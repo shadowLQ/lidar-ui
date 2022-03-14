@@ -13,39 +13,11 @@
 - 持续更新，实用性页面模板功能和交互，随意搭配组合，让构建页面变得简单化
 
 
-## 预览
-- [naive-ui-admin](https://naive-ui-admin.vercel.app)
-
-账号：admin，密码：123456（随意）
 
 ## 提示
 
-如果这个版本的功能和组件，并不能满足您的需求，不妨看看，我们全新 `NaiveAdmin v2` 他或许能让您眼前一亮O(∩_∩)O哈哈~
-
-[NaiveAdmin 官网](https://www.naiveadmin.com)
-
-[NaiveAdmin v2 预览](https://pro.naiveadmin.com)
-
-[NaiveAdmin v2 变更日志](https://www.naiveadmin.com/guide/changelog)
-
-## 新品
-
-### Antd vue
-
-千呼万唤 `Naive Admin Antd` 也迎来了第一个版本，同时具备 `Naive Ui Admin` 优点，如果您选的技术栈是 `Antd` 的话，不妨看看。
-
-[NaiveAdmin Antd 预览](https://antd.naiveadmin.com)
-
-### Arco vue
-
-新产品，新生态，智能设计体系，连接轻盈体验，一如既往、开箱即用，欢迎前往查看。
-
-[NaiveAdmin Arco 预览](https://arco.naiveadmin.com)
-
 
 ## 文档
-
-[v1文档地址](https://naive-ui-admin-docs.vercel.app)
 
 ## 准备
 
@@ -89,7 +61,7 @@ yarn build
 
 ## 更新日志
 
-[CHANGELOG](./CHANGELOG.md)
+
 
 
 ## 如何贡献
@@ -132,21 +104,3 @@ yarn build
 | :-: | :-: | :-: | :-: | :-: |
 | not support | last 2 versions | last 2 versions | last 2 versions | last 2 versions |
 
-## 维护者
-[@Ah jung](https://github.com/jekip)
-
-## 交流
-
-`Naive Ui Admin` 使用或者其他问题，都可以在群内讨论或提问。
-
-- QQ 群 `328347666`
-
-![(2O3HZAL78@@6H G9XTVM%9](https://user-images.githubusercontent.com/19426584/150084502-9783bf65-28e8-4435-95bf-3bae3bc63d99.png)
-
-
-## 赞助
-#### 如果你觉得这个项目帮助到了你，你可以帮作者买一杯果汁表示鼓励 🍹。
-
-![donate](https://jekip.github.io/docs/images/sponsor.png)
-
-[Paypal Me](https://www.paypal.com/paypalme/majunping)
