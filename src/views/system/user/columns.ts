@@ -13,12 +13,12 @@ export const columns = [
   },
   {
     title: '归属公司',
-    key: 'userNm',
+    key: 'ofcId',
     width: 100,
   },
   {
     title: '归属部门',
-    key: 'userNm',
+    key: 'depId',
     width: 100,
   },
   {
@@ -28,22 +28,22 @@ export const columns = [
   },
   {
     title: '登录名',
-    key: 'userNm',
+    key: 'loginNm',
     width: 100,
   },
   {
     title: '电话',
-    key: 'userNm',
+    key: 'userTel',
     width: 100,
   },
   {
     title: '手机',
-    key: 'userNm',
+    key: 'userMobile',
     width: 100,
   },
   {
     title: '用户状态',
-    key: 'userNm',
+    key: 'validInd',
     width: 100,
   },
   // {
