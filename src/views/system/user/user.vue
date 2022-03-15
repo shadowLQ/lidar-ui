@@ -11,7 +11,7 @@
       :columns="columns"
       :row-props="rowProps"
       :request="loadDataTable"
-      :row-key="(row) => row.id"
+      :row-key="(row) => row.userId"
       ref="actionRef"
       :actionColumn="actionColumn"
       @update:checked-row-keys="onCheckedRow"

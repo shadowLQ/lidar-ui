@@ -4,18 +4,45 @@
 export const columns = [
   {
     type: 'selection',
-    options: [
-      'all',
-      'none',
-    ],
   },
   {
     title: '用户id',
     key: 'userId',
     width: 100,
+    ifShow: false,
   },
   {
-    title: '用户名',
+    title: '归属公司',
+    key: 'userNm',
+    width: 100,
+  },
+  {
+    title: '归属部门',
+    key: 'userNm',
+    width: 100,
+  },
+  {
+    title: '姓名',
+    key: 'userNm',
+    width: 100,
+  },
+  {
+    title: '登录名',
+    key: 'userNm',
+    width: 100,
+  },
+  {
+    title: '电话',
+    key: 'userNm',
+    width: 100,
+  },
+  {
+    title: '手机',
+    key: 'userNm',
+    width: 100,
+  },
+  {
+    title: '用户状态',
     key: 'userNm',
     width: 100,
   },
@@ -39,24 +66,4 @@ export const columns = [
   //   },
   //   width: 150,
   // },
-  {
-    title: '用户编号',
-    key: 'userNbr',
-    width: 160,
-  },
-  {
-    title: '手机号',
-    key: 'userMobile',
-    width: 160,
-  },
-  {
-    title: '邮箱',
-    key: 'userEmail',
-    width: 160,
-  },
-  {
-    title: '创建时间',
-    key: 'loginTime',
-    width: 100,
-  },
 ];
