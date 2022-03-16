@@ -80,8 +80,8 @@ import {useRouter} from 'vue-router';
 
 
 const { proxy } = getCurrentInstance();
-const { a } = proxy.$useDict("0115");
-console.log(a)
+const { dict0115 } = proxy.$useDict("0115");
+console.log(dict0115)
 debugger
 const rules = {
   name: {
@@ -126,6 +126,27 @@ const schemas = [
     // rules: [{ required: true, message: '请输入姓名', trigger: ['blur'] }],
   },
   {
+    field: 'validInd',
+    component: 'NSelect',
+    label: '用户状态',
+    componentProps: {
+      placeholder: '请选择用户状态',
+      options:[
+        {
+          label: '正常',
+          value: 1,
+        },
+        {
+          label: '禁用',
+          value: 0,
+        },
+      ],
+      onUpdateValue: (e: any) => {
+        console.log(e);
+      },
+    },
+  },
+  {
     field: 'mobile',
     component: 'NInputNumber',
     label: '手机',
@@ -150,64 +171,25 @@ const schemas = [
     },
   },
   {
-    field: 'type',
-    component: 'NSelect',
-    label: '用户状态',
+    field: 'loginNm',
+    component: 'NInput',
+    label: '登录名',
     componentProps: {
-      placeholder: '请选择用户状态',
-      options:startsData,
-      onUpdateValue: (e: any) => {
+      placeholder: '请输入登录名',
+      showButton: false,
+      onInput: (e: any) => {
         console.log(e);
       },
     },
   },
   {
-    field: 'status',
-    label: '状态',
-    //插槽
-    slot: 'statusSlot',
-  },
-  {
-    field: 'makeProject',
-    component: 'NCheckbox',
-    label: '预约项目',
+    field: 'loginNm',
+    component: 'NInput',
+    label: '登录名',
     componentProps: {
-      placeholder: '请选择预约项目',
-      options: [
-        {
-          label: '种牙',
-          value: 1,
-        },
-        {
-          label: '补牙',
-          value: 2,
-        },
-        {
-          label: '根管',
-          value: 3,
-        },
-      ],
-      onUpdateChecked: (e: any) => {
-        console.log(e);
-      },
-    },
-  },
-  {
-    field: 'makeSource',
-    component: 'NRadioGroup',
-    label: '来源',
-    componentProps: {
-      options: [
-        {
-          label: '网上',
-          value: 1,
-        },
-        {
-          label: '门店',
-          value: 2,
-        },
-      ],
-      onUpdateChecked: (e: any) => {
+      placeholder: '请输入登录名',
+      showButton: false,
+      onInput: (e: any) => {
         console.log(e);
       },
     },

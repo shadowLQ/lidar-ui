@@ -9,9 +9,10 @@ export function useDict(...args) {
   return (() => {
     debugger
     args.forEach((d, index) => {
-      res.value[d] = [];
+
+      res.value["dict"+d] = [];
       getDicts(d).then(resp => {
-        res.value[d] = resp.map(p => ({ label: p.dictCnDesc, value: p.dictCd }))
+        res.value["dict"+d] = resp.map(p => ({ label: p.dictCnDesc, value: p.dictCd }))
       })
     })
     return toRefs(res.value);
