@@ -1,6 +1,9 @@
 // import { h } from 'vue';
 // import { NAvatar } from 'naive-ui';
 
+import {h} from "vue";
+import {NTag} from "naive-ui";
+
 export const columns = [
   {
     type: 'selection',
@@ -13,13 +16,13 @@ export const columns = [
   },
   {
     title: '归属公司',
-    key: 'ofcId',
+    key: 'ofc.ofcNm',
     width: 100,
   },
   {
     title: '归属部门',
-    key: 'depId',
-    width: 100,
+    key: 'dep.ofcNm',
+    width: 100
   },
   {
     title: '姓名',
@@ -45,6 +48,17 @@ export const columns = [
     title: '用户状态',
     key: 'validInd',
     width: 100,
+    render(row) {
+      return h(
+        NTag,
+        {
+          type: row.validInd ==1 ? 'success' : 'error',
+        },
+        {
+          default: () => (row.validInd ==1? '正常' : '禁用'),
+        }
+      );
+    },
   },
   // {
   //   title: '头像',

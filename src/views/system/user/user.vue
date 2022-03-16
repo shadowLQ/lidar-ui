@@ -69,7 +69,7 @@
 </template>
 
 <script lang="ts" setup>
-import {h, reactive, ref} from 'vue';
+import {getCurrentInstance, h, reactive, ref} from 'vue';
 import {useMessage} from 'naive-ui';
 import {BasicTable, TableAction} from '@/components/Table';
 import {BasicForm, useForm} from '@/components/Form/index';
@@ -78,6 +78,11 @@ import {columns} from './columns';
 import {DeleteOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
 
+
+const { proxy } = getCurrentInstance();
+const { a } = proxy.$useDict("0115");
+console.log(a)
+debugger
 const rules = {
   name: {
     required: true,
@@ -96,7 +101,16 @@ const rules = {
     message: '请选择日期',
   },
 };
-
+const startsData = ref([
+  {
+    label: '舒适性11',
+    value: 1,
+  },
+  {
+    label: '经济性',
+    value: 2,
+  },
+]);
 const schemas = [
   {
     field: 'userNm',
@@ -124,45 +138,24 @@ const schemas = [
     },
   },
   {
+    field: 'loginNm',
+    component: 'NInput',
+    label: '登录名',
+    componentProps: {
+      placeholder: '请输入登录名',
+      showButton: false,
+      onInput: (e: any) => {
+        console.log(e);
+      },
+    },
+  },
+  {
     field: 'type',
     component: 'NSelect',
-    label: '类型',
+    label: '用户状态',
     componentProps: {
-      placeholder: '请选择类型',
-      options: [
-        {
-          label: '舒适性',
-          value: 1,
-        },
-        {
-          label: '经济性',
-          value: 2,
-        },
-      ],
-      onUpdateValue: (e: any) => {
-        console.log(e);
-      },
-    },
-  },
-  {
-    field: 'makeDate',
-    component: 'NDatePicker',
-    label: '预约时间',
-    defaultValue: 1183135260000,
-    componentProps: {
-      type: 'date',
-      clearable: true,
-      onUpdateValue: (e: any) => {
-        console.log(e);
-      },
-    },
-  },
-  {
-    field: 'makeTime',
-    component: 'NTimePicker',
-    label: '停留时间',
-    componentProps: {
-      clearable: true,
+      placeholder: '请选择用户状态',
+      options:startsData,
       onUpdateValue: (e: any) => {
         console.log(e);
       },
@@ -229,6 +222,7 @@ const actionRef = ref();
 const showModal = ref(false);
 const formBtnLoading = ref(false);
 const formParams = reactive({});
+
 
 const params = ref();
 

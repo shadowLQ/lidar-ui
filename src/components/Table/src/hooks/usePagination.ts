@@ -22,7 +22,7 @@ export function usePagination(refProps: ComputedRef<BasicTableProps>) {
       showSizePicker: true,
       showQuickJumper: true,
       prefix: () => {
-        return `共${unref(configRef)[countField]}条`;
+        return `共${unref(configRef)[countField] || 0}条`;
       },
       ...(isBoolean(pagination) ? {} : pagination),
       ...unref(configRef),

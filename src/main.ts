@@ -3,9 +3,9 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router, { setupRouter } from './router';
 import { setupStore } from '@/store';
-import { setupNaive, setupDirectives } from '@/plugins';
+import {setupNaive, setupDirectives} from '@/plugins';
 import { AppProvider } from '@/components/Application';
-
+import { useDict } from '@/utils/dict';
 async function bootstrap() {
   const appProvider = createApp(AppProvider);
 
@@ -21,7 +21,8 @@ async function bootstrap() {
   setupDirectives(app);
 
   // 注册全局方法，如：app.config.globalProperties.$message = message
-  //setupGlobalMethods(app);
+// 全局方法挂载
+  app.config.globalProperties.$useDict = useDict
 
   // 挂载状态管理
   setupStore(app);
