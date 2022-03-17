@@ -7,7 +7,6 @@ import {ref, toRefs} from "vue";
 export function useDict(...args) {
   const res = ref({});
   return (() => {
-    debugger
     args.forEach((d, index) => {
 
       res.value["dict"+d] = [];

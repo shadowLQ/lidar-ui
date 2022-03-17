@@ -2,15 +2,15 @@
   <div>
     <div class="n-layout-page-header">
       <n-card :bordered="false" title="字典管理">
-        页面数据为 Mock 示例数据，非真实数据。
+
       </n-card>
     </div>
     <n-grid class="mt-4" cols="2 s:2 m:2 l:3 xl:3 2xl:3" responsive="screen" :x-gap="12">
       <n-gi span="1">
         <n-card :segmented="{ content: 'hard' }" :bordered="false" size="small">
           <template #header>
-            <n-space>
-              <n-button type="success">
+            <n-space >
+              <n-button type="success" @click="addTable">
                 新建
               </n-button>
               <n-button type="primary" @click="addTable">
@@ -31,11 +31,15 @@
           <div class="w-full">
             <BasicTable
               :columns="columnsDictType"
+              :row-props="rowProps"
               :request="loadDataTableDictType"
-              :row-key="(row) => row.id"
-              ref="actionRef"
-              :actionColumn="actionColumn"
+              :row-key="(row) => row.dictTypeCd"
+
+              :actionColumn="actionColumnDictType"
               @update:checked-row-keys="onCheckedRow"
+              :pagination="{'page-slot':5,'show-quick-jumper':false}"
+              :scroll-x="1090"
+
             >
             </BasicTable>
           </div>
@@ -54,22 +58,23 @@
           >
             <template #tableTitle>
               <n-space>
-                <n-input type="input" v-model:value="pattern" placeholder="请输入">
+                <n-input type="input" v-model:value="formParams.dictCd" placeholder="请输入">
                   <template #prefix>
                     <n-icon size="18" class="cursor-pointer">
                       <SearchOutlined />
                     </n-icon>
                   </template>
                 </n-input>
-                <n-button type="primary" @click="addTable">
+                <n-button type="primary"  @click="queryDict" >
                   查询
                 </n-button>
-                <n-button type="success">
+                <n-button type="success" @click="addTable">
                   新建
                 </n-button>
                 <n-button type="error">
                   删除
                 </n-button>
+
               </n-space>
             </template>
           </BasicTable>
@@ -121,9 +126,10 @@
   const isEditMenu = ref(false);
   const treeItemTitle = ref('');
   const pattern = ref('');
+
   const drawerTitle = ref('');
 
-  // const formParams = reactive({});
+  const formParams = reactive({});
 
   const params = ref();
 
@@ -144,14 +150,6 @@
     },
   ]);
 
-  const formParams = reactive({
-    type: 1,
-    label: '',
-    subtitle: '',
-    path: '',
-    auth: '',
-    openType: 1,
-  });
 
   function selectAddMenu(key: string) {
     drawerTitle.value = key === 'home' ? '添加顶栏菜单' : `添加子菜单：${treeItemTitle.value}`;
@@ -218,10 +216,66 @@
   function onExpandedKeys(keys) {
     expandedKeys.value = keys;
   }
+
+  function rowProps(values: Recordable) {
+    return {
+      style: 'cursor: pointer;',
+      onClick: () => {
+        params.value={dictTypeCd:values.dictTypeCd};
+        reloadTable()
+      },
+    };
+  }
+
   const actionRef = ref();
 
 
+  function reloadTable() {
+    actionRef.value.reload();
+  }
+
+
+  function queryDict() {
+    reloadTable()
+  }
+
   const actionColumn = reactive({
+    width: 70,
+    title: '操作',
+    key: 'action',
+    fixed: 'right',
+    render(record) {
+      return h(TableAction as any, {
+        style: 'button',
+        actions: [
+          {
+            label: '删除',
+            icon: 'ic:outline-delete-outline',
+            // onClick: handleDelete.bind(null, record),
+            // 根据业务控制是否显示 isShow 和 auth 是并且关系
+            ifShow: () => {
+              return true;
+            },
+            // 根据权限控制是否显示: 有权限，会显示，支持多个
+            auth: ['basic_list'],
+          },
+          {
+            label: '编辑',
+            // onClick: handleEdit.bind(null, record),
+            ifShow: () => {
+              return true;
+            },
+            auth: ['basic_list'],
+          },
+        ],
+        select: (key) => {
+          message.info(`您点击了，${key} 按钮`);
+        },
+      });
+    },
+  });
+
+  const actionColumnDictType = reactive({
     width: 70,
     title: '操作',
     key: 'action',

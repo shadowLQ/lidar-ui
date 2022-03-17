@@ -1,31 +1,25 @@
-import { h } from 'vue';
-import { NAvatar } from 'naive-ui';
+
 
 export const columns = [
   {
-    title: '字典名称',
-    key: 'id',
+    title: '主键id',
+    key: 'dictId',
     width: 50,
+    ifShow: false,
   },
   {
     title: '字典值',
-    key: 'name',
-    width: 50,
-  },
-  {
-    title: '排序',
-    key: 'avatar',
+    key: 'dictCd',
     width: 100,
-    render(row) {
-      return h(NAvatar, {
-        size: 48,
-        src: row.avatar,
-      });
-    },
   },
   {
-    title: '创建时间',
-    key: 'date',
+    title: '中文描述',
+    key: 'dictCnDesc',
+    width: 100,
+  },
+  {
+    title: '英文描述',
+    key: 'dictEnDesc',
     width: 100,
   },
 ];

@@ -302,7 +302,7 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      flex: 1;
+      flex: 2;
 
       &-title {
         display: flex;

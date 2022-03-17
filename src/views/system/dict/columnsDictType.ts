@@ -1,14 +1,22 @@
-
-
 export const columnsDictType = [
   {
-    title: '字典名称',
+    title: '字典类型',
+    key: 'dictTypeCd',
+    width: 30,
+  },
+  {
+    title: '字典类型中文描述',
     key: 'dictTypeCnDesc',
     width: 100,
   },
   {
-    title: '字典值',
-    key: 'dictTypeCd',
+    title: '字典类型英文描述',
+    key: 'dictTypeEnDesc',
+    width: 100,
+  },
+  {
+    title: '应用编号',
+    key: 'appCd',
     width: 100,
   },
 ];

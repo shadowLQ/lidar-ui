@@ -81,8 +81,6 @@ import {useRouter} from 'vue-router';
 
 const { proxy } = getCurrentInstance();
 const { dict0115 } = proxy.$useDict("0115");
-console.log(dict0115)
-debugger
 const rules = {
   name: {
     required: true,
@@ -325,7 +323,7 @@ function rowProps(values: Recordable) {
     style: 'cursor: pointer;',
     onClick: () => {
       console.log(values);
-      message.info('1');
+      message.info('11111');
     },
   };
 }
