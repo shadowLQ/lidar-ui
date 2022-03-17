@@ -13,7 +13,7 @@
               <n-button type="success" @click="addTable">
                 新建
               </n-button>
-              <n-button type="primary" @click="addTable">
+              <n-button type="primary" @click="upadteTable">
                 编辑
               </n-button>
               <n-button type="error">
@@ -81,7 +81,38 @@
         </n-card>
       </n-gi>
     </n-grid>
-    <CreateDict ref="createDrawerRef" :title="drawerTitle" />
+
+    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="添加字典类型">
+      <n-form
+        :model="formParams"
+        :rules="rules"
+        ref="formRef"
+        label-placement="left"
+        :label-width="130"
+        class="py-4"
+      >
+        <n-form-item label="字典类型" path="dictTypeCd">
+          <n-input placeholder="请输入字典类型" v-model:value="formParams.dictTypeCd" />
+        </n-form-item>
+        <n-form-item label="字典类型中文描述" path="dictTypeCnDesc">
+          <n-input placeholder="请输入字典类型中文描述" v-model:value="formParams.dictTypeCnDesc" />
+        </n-form-item>
+        <n-form-item label="字典类型英文描述" path="dictTypeEnDesc">
+          <n-input placeholder="请输入字典类型英文描述" v-model:value="formParams.dictTypeEnDesc" />
+        </n-form-item>
+        <n-form-item label="应用编号" path="appCd">
+          <n-input placeholder="请输入应用编号" v-model:value="formParams.appCd" />
+        </n-form-item>
+      </n-form>
+
+      <template #action>
+        <n-space>
+          <n-button @click="() => (showModal = false)">取消</n-button>
+          <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
+        </n-space>
+      </template>
+    </n-modal>
+<!--    <CreateDict ref="createDrawerRef" :title="drawerTitle" />-->
   </div>
 </template>
 <script lang="ts" setup>
@@ -128,8 +159,15 @@
   const pattern = ref('');
 
   const drawerTitle = ref('');
+  const showModal = ref(false);
+  const formBtnLoading = ref(false);
 
-  const formParams = reactive({});
+  const formParams = reactive({
+    dictTypeCd:'',
+    dictTypeEnDesc:'',
+    dictTypeCnDesc:'',
+    appCd:'',
+  });
 
   const params = ref();
 
@@ -150,6 +188,23 @@
     },
   ]);
 
+  function confirmForm(e) {
+    e.preventDefault();
+    formBtnLoading.value = true;
+    formRef.value.validate((errors) => {
+      if (!errors) {
+        console.log(formParams)
+        // message.success('新建成功');
+        // setTimeout(() => {
+        //   showModal.value = false;
+        //   reloadTable();
+        // });
+      } else {
+        message.error('请填写完整信息');
+      }
+      formBtnLoading.value = false;
+    });
+  }
 
   function selectAddMenu(key: string) {
     drawerTitle.value = key === 'home' ? '添加顶栏菜单' : `添加子菜单：${treeItemTitle.value}`;
@@ -159,6 +214,10 @@
   function openCreateDrawer() {
     const { openDrawer } = createDrawerRef.value;
     openDrawer();
+  }
+
+  function addTable() {
+    showModal.value = true;
   }
 
   function selectedTree(keys) {
