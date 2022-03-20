@@ -9,20 +9,20 @@
       <n-gi span="1">
         <n-card :segmented="{ content: 'hard' }" :bordered="false" size="small">
           <template #header>
-            <n-space >
+            <n-space>
               <n-button type="success" @click="addTable">
                 新建
               </n-button>
-              <n-button type="primary" @click="upadteTable">
+              <n-button :disabled="isDisabled" type="primary" @click="">
                 编辑
               </n-button>
-              <n-button type="error">
+              <n-button :disabled="isDisabled" type="error" @click="handleDelete">
                 删除
               </n-button>
               <n-input type="input" v-model:value="pattern" placeholder="请输入">
                 <template #prefix>
                   <n-icon size="18" class="cursor-pointer">
-                    <SearchOutlined />
+                    <SearchOutlined/>
                   </n-icon>
                 </template>
               </n-input>
@@ -34,7 +34,6 @@
               :row-props="rowProps"
               :request="loadDataTableDictType"
               :row-key="(row) => row.dictTypeCd"
-
               :actionColumn="actionColumnDictType"
               @update:checked-row-keys="onCheckedRow"
               :pagination="{'page-slot':5,'show-quick-jumper':false}"
@@ -61,11 +60,11 @@
                 <n-input type="input" v-model:value="formParams.dictCd" placeholder="请输入">
                   <template #prefix>
                     <n-icon size="18" class="cursor-pointer">
-                      <SearchOutlined />
+                      <SearchOutlined/>
                     </n-icon>
                   </template>
                 </n-input>
-                <n-button type="primary"  @click="queryDict" >
+                <n-button type="primary" @click="queryDict">
                   查询
                 </n-button>
                 <n-button type="success" @click="addTable">
@@ -92,16 +91,16 @@
         class="py-4"
       >
         <n-form-item label="字典类型" path="dictTypeCd">
-          <n-input placeholder="请输入字典类型" v-model:value="formParams.dictTypeCd" />
+          <n-input placeholder="请输入字典类型" v-model:value="formParams.dictTypeCd"/>
         </n-form-item>
         <n-form-item label="字典类型中文描述" path="dictTypeCnDesc">
-          <n-input placeholder="请输入字典类型中文描述" v-model:value="formParams.dictTypeCnDesc" />
+          <n-input placeholder="请输入字典类型中文描述" v-model:value="formParams.dictTypeCnDesc"/>
         </n-form-item>
         <n-form-item label="字典类型英文描述" path="dictTypeEnDesc">
-          <n-input placeholder="请输入字典类型英文描述" v-model:value="formParams.dictTypeEnDesc" />
+          <n-input placeholder="请输入字典类型英文描述" v-model:value="formParams.dictTypeEnDesc"/>
         </n-form-item>
         <n-form-item label="应用编号" path="appCd">
-          <n-input placeholder="请输入应用编号" v-model:value="formParams.appCd" />
+          <n-input placeholder="请输入应用编号" v-model:value="formParams.appCd"/>
         </n-form-item>
       </n-form>
 
@@ -112,261 +111,306 @@
         </n-space>
       </template>
     </n-modal>
-<!--    <CreateDict ref="createDrawerRef" :title="drawerTitle" />-->
+    <!--    <CreateDict ref="createDrawerRef" :title="drawerTitle" />-->
   </div>
 </template>
 <script lang="ts" setup>
-  import { BasicTable, TableAction } from '@/components/Table';
-  import { columns } from './columns';
-  import { columnsDictType } from './columnsDictType';
+import {BasicTable, TableAction} from '@/components/Table';
+import {columns} from './columns';
+import {columnsDictType} from './columnsDictType';
 
-  import {ref, unref, reactive, onMounted, computed, h} from 'vue';
-  import { useMessage } from 'naive-ui';
-  import { DownOutlined, AlignLeftOutlined, SearchOutlined, FormOutlined } from '@vicons/antd';
-  import { getMenuList } from '@/api/system/menu';
-  import { getTreeItem } from '@/utils';
-  import CreateDict from './CreateDict.vue';
-  import { getTableListDict } from "@/api/dict/dict";
-  import { getTableListDictType } from "@/api/dict/dictType";
+import {ref, unref, reactive, onMounted, computed, h} from 'vue';
+import {NButton, NSpace, useDialog, useMessage} from 'naive-ui';
+import {SearchOutlined} from '@vicons/antd';
+import {getTreeItem} from '@/utils';
+import {getTableListDict} from "@/api/dict/dict";
+import {addDictType, deleteDictType, getTableListDictType} from "@/api/dict/dictType";
 
-  const rules = {
-    label: {
-      required: true,
-      message: '请输入标题',
-      trigger: 'blur',
-    },
-    path: {
-      required: true,
-      message: '请输入路径',
-      trigger: 'blur',
-    },
-  };
 
-  const formRef: any = ref(null);
-  const createDrawerRef = ref();
-  const message = useMessage();
+const rules = {
+  dictTypeCd: {
+    required: true,
+    trigger: ['blur', 'input'],
+    message: '请输入字典类型',
+  },
+  dictTypeCnDesc: {
+    required: true,
+    trigger: ['blur', 'input'],
+    message: '请输入字典类型中文描述',
+  },
+  dictTypeEnDesc: {
+    required: true,
+    trigger: ['blur', 'input'],
+    message: '请输入字典类型英文描述',
+  },
+};
 
-  let treeItemKey = ref([]);
+const dialog = useDialog();
 
-  let expandedKeys = ref([]);
 
-  const treeData = ref([]);
+const formRef: any = ref(null);
+const createDrawerRef = ref();
+const message = useMessage();
 
-  const loading = ref(true);
-  const subLoading = ref(false);
-  const isEditMenu = ref(false);
-  const treeItemTitle = ref('');
-  const pattern = ref('');
+let treeItemKey = ref([]);
 
-  const drawerTitle = ref('');
-  const showModal = ref(false);
-  const formBtnLoading = ref(false);
+let expandedKeys = ref([]);
+let checkedRowKeys = ref([]);
 
-  const formParams = reactive({
-    dictTypeCd:'',
-    dictTypeEnDesc:'',
-    dictTypeCnDesc:'',
-    appCd:'',
-  });
+const treeData = ref([]);
 
-  const params = ref();
+const loading = ref(true);
+const subLoading = ref(false);
+const isEditMenu = ref(false);
+const treeItemTitle = ref('');
+const pattern = ref('');
 
-  const isAddSon = computed(() => {
-    return !treeItemKey.value.length;
-  });
+const drawerTitle = ref('');
+const isDisabled =ref(true)
 
-  const addMenuOptions = ref([
-    {
-      label: '添加顶级菜单',
-      key: 'home',
-      disabled: false,
-    },
-    {
-      label: '添加子菜单',
-      key: 'son',
-      disabled: isAddSon,
-    },
-  ]);
+const showModal = ref(false);
+const formBtnLoading = ref(false);
 
-  function confirmForm(e) {
-    e.preventDefault();
-    formBtnLoading.value = true;
-    formRef.value.validate((errors) => {
-      if (!errors) {
-        console.log(formParams)
-        // message.success('新建成功');
-        // setTimeout(() => {
-        //   showModal.value = false;
-        //   reloadTable();
-        // });
-      } else {
-        message.error('请填写完整信息');
-      }
-      formBtnLoading.value = false;
-    });
-  }
+const formParams = reactive({
+  dictTypeCd: '',
+  dictTypeEnDesc: '',
+  dictTypeCnDesc: '',
+  appCd: '',
+});
 
-  function selectAddMenu(key: string) {
-    drawerTitle.value = key === 'home' ? '添加顶栏菜单' : `添加子菜单：${treeItemTitle.value}`;
-    openCreateDrawer();
-  }
+const params = ref();
 
-  function openCreateDrawer() {
-    const { openDrawer } = createDrawerRef.value;
-    openDrawer();
-  }
+const isAddSon = computed(() => {
+  return !treeItemKey.value.length;
+});
 
-  function addTable() {
-    showModal.value = true;
-  }
 
-  function selectedTree(keys) {
-    if (keys.length) {
-      const treeItem = getTreeItem(unref(treeData), keys[0]);
-      treeItemKey.value = keys;
-      treeItemTitle.value = treeItem.label;
-      Object.assign(formParams, treeItem);
-      isEditMenu.value = true;
+function confirmForm(e) {
+  e.preventDefault();
+  formBtnLoading.value = true;
+  formRef.value.validate((errors) => {
+    if (!errors) {
+      addDictType(formParams).then(res => {
+        console.log(res)
+        showModal.value = false;
+        message.success(res.message);
+        reloadTable();
+      }).catch((err) => {
+        message.error(err);
+      })
+      // console.log(tata)
+      // message.success('新建成功');
+      // setTimeout(() => {
+      // });
     } else {
-      isEditMenu.value = false;
-      treeItemKey.value = [];
-      treeItemTitle.value = '';
+      message.error('请填写完整信息');
     }
-  }
-
-  function handleReset() {
-    const treeItem = getTreeItem(unref(treeData), treeItemKey[0]);
-    Object.assign(formParams, treeItem);
-  }
-
-  function formSubmit() {
-    formRef.value.validate((errors: boolean) => {
-      if (!errors) {
-        message.error('抱歉，您没有该权限');
-      } else {
-        message.error('请填写完整信息');
-      }
-    });
-  }
-
-  function packHandle() {
-    if (expandedKeys.value.length) {
-      expandedKeys.value = [];
-    } else {
-      expandedKeys.value = unref(treeData).map((item: any) => item.key as string) as [];
-    }
-  }
-
-  onMounted(async () => {
-    // const treeMenuList = await getMenuList();
-    // const keys = treeMenuList.list.map((item) => item.key);
-    // Object.assign(formParams, keys);
-    // treeData.value = treeMenuList.list;
-    loading.value = false;
+    formBtnLoading.value = false;
   });
+}
 
-  const loadDataTableDictType = async (res) => {
-    return await getTableListDictType({ ...params.value, ...res });
-  };
-  const loadDataTableDict = async (res) => {
-    return await getTableListDict({ ...formParams, ...params.value, ...res });
-  };
 
-  function onExpandedKeys(keys) {
-    expandedKeys.value = keys;
+function handleDelete(record) {
+  console.log(record);
+  const s=dialog.warning({
+    style: 'width: 380px;',
+    title: '删除确认',
+    closable: false,
+    content: () => {
+      return h(
+      'p', {style:'padding-left: 35px'},[`您确认要删除，`,h('span',{
+        style:'font-weight:500'
+        },`预约事项？`)],
+      )},
+    action: () => {
+      return h(NSpace,
+        [
+          h(NButton,
+            {
+            // textColor:'red'
+            onClick(){
+              s.destroy();
+            }
+          }, `取消`),
+          h(NButton, {
+            type: 'info',
+            onClick(){
+              console.log('dialog',checkedRowKeys)
+              deleteDictType(unref(checkedRowKeys))
+              // message.error('抱歉，您没有该权限');
+              s.destroy();
+            }
+            // textColor:'red'
+          }, `确认`)
+        ]
+      )
+    },
+    // positiveText:  `确认`,
+    // negativeText: `再想想`,
+    onPositiveClick: () => {
+      message.success('删除成功');
+    },
+    onNegativeClick: () => {
+    },
+  });
+}
+
+function selectAddMenu(key: string) {
+  drawerTitle.value = key === 'home' ? '添加顶栏菜单' : `添加子菜单：${treeItemTitle.value}`;
+  openCreateDrawer();
+}
+
+function openCreateDrawer() {
+  const {openDrawer} = createDrawerRef.value;
+  openDrawer();
+}
+
+function addTable() {
+  showModal.value = true;
+}
+function onCheckedRow(values) {
+  if (values.length>0){
+    checkedRowKeys.value=values;
+    isDisabled.value=false;
+  }else {
+    isDisabled.value=true;
   }
+}
 
-  function rowProps(values: Recordable) {
-    return {
-      style: 'cursor: pointer;',
-      onClick: () => {
-        params.value={dictTypeCd:values.dictTypeCd};
-        reloadTable()
+
+function handleReset() {
+  const treeItem = getTreeItem(unref(treeData), treeItemKey[0]);
+  Object.assign(formParams, treeItem);
+}
+
+function formSubmit() {
+  formRef.value.validate((errors: boolean) => {
+    if (!errors) {
+      message.error('抱歉，您没有该权限');
+    } else {
+      message.error('请填写完整信息');
+    }
+  });
+}
+
+function packHandle() {
+  if (expandedKeys.value.length) {
+    expandedKeys.value = [];
+  } else {
+    expandedKeys.value = unref(treeData).map((item: any) => item.key as string) as [];
+  }
+}
+
+onMounted(async () => {
+  // const treeMenuList = await getMenuList();
+  // const keys = treeMenuList.list.map((item) => item.key);
+  // Object.assign(formParams, keys);
+  // treeData.value = treeMenuList.list;
+  loading.value = false;
+});
+
+const loadDataTableDictType = async (res) => {
+  return await getTableListDictType({...params.value, ...res});
+};
+const loadDataTableDict = async (res) => {
+  return await getTableListDict({...formParams, ...params.value, ...res});
+};
+
+function onExpandedKeys(keys) {
+  expandedKeys.value = keys;
+}
+
+function rowProps(values: Recordable) {
+  return {
+    style: 'cursor: pointer;',
+    onClick: () => {
+      params.value = {dictTypeCd: values.dictTypeCd};
+      reloadTable()
+    },
+  };
+}
+
+const actionRef = ref();
+
+
+function reloadTable() {
+  actionRef.value.reload();
+}
+
+
+function queryDict() {
+  reloadTable()
+}
+
+const actionColumn = reactive({
+  width: 70,
+  title: '操作',
+  key: 'action',
+  fixed: 'right',
+  render(record) {
+    return h(TableAction as any, {
+      style: 'button',
+      actions: [
+        {
+          label: '删除',
+          icon: 'ic:outline-delete-outline',
+          // onClick: handleDelete.bind(null, record),
+          // 根据业务控制是否显示 isShow 和 auth 是并且关系
+          ifShow: () => {
+            return true;
+          },
+          // 根据权限控制是否显示: 有权限，会显示，支持多个
+          auth: ['basic_list'],
+        },
+        {
+          label: '编辑',
+          // onClick: handleEdit.bind(null, record),
+          ifShow: () => {
+            return true;
+          },
+          auth: ['basic_list'],
+        },
+      ],
+      select: (key) => {
+        message.info(`您点击了，${key} 按钮`);
       },
-    };
-  }
+    });
+  },
+});
 
-  const actionRef = ref();
-
-
-  function reloadTable() {
-    actionRef.value.reload();
-  }
-
-
-  function queryDict() {
-    reloadTable()
-  }
-
-  const actionColumn = reactive({
-    width: 70,
-    title: '操作',
-    key: 'action',
-    fixed: 'right',
-    render(record) {
-      return h(TableAction as any, {
-        style: 'button',
-        actions: [
-          {
-            label: '删除',
-            icon: 'ic:outline-delete-outline',
-            // onClick: handleDelete.bind(null, record),
-            // 根据业务控制是否显示 isShow 和 auth 是并且关系
-            ifShow: () => {
-              return true;
-            },
-            // 根据权限控制是否显示: 有权限，会显示，支持多个
-            auth: ['basic_list'],
+const actionColumnDictType = reactive({
+  width: 70,
+  title: '操作',
+  key: 'action',
+  fixed: 'right',
+  render(record) {
+    return h(TableAction as any, {
+      style: 'button',
+      actions: [
+        {
+          label: '删除',
+          icon: 'ic:outline-delete-outline',
+          // onClick: handleDelete.bind(null, record),
+          // 根据业务控制是否显示 isShow 和 auth 是并且关系
+          ifShow: () => {
+            return true;
           },
-          {
-            label: '编辑',
-            // onClick: handleEdit.bind(null, record),
-            ifShow: () => {
-              return true;
-            },
-            auth: ['basic_list'],
-          },
-        ],
-        select: (key) => {
-          message.info(`您点击了，${key} 按钮`);
+          // 根据权限控制是否显示: 有权限，会显示，支持多个
+          auth: ['basic_list'],
         },
-      });
-    },
-  });
-
-  const actionColumnDictType = reactive({
-    width: 70,
-    title: '操作',
-    key: 'action',
-    fixed: 'right',
-    render(record) {
-      return h(TableAction as any, {
-        style: 'button',
-        actions: [
-          {
-            label: '删除',
-            icon: 'ic:outline-delete-outline',
-            // onClick: handleDelete.bind(null, record),
-            // 根据业务控制是否显示 isShow 和 auth 是并且关系
-            ifShow: () => {
-              return true;
-            },
-            // 根据权限控制是否显示: 有权限，会显示，支持多个
-            auth: ['basic_list'],
+        {
+          label: '编辑',
+          // onClick: handleEdit.bind(null, record),
+          ifShow: () => {
+            return true;
           },
-          {
-            label: '编辑',
-            // onClick: handleEdit.bind(null, record),
-            ifShow: () => {
-              return true;
-            },
-            auth: ['basic_list'],
-          },
-        ],
-        select: (key) => {
-          message.info(`您点击了，${key} 按钮`);
+          auth: ['basic_list'],
         },
-      });
-    },
-  });
+      ],
+      select: (key) => {
+        message.info(`您点击了，${key} 按钮`);
+      },
+    });
+  },
+});
 </script>

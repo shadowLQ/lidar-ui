@@ -1,5 +1,8 @@
 export const columnsDictType = [
   {
+    type: 'selection'
+  },
+  {
     title: '字典类型',
     key: 'dictTypeCd',
     width: 30,
