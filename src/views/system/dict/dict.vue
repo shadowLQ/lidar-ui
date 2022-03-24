@@ -13,7 +13,7 @@
               <n-button type="success" @click="addTable">
                 新建
               </n-button>
-              <n-button :disabled="isDisabled" type="primary" @click="">
+              <n-button :disabled="isDisabledEdit" type="primary" @click="">
                 编辑
               </n-button>
               <n-button :disabled="isDisabled" type="error" @click="handleDelete">
@@ -167,6 +167,7 @@ const pattern = ref('');
 
 const drawerTitle = ref('');
 const isDisabled =ref(true)
+const isDisabledEdit =ref(true)
 
 const showModal = ref(false);
 const formBtnLoading = ref(false);
@@ -269,11 +270,17 @@ function addTable() {
   showModal.value = true;
 }
 function onCheckedRow(values) {
-  if (values.length>0){
+  if (values.length>1){
     checkedRowKeys.value=values;
+    isDisabled.value=false;
+    isDisabledEdit.value=true;
+  }else if (values.length==1){
+    checkedRowKeys.value=values;
+    isDisabledEdit.value=false;
     isDisabled.value=false;
   }else {
     isDisabled.value=true;
+    isDisabledEdit.value=true;
   }
 }
 
