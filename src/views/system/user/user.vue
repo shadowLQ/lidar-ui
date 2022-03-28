@@ -213,7 +213,7 @@ const actionColumn = reactive({
   fixed: 'right',
   render(record) {
     return h(TableAction as any, {
-      style: 'text',
+      style: 'button',
       actions: [
         {
           label: '删除',

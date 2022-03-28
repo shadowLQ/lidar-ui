@@ -350,7 +350,7 @@ function queryDict() {
 }
 
 const actionColumn = reactive({
-  width: 70,
+  width: 50,
   title: '操作',
   key: 'action',
   fixed: 'right',
@@ -360,7 +360,7 @@ const actionColumn = reactive({
       actions: [
         {
           label: '删除',
-          icon: 'ic:outline-delete-outline',
+          type:'error',
           // onClick: handleDelete.bind(null, record),
           // 根据业务控制是否显示 isShow 和 auth 是并且关系
           ifShow: () => {
@@ -371,6 +371,7 @@ const actionColumn = reactive({
         },
         {
           label: '编辑',
+          type:'info',
           // onClick: handleEdit.bind(null, record),
           ifShow: () => {
             return true;
@@ -386,7 +387,7 @@ const actionColumn = reactive({
 });
 
 const actionColumnDictType = reactive({
-  width: 70,
+  width: 60,
   title: '操作',
   key: 'action',
   fixed: 'right',
@@ -396,7 +397,8 @@ const actionColumnDictType = reactive({
       actions: [
         {
           label: '删除',
-          icon: 'ic:outline-delete-outline',
+          type:'error',
+          // icon: 'ic:outline-delete-outline',
           // onClick: handleDelete.bind(null, record),
           // 根据业务控制是否显示 isShow 和 auth 是并且关系
           ifShow: () => {
@@ -407,6 +409,7 @@ const actionColumnDictType = reactive({
         },
         {
           label: '编辑',
+          type:'info',
           // onClick: handleEdit.bind(null, record),
           ifShow: () => {
             return true;
