@@ -34,28 +34,92 @@
         </template>
       </BasicTable>
 
-      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="新建">
-        <n-form
-          :model="formParams"
-          :rules="rules"
-          ref="formRef"
-          label-placement="left"
-          :label-width="80"
-          class="py-4"
+      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="新建" :style="{ width: '800px' }">
+        <n-card
+          :title="'栅格化表单' + cols + '列'"
+          :header-style="{ padding: '10px' }"
+          class="mt-2"
+          :segmented="true"
         >
-          <n-form-item label="用户名" path="name">
-            <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>
-          </n-form-item>
-          <n-form-item label="用户编号" path="address">
-            <n-input type="textarea" placeholder="请输入用户编号" v-model:value="formParams.address"/>
-          </n-form-item>
-          <!--        <n-form-item label="手机号" path="date">-->
-          <!--          <n-date-picker type="datetime" placeholder="请选择日期" v-model:value="formParams.date" />-->
-          <!--        </n-form-item>-->
-          <n-form-item label="手机号" path="name">
-            <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>
-          </n-form-item>
-        </n-form>
+          <n-form :rules="rules" label-width="80"  label-placement="left">
+            <n-grid :cols="2" x-gap="20" y-gap="10">
+              <n-form-item-gi label="下拉选择">
+                <n-select
+                  placeholder="请选择一个吧"
+                  :options="[
+                {
+                  label: '选项一',
+                  value: 1,
+                },
+                {
+                  label: '选项二',
+                  value: 2,
+                },
+                {
+                  label: '选项三',
+                  value: 3,
+                },
+                {
+                  label: '选项四',
+                  value: 4,
+                },
+              ]"
+                />
+              </n-form-item-gi>
+              <n-form-item-gi label="加减数量">
+                <n-input-number style="width: 100%" />
+              </n-form-item-gi>
+              <n-form-item-gi label="输入框">
+                <n-input />
+              </n-form-item-gi>
+              <n-form-item-gi label="复选框">
+                <n-checkbox-group>
+                  <n-space>
+                    <n-checkbox value="1">普通</n-checkbox>
+                    <n-checkbox value="2">独家</n-checkbox>
+                    <n-checkbox value="3">代理</n-checkbox>
+                  </n-space>
+                </n-checkbox-group>
+              </n-form-item-gi>
+              <n-form-item-gi label="选择日期">
+                <n-date-picker style="width: 100%" />
+              </n-form-item-gi>
+              <n-form-item-gi label="日期范围">
+                <n-date-picker type="daterange" style="width: 100%" />
+              </n-form-item-gi>
+              <n-form-item-gi label="选择时间">
+                <n-time-picker style="width: 100%" />
+              </n-form-item-gi>
+              <n-form-item-gi label="开关按钮" path="name">
+                <n-switch />
+              </n-form-item-gi>
+              <n-form-item-gi label="用户名" path="name">
+                <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>
+              </n-form-item-gi>
+            </n-grid>
+          </n-form>
+        </n-card>
+<!--        <n-form-->
+<!--          :model="formParams"-->
+<!--          :rules="rules"-->
+<!--          ref="formRef"-->
+<!--          label-placement="left"-->
+<!--          :label-width="80"-->
+<!--          class="py-4"-->
+<!--        >-->
+<!--          <n-form-item label="用户名" path="name">-->
+<!--            <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>-->
+<!--          </n-form-item>-->
+<!--          <n-form-item label="用户编号" path="address">-->
+<!--            <n-input type="textarea" placeholder="请输入用户编号" v-model:value="formParams.address"/>-->
+<!--          </n-form-item>-->
+<!--          &lt;!&ndash;        <n-form-item label="手机号" path="date">&ndash;&gt;-->
+<!--          &lt;!&ndash;          <n-date-picker type="datetime" placeholder="请选择日期" v-model:value="formParams.date" />&ndash;&gt;-->
+<!--          &lt;!&ndash;        </n-form-item>&ndash;&gt;-->
+<!--          <n-form-item label="手机号" path="name">-->
+<!--            <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>-->
+<!--          </n-form-item>-->
+<!--        </n-form>-->
 
         <template #action>
           <n-space>
