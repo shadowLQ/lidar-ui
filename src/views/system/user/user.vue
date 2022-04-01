@@ -34,16 +34,23 @@
         </template>
       </BasicTable>
 
-      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="新建" :style="{ width: '800px' }">
+      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="用户添加" :style="{ width: '800px' }">
         <n-card
-          :title="'栅格化表单' + cols + '列'"
-          :header-style="{ padding: '10px' }"
           class="mt-2"
           :segmented="true"
         >
-          <n-form :rules="rules" label-width="80"  label-placement="left">
+          <n-form :rules="rules" ref="formRef" :model="formParams" label-width="80"  label-placement="left">
             <n-grid :cols="2" x-gap="20" y-gap="10">
-              <n-form-item-gi label="下拉选择">
+              <n-form-item-gi label="登录名" path="name">
+                <n-input placeholder="请输入登录名" v-model:value="formParams.name"/>
+              </n-form-item-gi>
+              <n-form-item-gi label="用户名" path="address">
+                <n-input placeholder="请输入用户名" v-model:value="formParams.address"/>
+              </n-form-item-gi>
+              <n-form-item-gi label="归属公司" path="name">
+                <n-input placeholder="请输入归属公司" v-model:value="formParams.name"/>
+              </n-form-item-gi>
+              <n-form-item-gi label="归属部门">
                 <n-select
                   placeholder="请选择一个吧"
                   :options="[
@@ -66,35 +73,32 @@
               ]"
                 />
               </n-form-item-gi>
-              <n-form-item-gi label="加减数量">
-                <n-input-number style="width: 100%" />
+              <n-form-item-gi label="工号">
+                <n-input type="text" placeholder="工号"/>
               </n-form-item-gi>
-              <n-form-item-gi label="输入框">
-                <n-input />
+              <n-form-item-gi label="密码">
+                <n-input type="password" show-password-on="mousedown"  placeholder="密码"/>
               </n-form-item-gi>
-              <n-form-item-gi label="复选框">
-                <n-checkbox-group>
-                  <n-space>
-                    <n-checkbox value="1">普通</n-checkbox>
-                    <n-checkbox value="2">独家</n-checkbox>
-                    <n-checkbox value="3">代理</n-checkbox>
-                  </n-space>
-                </n-checkbox-group>
+              <n-form-item-gi label="确认密码">
+                <n-input type="password" show-password-on="mousedown"  placeholder="确认密码"/>
               </n-form-item-gi>
-              <n-form-item-gi label="选择日期">
-                <n-date-picker style="width: 100%" />
+              <n-form-item-gi label="邮箱" path="email">
+                <n-auto-complete :input-props="{autocomplete:'disabled'}" :options="options"  v-model:value="formParams.email" placeholder="邮箱"/>
               </n-form-item-gi>
-              <n-form-item-gi label="日期范围">
-                <n-date-picker type="daterange" style="width: 100%" />
+              <n-form-item-gi label="手机号" path="phone">
+<!--                <n-input-number :show-button="false" placeholder="手机号" clearable max="99999999999"/>-->
+                <n-input  placeholder="手机号" v-model:value="formParams.phone" clearable />
               </n-form-item-gi>
-              <n-form-item-gi label="选择时间">
-                <n-time-picker style="width: 100%" />
+              <n-form-item-gi label="用户类型">
+                <n-select
+                  placeholder="用户类型"
+                  :options=dict0103
+                />
               </n-form-item-gi>
-              <n-form-item-gi label="开关按钮" path="name">
+              <n-form-item-gi>
+              </n-form-item-gi>
+              <n-form-item-gi label="是否启用" path="name" >
                 <n-switch />
-              </n-form-item-gi>
-              <n-form-item-gi label="用户名" path="name">
-                <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>
               </n-form-item-gi>
             </n-grid>
           </n-form>
@@ -133,8 +137,8 @@
 </template>
 
 <script lang="ts" setup>
-import {getCurrentInstance, h, reactive, ref} from 'vue';
-import {useMessage} from 'naive-ui';
+import {computed, getCurrentInstance, h, reactive, ref, toRef, toRefs} from 'vue';
+import {FormItemRule, useMessage} from 'naive-ui';
 import {BasicTable, TableAction} from '@/components/Table';
 import {BasicForm, useForm} from '@/components/Form/index';
 import {getTableList} from '@/api/user/user';
@@ -144,7 +148,7 @@ import {useRouter} from 'vue-router';
 
 
 const { proxy } = getCurrentInstance();
-const { dict0115 } = proxy.$useDict("0115");
+const { dict0103 } = proxy.$useDict("0103");
 const rules = {
   name: {
     required: true,
@@ -162,6 +166,36 @@ const rules = {
     trigger: ['blur', 'change'],
     message: '请选择日期',
   },
+  phone:{
+    required:true,
+    trigger: ['blur', 'input'],
+    validator (rule: FormItemRule, value: string) {
+      const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
+
+      if (!value) {
+        return new Error('需要手机号')
+      } else if (!/^\d*$/.test(value)) {
+        return new Error('手机号应该为数字')
+      } else if (!phoneReg.test(value)) {
+        return new Error('手机号格式不正确')
+      }
+      return true
+    }
+  },
+  email:{
+    required:true,
+    trigger: ['blur', 'input'],
+    validator (rule: FormItemRule, value: string) {
+      const emailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+
+      if (!value) {
+        return new Error('需要邮箱')
+      }else if (!emailReg.test(value)) {
+        return new Error('邮箱格式不正确')
+      }
+      return true
+    }
+  }
 };
 const startsData = ref([
   {
@@ -265,10 +299,14 @@ const actionRef = ref();
 
 const showModal = ref(false);
 const formBtnLoading = ref(false);
-const formParams = reactive({});
+const formParams = reactive({
+  email:''
+});
 
 
 const params = ref();
+
+const valueRef = ref('')
 
 const actionColumn = reactive({
   width: 220,
@@ -329,9 +367,21 @@ const [register, {}] = useForm({
   schemas,
 });
 
+
+
 function addTable() {
   showModal.value = true;
 }
+
+const options = computed(() => {
+  return ['@126.com', '@163.com', '@qq.com','@msfl.com.cn'].map((suffix) => {
+    const prefix = formParams.email.split('@')[0]
+    return {
+      label: prefix + suffix,
+      value: prefix + suffix
+    }
+  })
+})
 
 const loadDataTable = async (res) => {
   return await getTableList({...formParams, ...params.value, ...res});
@@ -344,6 +394,8 @@ function onCheckedRow(rowKeys) {
 function reloadTable() {
   actionRef.value.reload();
 }
+
+
 
 function confirmForm(e) {
   e.preventDefault();
