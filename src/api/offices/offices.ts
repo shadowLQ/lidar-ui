@@ -1,9 +1,9 @@
-import { http } from '@/utils/http/axios';
+import {http} from '@/utils/http/axios';
 
 //获取table
 export function getTableListOffices(params) {
   return http.request({
-    url: '/system/cbaySysDict/list',
+    url: '/system/cbaySysOffice/list',
     method: 'get',
     params,
   });
@@ -13,7 +13,8 @@ export function getTableListOffices(params) {
 // 根据机构类型查询机构信息
 export function getOfficesByOfcTypeCd(ofcTypeCd) {
   return http.request({
-    url: '/system/cbaySysDict/getByDictTypeCd/' + ofcTypeCd,
-    method: 'get'
-  })
+      url: '/system/cbaySysOffice/getByOfcTypeCd/' + ofcTypeCd,
+      method: 'get',
+    }
+  )
 }

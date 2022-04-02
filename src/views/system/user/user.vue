@@ -47,8 +47,8 @@
               <n-form-item-gi label="用户名" path="address">
                 <n-input placeholder="请输入用户名" v-model:value="formParams.address"/>
               </n-form-item-gi>
-              <n-form-item-gi label="归属公司" path="name">
-                <n-input placeholder="请输入归属公司" v-model:value="formParams.name"/>
+              <n-form-item-gi label="归属公司" >
+                <n-select placeholder="归属公司" v-model:value="formParams.name" :options=offices />
               </n-form-item-gi>
               <n-form-item-gi label="归属部门">
                 <n-select
@@ -145,10 +145,12 @@ import {getTableList} from '@/api/user/user';
 import {columns} from './columns';
 import {DeleteOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
+import {getOfficesByOfcTypeCd} from "@/api/offices/offices";
 
 
 const { proxy } = getCurrentInstance();
 const { dict0103 } = proxy.$useDict("0103");
+
 const rules = {
   name: {
     required: true,
@@ -305,6 +307,7 @@ const formParams = reactive({
 
 
 const params = ref();
+let offices =reactive([]);
 
 const valueRef = ref('')
 
@@ -443,6 +446,18 @@ function rowProps(values: Recordable) {
     },
   };
 }
+
+
+function getOffices() {
+    getOfficesByOfcTypeCd('010100000002').then(res=>{
+      offices = toRefs(...res);
+      console.log(offices)
+      console.log(111)
+    });
+}
+// (()=> getOfficesByOfcTypeCd('010100000001').then(res=> console.log(res)))()
+getOffices()
+console.log(startsData)
 </script>
 
 <style lang="less" scoped></style>
