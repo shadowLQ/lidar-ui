@@ -41,49 +41,29 @@
         >
           <n-form :rules="rules" ref="formRef" :model="formParams" label-width="80"  label-placement="left">
             <n-grid :cols="2" x-gap="20" y-gap="10">
-              <n-form-item-gi label="登录名" path="name">
+              <n-form-item-gi label="登录名" path="loginNm">
                 <n-input placeholder="请输入登录名" v-model:value="formParams.name"/>
               </n-form-item-gi>
               <n-form-item-gi label="用户名" path="address">
                 <n-input placeholder="请输入用户名" v-model:value="formParams.address"/>
               </n-form-item-gi>
               <n-form-item-gi label="归属公司" >
-                <n-select placeholder="归属公司" v-model:value="formParams.name" :options=offices />
+                <n-select placeholder="归属公司" v-model:value="formParams.name" :options=ofc />
               </n-form-item-gi>
               <n-form-item-gi label="归属部门">
-                <n-select
-                  placeholder="请选择一个吧"
-                  :options="[
-                {
-                  label: '选项一',
-                  value: 1,
-                },
-                {
-                  label: '选项二',
-                  value: 2,
-                },
-                {
-                  label: '选项三',
-                  value: 3,
-                },
-                {
-                  label: '选项四',
-                  value: 4,
-                },
-              ]"
-                />
+                <n-select placeholder="请选择一个吧" :options=dep />
               </n-form-item-gi>
               <n-form-item-gi label="工号">
                 <n-input type="text" placeholder="工号"/>
               </n-form-item-gi>
-              <n-form-item-gi label="密码">
+              <n-form-item-gi label="密码" path="password">
                 <n-input type="password" show-password-on="mousedown"  placeholder="密码"/>
               </n-form-item-gi>
               <n-form-item-gi label="确认密码">
                 <n-input type="password" show-password-on="mousedown"  placeholder="确认密码"/>
               </n-form-item-gi>
-              <n-form-item-gi label="邮箱" path="email">
-                <n-auto-complete :input-props="{autocomplete:'disabled'}" :options="options"  v-model:value="formParams.email" placeholder="邮箱"/>
+              <n-form-item-gi label="邮箱" path="userEmail">
+                <n-auto-complete :input-props="{autocomplete:'disabled'}" :options="options"  v-model:value="formParams.userEmail" placeholder="邮箱"/>
               </n-form-item-gi>
               <n-form-item-gi label="手机号" path="phone">
 <!--                <n-input-number :show-button="false" placeholder="手机号" clearable max="99999999999"/>-->
@@ -145,17 +125,19 @@ import {getTableList} from '@/api/user/user';
 import {columns} from './columns';
 import {DeleteOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
-import {getOfficesByOfcTypeCd} from "@/api/offices/offices";
+import {getDeps, getOffices} from '@/utils/dict';
 
 
 const { proxy } = getCurrentInstance();
 const { dict0103 } = proxy.$useDict("0103");
+const ofc = getOffices();
+const dep = getDeps();
 
 const rules = {
-  name: {
+  loginNm: {
     required: true,
     trigger: ['blur', 'input'],
-    message: '请输入名称11',
+    message: '请输入登录名',
   },
   address: {
     required: true,
@@ -167,6 +149,11 @@ const rules = {
     required: true,
     trigger: ['blur', 'change'],
     message: '请选择日期',
+  },
+  password: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '请输入密码',
   },
   phone:{
     required:true,
@@ -184,7 +171,7 @@ const rules = {
       return true
     }
   },
-  email:{
+  userEmail:{
     required:true,
     trigger: ['blur', 'input'],
     validator (rule: FormItemRule, value: string) {
@@ -302,12 +289,11 @@ const actionRef = ref();
 const showModal = ref(false);
 const formBtnLoading = ref(false);
 const formParams = reactive({
-  email:''
+  userEmail:''
 });
 
 
 const params = ref();
-let offices =reactive([]);
 
 const valueRef = ref('')
 
@@ -378,7 +364,7 @@ function addTable() {
 
 const options = computed(() => {
   return ['@126.com', '@163.com', '@qq.com','@msfl.com.cn'].map((suffix) => {
-    const prefix = formParams.email.split('@')[0]
+    const prefix = formParams.userEmail.split('@')[0]
     return {
       label: prefix + suffix,
       value: prefix + suffix
@@ -448,16 +434,8 @@ function rowProps(values: Recordable) {
 }
 
 
-function getOffices() {
-    getOfficesByOfcTypeCd('010100000002').then(res=>{
-      offices = toRefs(...res);
-      console.log(offices)
-      console.log(111)
-    });
-}
 // (()=> getOfficesByOfcTypeCd('010100000001').then(res=> console.log(res)))()
-getOffices()
-console.log(startsData)
+
 </script>
 
 <style lang="less" scoped></style>
