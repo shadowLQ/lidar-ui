@@ -82,8 +82,7 @@
               <n-form-item-gi>
               </n-form-item-gi>
               <n-form-item-gi label="状态" path="name">
-                <n-switch  checked-value="1"
-                           unchecked-value="0"  v-model:value="formParams.validInd"  size="large" :rail-style="railStyle" :default-value="true">
+                <n-switch  checked-value="1" unchecked-value="0"  v-model:value="formParams.validInd"  size="large" :rail-style="railStyle" :default-value="true">
                   <template #checked>
                     启用
                   </template>

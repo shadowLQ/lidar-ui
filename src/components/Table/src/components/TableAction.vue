@@ -2,7 +2,18 @@
   <div class="tableAction">
     <div class="flex items-center justify-center">
       <template v-for="(action, index) in getActions" :key="`${index}-${action.label}`">
-        <n-button icon-placement="left" v-bind="action" class="mx-2">{{ action.label }}
+
+        <n-popconfirm v-if="action.popConfirm"
+          @positive-click="handlePositiveClick"
+          @negative-click="handleNegativeClick"
+        >
+          <template #trigger>
+            <n-switch>删除</n-switch>
+          </template>
+          您真的，确定要删除吗？
+        </n-popconfirm>
+
+        <n-button v-else icon-placement="left" v-bind="action" class="mx-2">{{ action.label }}
           <template #icon v-if="action.icon">
             <n-icon  class="ml-1">
               <component :is="action.icon" />
