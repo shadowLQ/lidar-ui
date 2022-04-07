@@ -34,40 +34,44 @@
         </template>
       </BasicTable>
 
-      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="用户添加" :style="{ width: '800px' }">
+      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="用户添加"
+               :style="{ width: '800px' }">
         <n-card
           class="mt-2"
           :segmented="true"
         >
-          <n-form :rules="rules" ref="formRef" :model="formParams" label-width="80"  label-placement="left">
+          <n-form :rules="rules" ref="formRef" :model="formParams" label-width="80"
+                  label-placement="left">
             <n-grid :cols="2" x-gap="20" y-gap="10">
               <n-form-item-gi label="登录名" path="loginNm">
-                <n-input placeholder="请输入登录名" v-model:value="formParams.name"/>
+                <n-input placeholder="请输入登录名" v-model:value="formParams.loginNm"/>
               </n-form-item-gi>
-              <n-form-item-gi label="用户名" path="address">
-                <n-input placeholder="请输入用户名" v-model:value="formParams.address"/>
+              <n-form-item-gi label="用户名" path="userNm">
+                <n-input placeholder="请输入用户名" v-model:value="formParams.userNm"/>
               </n-form-item-gi>
-              <n-form-item-gi label="归属公司" >
-                <n-select placeholder="归属公司" v-model:value="formParams.name" :options=ofc />
+              <n-form-item-gi label="归属公司">
+                <n-select placeholder="归属公司" v-model:value="formParams.ofcId" :options="ofc"/>
               </n-form-item-gi>
               <n-form-item-gi label="归属部门">
-                <n-select placeholder="请选择一个吧" :options=dep />
+                <n-select placeholder="请选择一个吧" v-model:value="formParams.depId" :options="dep"/>
               </n-form-item-gi>
               <n-form-item-gi label="工号">
                 <n-input type="text" placeholder="工号"/>
               </n-form-item-gi>
               <n-form-item-gi label="密码" path="password">
-                <n-input type="password" show-password-on="mousedown"  placeholder="密码"/>
+                <n-input type="password" show-password-on="mousedown"
+                         v-model:value="formParams.password" placeholder="密码"/>
               </n-form-item-gi>
               <n-form-item-gi label="确认密码">
-                <n-input type="password" show-password-on="mousedown"  placeholder="确认密码"/>
+                <n-input type="password" show-password-on="mousedown" placeholder="确认密码"/>
               </n-form-item-gi>
               <n-form-item-gi label="邮箱" path="userEmail">
-                <n-auto-complete :input-props="{autocomplete:'disabled'}" :options="options"  v-model:value="formParams.userEmail" placeholder="邮箱"/>
+                <n-auto-complete :input-props="{autocomplete:'disabled'}" :options="options"
+                                 v-model:value="formParams.userEmail" placeholder="邮箱"/>
               </n-form-item-gi>
-              <n-form-item-gi label="手机号" path="phone">
-<!--                <n-input-number :show-button="false" placeholder="手机号" clearable max="99999999999"/>-->
-                <n-input  placeholder="手机号" v-model:value="formParams.phone" clearable />
+              <n-form-item-gi label="手机号" path="userMobile">
+                <!--                <n-input-number :show-button="false" placeholder="手机号" clearable max="99999999999"/>-->
+                <n-input placeholder="手机号" v-model:value="formParams.userMobile" clearable/>
               </n-form-item-gi>
               <n-form-item-gi label="用户类型">
                 <n-select
@@ -77,33 +81,41 @@
               </n-form-item-gi>
               <n-form-item-gi>
               </n-form-item-gi>
-              <n-form-item-gi label="是否启用" path="name" >
-                <n-switch />
+              <n-form-item-gi label="状态" path="name">
+                <n-switch  checked-value="1"
+                           unchecked-value="0"  v-model:value="formParams.validInd"  size="large" :rail-style="railStyle" :default-value="true">
+                  <template #checked>
+                    启用
+                  </template>
+                  <template #unchecked>
+                    禁用
+                  </template>
+                </n-switch>
               </n-form-item-gi>
             </n-grid>
           </n-form>
         </n-card>
-<!--        <n-form-->
-<!--          :model="formParams"-->
-<!--          :rules="rules"-->
-<!--          ref="formRef"-->
-<!--          label-placement="left"-->
-<!--          :label-width="80"-->
-<!--          class="py-4"-->
-<!--        >-->
-<!--          <n-form-item label="用户名" path="name">-->
-<!--            <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>-->
-<!--          </n-form-item>-->
-<!--          <n-form-item label="用户编号" path="address">-->
-<!--            <n-input type="textarea" placeholder="请输入用户编号" v-model:value="formParams.address"/>-->
-<!--          </n-form-item>-->
-<!--          &lt;!&ndash;        <n-form-item label="手机号" path="date">&ndash;&gt;-->
-<!--          &lt;!&ndash;          <n-date-picker type="datetime" placeholder="请选择日期" v-model:value="formParams.date" />&ndash;&gt;-->
-<!--          &lt;!&ndash;        </n-form-item>&ndash;&gt;-->
-<!--          <n-form-item label="手机号" path="name">-->
-<!--            <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>-->
-<!--          </n-form-item>-->
-<!--        </n-form>-->
+        <!--        <n-form-->
+        <!--          :model="formParams"-->
+        <!--          :rules="rules"-->
+        <!--          ref="formRef"-->
+        <!--          label-placement="left"-->
+        <!--          :label-width="80"-->
+        <!--          class="py-4"-->
+        <!--        >-->
+        <!--          <n-form-item label="用户名" path="name">-->
+        <!--            <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>-->
+        <!--          </n-form-item>-->
+        <!--          <n-form-item label="用户编号" path="address">-->
+        <!--            <n-input type="textarea" placeholder="请输入用户编号" v-model:value="formParams.address"/>-->
+        <!--          </n-form-item>-->
+        <!--          &lt;!&ndash;        <n-form-item label="手机号" path="date">&ndash;&gt;-->
+        <!--          &lt;!&ndash;          <n-date-picker type="datetime" placeholder="请选择日期" v-model:value="formParams.date" />&ndash;&gt;-->
+        <!--          &lt;!&ndash;        </n-form-item>&ndash;&gt;-->
+        <!--          <n-form-item label="手机号" path="name">-->
+        <!--            <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>-->
+        <!--          </n-form-item>-->
+        <!--        </n-form>-->
 
         <template #action>
           <n-space>
@@ -117,19 +129,23 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, getCurrentInstance, h, reactive, ref, toRef, toRefs} from 'vue';
+import {
+  computed,
+  CSSProperties, getCurrentInstance, h, nextTick, reactive, ref, toRef, toRefs, unref
+} from 'vue';
 import {FormItemRule, useMessage} from 'naive-ui';
 import {BasicTable, TableAction} from '@/components/Table';
 import {BasicForm, useForm} from '@/components/Form/index';
-import {getTableList} from '@/api/user/user';
+import {addUser, getTableList} from '@/api/user/user';
 import {columns} from './columns';
 import {DeleteOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
 import {getDeps, getOffices} from '@/utils/dict';
+import {addDictType} from "@/api/dict/dictType";
 
 
-const { proxy } = getCurrentInstance();
-const { dict0103 } = proxy.$useDict("0103");
+const {proxy} = getCurrentInstance();
+const {dict0103} = proxy.$useDict("0103");
 const ofc = getOffices();
 const dep = getDeps();
 
@@ -139,10 +155,10 @@ const rules = {
     trigger: ['blur', 'input'],
     message: '请输入登录名',
   },
-  address: {
+  userNm: {
     required: true,
     trigger: ['blur', 'input'],
-    message: '请输入地址',
+    message: '请输入用户名',
   },
   date: {
     type: 'number',
@@ -155,10 +171,10 @@ const rules = {
     trigger: ['blur', 'change'],
     message: '请输入密码',
   },
-  phone:{
-    required:true,
+  userMobile: {
+    required: true,
     trigger: ['blur', 'input'],
-    validator (rule: FormItemRule, value: string) {
+    validator(rule: FormItemRule, value: string) {
       const phoneReg = /^1[3|4|5|7|8][0-9]{9}$/
 
       if (!value) {
@@ -171,15 +187,15 @@ const rules = {
       return true
     }
   },
-  userEmail:{
-    required:true,
+  userEmail: {
+    required: true,
     trigger: ['blur', 'input'],
-    validator (rule: FormItemRule, value: string) {
+    validator(rule: FormItemRule, value: string) {
       const emailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
 
       if (!value) {
         return new Error('需要邮箱')
-      }else if (!emailReg.test(value)) {
+      } else if (!emailReg.test(value)) {
         return new Error('邮箱格式不正确')
       }
       return true
@@ -216,7 +232,7 @@ const schemas = [
     label: '用户状态',
     componentProps: {
       placeholder: '请选择用户状态',
-      options:[
+      options: [
         {
           label: '正常',
           value: 1,
@@ -255,30 +271,6 @@ const schemas = [
       },
     },
   },
-  {
-    field: 'loginNm',
-    component: 'NInput',
-    label: '登录名',
-    componentProps: {
-      placeholder: '请输入登录名',
-      showButton: false,
-      onInput: (e: any) => {
-        console.log(e);
-      },
-    },
-  },
-  {
-    field: 'loginNm',
-    component: 'NInput',
-    label: '登录名',
-    componentProps: {
-      placeholder: '请输入登录名',
-      showButton: false,
-      onInput: (e: any) => {
-        console.log(e);
-      },
-    },
-  },
 ];
 
 const router = useRouter();
@@ -288,9 +280,19 @@ const actionRef = ref();
 
 const showModal = ref(false);
 const formBtnLoading = ref(false);
-const formParams = reactive({
-  userEmail:''
+
+const defaultValueRef = () => ({
+  userEmail: '',
+  loginNm: '',
+  ofcId: '',
+  depId: '',
+  userMobile: '',
+  password: '',
+  userNm: '',
+  validInd: '1',
 });
+
+let formParams = reactive(defaultValueRef());
 
 
 const params = ref();
@@ -314,6 +316,7 @@ const actionColumn = reactive({
           ifShow: () => {
             return true;
           },
+          popConfirm: {title:"删除"},
           // 根据权限控制是否显示: 有权限，会显示，支持多个
           auth: ['basic_list'],
         },
@@ -326,26 +329,29 @@ const actionColumn = reactive({
           auth: ['basic_list'],
         },
       ],
-      dropDownActions: [
-        {
-          label: '启用',
-          key: 'enabled',
-          // 根据业务控制是否显示: 非enable状态的不显示启用按钮
-          ifShow: () => {
-            return true;
-          },
-        },
-        {
-          label: '禁用',
-          key: 'disabled',
-          ifShow: () => {
-            return true;
-          },
-        },
-      ],
-      select: (key) => {
-        message.info(`您点击了，${key} 按钮`);
-      },
+      switchActions: [
+
+      ]
+      // dropDownActions: [
+      //   {
+      //     label: '启用',
+      //     key: 'enabled',
+      //     // 根据业务控制是否显示: 非enable状态的不显示启用按钮
+      //     ifShow: () => {
+      //       return true;
+      //     },
+      //   },
+      //   {
+      //     label: '禁用',
+      //     key: 'disabled',
+      //     ifShow: () => {
+      //       return true;
+      //     },
+      //   },
+      // ],
+      // select: (key) => {
+      //   message.info(`您点击了，${key} 按钮`);
+      // },
     });
   },
 });
@@ -357,13 +363,25 @@ const [register, {}] = useForm({
 });
 
 
-
 function addTable() {
   showModal.value = true;
+  handleReset();
+
 }
 
+// function reset() {
+//   if (!options.value) return
+//   options.value.forEach((it: FormItem) => {
+//     if (it.reset) {
+//       it.reset(it)
+//     } else {
+//       it.value.value = null
+//     }
+//   })
+// }
+
 const options = computed(() => {
-  return ['@126.com', '@163.com', '@qq.com','@msfl.com.cn'].map((suffix) => {
+  return ['@126.com', '@163.com', '@qq.com', '@msfl.com.cn'].map((suffix) => {
     const prefix = formParams.userEmail.split('@')[0]
     return {
       label: prefix + suffix,
@@ -373,7 +391,7 @@ const options = computed(() => {
 })
 
 const loadDataTable = async (res) => {
-  return await getTableList({...formParams, ...params.value, ...res});
+  return await getTableList({...params.value, ...res});
 };
 
 function onCheckedRow(rowKeys) {
@@ -385,17 +403,25 @@ function reloadTable() {
 }
 
 
-
 function confirmForm(e) {
   e.preventDefault();
   formBtnLoading.value = true;
   formRef.value.validate((errors) => {
+    console.log(formRef)
     if (!errors) {
-      message.success('新建成功');
-      setTimeout(() => {
+      addUser(formParams).then(res => {
+        console.log(res)
         showModal.value = false;
+        message.success(res.message);
         reloadTable();
-      });
+      }).catch((err) => {
+        message.error(err);
+      })
+      // message.success('新建成功');
+      // setTimeout(() => {
+      //   showModal.value = false;
+      //   reloadTable();
+      // });
     } else {
       message.error('请填写完整信息');
     }
@@ -419,8 +445,12 @@ function handleSubmit(values: Recordable) {
   reloadTable();
 }
 
-function handleReset(values: Recordable) {
-  console.log(values);
+function handleReset() {
+  // console.log(values);
+
+  formRef.value?.restoreValidation();
+  formParams = Object.assign(unref(formParams), defaultValueRef());
+
 }
 
 function rowProps(values: Recordable) {
@@ -431,6 +461,24 @@ function rowProps(values: Recordable) {
       message.info('11111');
     },
   };
+}
+
+function railStyle(info) {
+  const {checked, focused} = info;
+  const style: CSSProperties = {}
+  if (checked) {
+    style.background = '#2080f0'
+    if (focused) {
+      style.boxShadow = '0 0 0 2px #2080f040'
+    }
+  } else {
+    style.background = '#d03050'
+    if (focused) {
+      style.boxShadow = '0 0 0 2px #d0305040'
+    }
+  }
+  return style
+
 }
 
 

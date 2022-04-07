@@ -8,3 +8,18 @@ export function getTableList(params) {
     params,
   });
 }
+
+/**
+ * 新增用户
+ */
+export function addUser(params) {
+  return http.request({
+      url: '/system/cbaySysUser/add',
+      method: 'POST',
+      params,
+    },
+    {
+      isTransformResponse: false,
+    }
+  );
+}
