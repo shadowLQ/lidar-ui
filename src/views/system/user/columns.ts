@@ -136,6 +136,9 @@ export const columns = [
 ];
 
 
+
+
+
 function railStyle(info) {
   const {checked, focused} = info;
   const style: CSSProperties = {}
