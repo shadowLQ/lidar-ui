@@ -69,9 +69,11 @@ export const columns = [
       function systemOpenChange(value) {
         row.validInd=value;
         if (value) {
+          let text = row.validInd === "0" ? "禁用" : "启用";
           dialog.warning({
             title: '提示',
-            content: '您确定要关闭系统访问吗？该操作立马生效，请慎重操作！',
+            style: 'font-weight: bold',
+            content: `您确定要${text}${row.userNm}?该操作立马生效，请慎重操作！`,
             positiveText: '确定',
             negativeText: '取消',
             onPositiveClick: () => {
@@ -79,14 +81,11 @@ export const columns = [
 
             },
             onNegativeClick: () => {
-
-              if (value==="1"){
-                row.validInd="0";
-              }else {
-                row.validInd="1";
-              }
-
+              row.validInd= value==="1"? "0":"1";
             },
+            onMaskClick: () => {
+              row.validInd= value==="1"? "0":"1";
+            }
           });
         }
       }
