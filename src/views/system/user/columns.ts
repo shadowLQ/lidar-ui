@@ -71,9 +71,15 @@ export const columns = [
         if (value) {
           let text = row.validInd === "0" ? "禁用" : "启用";
           dialog.warning({
-            title: '提示',
-            style: 'font-weight: bold',
-            content: `您确定要${text}${row.userNm}?该操作立马生效，请慎重操作！`,
+            title: '警告',
+            // content: `您确定要${text}${row.userNm}?该操作立马生效，请慎重操作！`,
+            content: ()=>{
+              return h(
+                'p', {style:'padding-left: 35px'},[`您确定要,${text}`,h('span',{
+                  style:'font-weight:bold'
+                },`${row.userNm}`),`该操作立马生效,请慎重操作!`],
+              )
+            },
             positiveText: '确定',
             negativeText: '取消',
             onPositiveClick: () => {

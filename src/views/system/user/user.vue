@@ -1,5 +1,4 @@
 <template>
-  <n-space vertical>
     <n-card :bordered="false" class="n-card pt-3 mb-3 proCard">
       <BasicForm @register="register" @submit="handleSubmit" @reset="handleReset">
         <template #statusSlot="{ model, field }">
@@ -15,6 +14,7 @@
         :row-key="(row) => row.userId"
         ref="actionRef"
         :actionColumn="actionColumn"
+
         @update:checked-row-keys="onCheckedRow"
         :scroll-x="1090"
       >
@@ -44,16 +44,16 @@
                   label-placement="left">
             <n-grid :cols="2" x-gap="20" y-gap="10">
               <n-form-item-gi label="登录名" path="loginNm">
-                <n-input placeholder="请输入登录名" v-model:value="formParams.loginNm"/>
+                <n-input clearable placeholder="请输入登录名" v-model:value="formParams.loginNm"/>
               </n-form-item-gi>
               <n-form-item-gi label="用户名" path="userNm">
-                <n-input placeholder="请输入用户名" v-model:value="formParams.userNm"/>
+                <n-input clearable placeholder="请输入用户名" v-model:value="formParams.userNm"/>
               </n-form-item-gi>
               <n-form-item-gi label="归属公司">
-                <n-select placeholder="归属公司" v-model:value="formParams.ofcId" :options="ofc"/>
+                <n-select  filterable clearable placeholder="归属公司" v-model:value="formParams.ofcId" :options="ofc"/>
               </n-form-item-gi>
               <n-form-item-gi label="归属部门">
-                <n-select placeholder="请选择一个吧" v-model:value="formParams.depId" :options="dep"/>
+                <n-select  filterable clearable placeholder="归属部门" v-model:value="formParams.depId" :options="dep"/>
               </n-form-item-gi>
               <n-form-item-gi label="工号">
                 <n-input type="text" placeholder="工号"/>
@@ -124,7 +124,7 @@
         </template>
       </n-modal>
     </n-card>
-  </n-space>
+
 </template>
 
 <script lang="ts" setup>
@@ -233,7 +233,7 @@ const schemas = [
       placeholder: '请选择用户状态',
       options: [
         {
-          label: '正常',
+          label: '启用',
           value: 1,
         },
         {
@@ -252,6 +252,30 @@ const schemas = [
     label: '手机',
     componentProps: {
       placeholder: '请输入手机号码',
+      showButton: false,
+      onInput: (e: any) => {
+        console.log(e);
+      },
+    },
+  },
+  {
+    field: 'loginNm',
+    component: 'NInput',
+    label: '登录名',
+    componentProps: {
+      placeholder: '请输入登录名',
+      showButton: false,
+      onInput: (e: any) => {
+        console.log(e);
+      },
+    },
+  },
+  {
+    field: 'loginNm',
+    component: 'NInput',
+    label: '登录名',
+    componentProps: {
+      placeholder: '请输入登录名',
       showButton: false,
       onInput: (e: any) => {
         console.log(e);
