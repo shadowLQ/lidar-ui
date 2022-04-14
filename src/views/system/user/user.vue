@@ -9,7 +9,6 @@
     <n-card :bordered="false" class="n-card proCard">
       <BasicTable
         :columns="columns"
-        :row-props="rowProps"
         :request="loadDataTable"
         :row-key="(row) => row.userId"
         ref="actionRef"
@@ -44,7 +43,7 @@
                   label-placement="left">
             <n-grid :cols="2" x-gap="20" y-gap="10">
               <n-form-item-gi label="登录名" path="loginNm">
-                <n-input clearable placeholder="请输入登录名" v-model:value="formParams.loginNm"/>
+                <n-input clearable :disabled="disabled" placeholder="请输入登录名" v-model:value="formParams.loginNm"/>
               </n-form-item-gi>
               <n-form-item-gi label="用户名" path="userNm">
                 <n-input clearable placeholder="请输入用户名" v-model:value="formParams.userNm"/>
@@ -58,11 +57,11 @@
               <n-form-item-gi label="工号">
                 <n-input type="text" placeholder="工号"/>
               </n-form-item-gi>
-              <n-form-item-gi label="密码" path="password">
+              <n-form-item-gi v-if="formParams.userId == undefined" label="密码" path="password">
                 <n-input type="password" show-password-on="mousedown"
                          v-model:value="formParams.password" placeholder="密码"/>
               </n-form-item-gi>
-              <n-form-item-gi label="确认密码">
+              <n-form-item-gi v-if="formParams.userId == undefined" label="确认密码">
                 <n-input type="password" show-password-on="mousedown" placeholder="确认密码"/>
               </n-form-item-gi>
               <n-form-item-gi label="邮箱" path="userEmail">
@@ -77,6 +76,7 @@
                 <n-select
                   placeholder="用户类型"
                   :options=dict0103
+                  v-model:value="formParams.userTypeCd"
                 />
               </n-form-item-gi>
               <n-form-item-gi>
@@ -135,7 +135,7 @@ import {
 import {FormItemRule, useMessage} from 'naive-ui';
 import {BasicTable, TableAction} from '@/components/Table';
 import {BasicForm, useForm} from '@/components/Form/index';
-import {addUser, getTableList} from '@/api/user/user';
+import {addUser, getByUserId, getTableList} from '@/api/user/user';
 import {columns} from './columns';
 import {DeleteOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
@@ -302,6 +302,7 @@ const message = useMessage();
 const actionRef = ref();
 
 const showModal = ref(false);
+const disabled = ref(false);
 const formBtnLoading = ref(false);
 
 const defaultValueRef = () => ({
@@ -313,6 +314,8 @@ const defaultValueRef = () => ({
   password: '',
   userNm: '',
   validInd: '1',
+  userTypeCd: '',
+  userId: undefined,
 });
 
 let formParams = reactive(defaultValueRef());
@@ -329,7 +332,7 @@ const actionColumn = reactive({
   fixed: 'right',
   render(record) {
     return h(TableAction as any, {
-      style: 'button',
+      style: 'text',
       actions: [
         {
           label: '删除',
@@ -339,7 +342,6 @@ const actionColumn = reactive({
           ifShow: () => {
             return true;
           },
-          popConfirm: {title:"删除"},
           // 根据权限控制是否显示: 有权限，会显示，支持多个
           auth: ['basic_list'],
         },
@@ -453,8 +455,15 @@ function confirmForm(e) {
 }
 
 function handleEdit(record: Recordable) {
+  showModal.value = true;
+  getByUserId(record.userId).then(res => {
+    console.log(res)
+    disabled.value=true;
+    // formParams = Object.assign(unref(formParams), defaultValueRef());
+    formParams = Object.assign(unref(formParams), res);
+  })
   console.log('点击了编辑', record);
-  router.push({name: 'basic-info', params: {id: record.id}});
+  // router.push({name: 'basic-info', params: {id: record.id}});
 }
 
 function handleDelete(record: Recordable) {
@@ -476,15 +485,15 @@ function handleReset() {
 
 }
 
-function rowProps(values: Recordable) {
-  return {
-    style: 'cursor: pointer;',
-    onClick: () => {
-      console.log(values);
-      message.info('11111');
-    },
-  };
-}
+// function rowProps(values: Recordable) {
+//   return {
+//     style: 'cursor: pointer;',
+//     onClick: () => {
+//       console.log(values);
+//       message.info('11111');
+//     },
+//   };
+// }
 
 function railStyle(info) {
   const {checked, focused} = info;

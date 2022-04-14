@@ -23,3 +23,13 @@ export function addUser(params) {
     }
   );
 }
+/**
+ * 根据用户id获取用户信息
+ */
+export function getByUserId(params) {
+  return http.request({
+      url: '/system/cbaySysUser/getByUserId/'+params,
+      method: 'get'
+    }
+  );
+}

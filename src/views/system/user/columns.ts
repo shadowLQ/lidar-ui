@@ -75,7 +75,7 @@ export const columns = [
             // content: `您确定要${text}${row.userNm}?该操作立马生效，请慎重操作！`,
             content: ()=>{
               return h(
-                'p', {style:'padding-left: 35px'},[`您确定要,${text}`,h('span',{
+                'p', {style:'padding-left: 35px'},[`您确定要${text}`,h('span',{
                   style:'font-weight:bold'
                 },`${row.userNm}`),`该操作立马生效,请慎重操作!`],
               )
