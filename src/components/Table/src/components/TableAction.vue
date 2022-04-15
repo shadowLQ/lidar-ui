@@ -128,7 +128,6 @@
             return hasPermission(action.auth) && isIfShow(action);
           })
           .map((action) => {
-            debugger
             const { popConfirm } = action;
             //需要展示什么风格，自己修改一下参数
             return {
