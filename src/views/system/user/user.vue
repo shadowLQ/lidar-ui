@@ -1,4 +1,5 @@
 <template>
+  <div>
     <n-card :bordered="false" class="n-card pt-3 mb-3 proCard">
       <BasicForm @register="register" @submit="handleSubmit" @reset="handleReset">
         <template #statusSlot="{ model, field }">
@@ -124,7 +125,7 @@
         </template>
       </n-modal>
     </n-card>
-
+  </div>
 </template>
 
 <script lang="ts" setup>
