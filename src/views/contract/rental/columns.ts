@@ -1,8 +1,5 @@
-// import { h } from 'vue';
-// import { NAvatar } from 'naive-ui';
-
-import {CSSProperties, getCurrentInstance, h} from "vue";
-import {NSwitch, NTag, useDialog} from "naive-ui";
+import {h} from "vue";
+import {NTag} from "naive-ui";
 
 export const columns = [
   {
@@ -77,7 +74,7 @@ export const columns = [
     title: '用户状态',
     key: 'validInd',
     width: 100,
-    render(row) {
+    render() {
       return h(
         NTag,
         {
@@ -100,29 +97,6 @@ export const columns = [
   },
 ];
 
-const {proxy} = getCurrentInstance();
-
-const {dict0103} = proxy.$useDict("0103");
-
-
-
-function railStyle(info) {
-  const {checked, focused} = info;
-  const style: CSSProperties = {}
-  if (checked) {
-    style.background = '#2080f0'
-    if (focused) {
-      style.boxShadow = '0 0 0 2px #2080f040'
-    }
-  } else {
-    style.background = '#d03050'
-    if (focused) {
-      style.boxShadow = '0 0 0 2px #d0305040'
-    }
-  }
-  return style
-
-}
 
 
 

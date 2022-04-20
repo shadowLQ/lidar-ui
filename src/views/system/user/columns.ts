@@ -1,8 +1,10 @@
 // import { h } from 'vue';
 // import { NAvatar } from 'naive-ui';
 
-import {CSSProperties, h, renderSlot} from "vue";
-import {NButton, NPopconfirm, NSwitch, useDialog} from "naive-ui";
+import {CSSProperties, h} from "vue";
+import {NSwitch, useDialog} from "naive-ui";
+import {getDictLable, useDict} from "@/utils/dict";
+let {dict0103} = useDict("0103");
 
 export const columns = [
   {
@@ -43,6 +45,16 @@ export const columns = [
     title: '手机',
     key: 'userMobile',
     width: 100,
+  },
+  {
+    title: '用户类型',
+    key: 'userTypeCd',
+    width: 100,
+    render(row) {
+      return h(
+        () => (getDictLable(row.userTypeCd,dict0103))
+      );
+    },
   },
   // {
   //   title: '用户状态',

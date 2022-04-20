@@ -40,3 +40,18 @@ export function getDeps() {
   });
   return offices;
 }
+
+
+export function getDictLable(a,dictValue){
+  let lab="";
+  const arr=Array.isArray(a) ? a : [String(a )];
+  dictValue.value.forEach((d)=>{
+    if (arr.includes(d.value)){
+      console.log(d.label)
+      lab=d.label
+      return;
+    }
+  })
+  return lab;
+}
+
