@@ -1,6 +1,6 @@
 import { http } from '@/utils/http/axios';
 
-//获取table
+//获取合同table
 export function getTableList(params) {
   return http.request({
     url: '/contract/olRentalContract/list',
