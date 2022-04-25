@@ -50,7 +50,7 @@
                 <n-input clearable placeholder="请输入用户名" v-model:value="formParams.userNm"/>
               </n-form-item-gi>
               <n-form-item-gi label="归属公司">
-                <n-select  filterable clearable placeholder="归属公司" v-model:value="formParams.ofcId" :options="ofc"/>
+                <n-select  filterable clearable placeholder="归属公司" :render-label="renderLabel"  v-model:value="formParams.ofcId" :options="ofc"/>
               </n-form-item-gi>
               <n-form-item-gi label="归属部门">
                 <n-select  filterable clearable placeholder="归属部门" v-model:value="formParams.depId" :options="dep"/>
@@ -131,14 +131,14 @@
 <script lang="ts" setup>
 import {
   computed,
-  CSSProperties, getCurrentInstance, h, nextTick, reactive, ref, toRef, toRefs, unref
+  CSSProperties, getCurrentInstance, h, nextTick, reactive, ref, toRef, toRefs, unref, VNodeChild
 } from 'vue';
-import {FormItemRule, useMessage} from 'naive-ui';
+import {FormItemRule, NEllipsis, NIcon, SelectOption, useMessage} from 'naive-ui';
 import {BasicTable, TableAction} from '@/components/Table';
 import {BasicForm, useForm} from '@/components/Form/index';
 import {addUser, getByUserId, getTableList} from '@/api/user/user';
 import {columns} from './columns';
-import {DeleteOutlined, PlusOutlined} from '@vicons/antd';
+import {DeleteOutlined, FormOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
 import {getDeps, getOffices} from '@/utils/dict';
 import {addDictType} from "@/api/dict/dictType";
@@ -348,6 +348,7 @@ const actionColumn = reactive({
         },
         {
           label: '编辑',
+          icon: FormOutlined,
           onClick: handleEdit.bind(null, record),
           ifShow: () => {
             return true;
@@ -391,6 +392,7 @@ const [register, {}] = useForm({
 
 function addTable() {
   showModal.value = true;
+  disabled.value=false;
   handleReset();
 
 }
@@ -513,7 +515,17 @@ function railStyle(info) {
   return style
 
 }
-
+//
+function renderLabel (option){
+  return [
+    h(
+      NEllipsis,
+      null,
+      {
+        default: () => option.label
+      }
+    )]
+}
 
 // (()=> getOfficesByOfcTypeCd('010100000001').then(res=> console.log(res)))()
 
