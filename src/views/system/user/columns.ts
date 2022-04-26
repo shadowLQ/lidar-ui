@@ -1,6 +1,3 @@
-// import { h } from 'vue';
-// import { NAvatar } from 'naive-ui';
-
 import {CSSProperties, h} from "vue";
 import {NSwitch, useDialog} from "naive-ui";
 import {getDictLable, useDict} from "@/utils/dict";
