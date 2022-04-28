@@ -17,24 +17,24 @@
               label-placement="left">
         <n-grid :cols="3" x-gap="20" y-gap="10">
           <n-form-item-gi label="登录名" path="loginNm">
-            <n-input clearable  placeholder="请输入登录名" />
+            <n-input clearable placeholder="请输入登录名"/>
           </n-form-item-gi>
           <n-form-item-gi label="用户名" path="userNm">
-            <n-input clearable placeholder="请输入用户名" />
+            <n-input clearable placeholder="请输入用户名"/>
           </n-form-item-gi>
           <n-form-item-gi label="归属公司">
-            <n-select  filterable clearable placeholder="归属公司" :render-label="renderLabel"  />
+            <n-select filterable clearable placeholder="归属公司" :render-label="renderLabel"/>
           </n-form-item-gi>
           <n-form-item-gi label="归属部门">
-            <n-select  filterable clearable placeholder="归属部门" />
+            <n-select filterable clearable placeholder="归属部门"/>
           </n-form-item-gi>
           <n-form-item-gi label="工号">
             <n-input type="text" placeholder="工号"/>
           </n-form-item-gi>
-          <n-form-item-gi  label="密码" path="password">
+          <n-form-item-gi label="密码" path="password">
             <n-input type="password" show-password-on="mousedown" placeholder="密码"/>
           </n-form-item-gi>
-          <n-form-item-gi  label="确认密码">
+          <n-form-item-gi label="确认密码">
             <n-input type="password" show-password-on="mousedown" placeholder="确认密码"/>
           </n-form-item-gi>
           <n-form-item-gi label="邮箱" path="userEmail">
@@ -42,7 +42,7 @@
           </n-form-item-gi>
           <n-form-item-gi label="手机号" path="userMobile">
             <!--                <n-input-number :show-button="false" placeholder="手机号" clearable max="99999999999"/>-->
-            <n-input placeholder="手机号"  clearable/>
+            <n-input placeholder="手机号" clearable/>
           </n-form-item-gi>
           <n-form-item-gi label="用户类型">
             <n-select
@@ -52,7 +52,8 @@
           <n-form-item-gi>
           </n-form-item-gi>
           <n-form-item-gi label="状态" path="name">
-            <n-switch  checked-value="1" unchecked-value="0"   size="large" :rail-style="railStyle" :default-value="true">
+            <n-switch checked-value="1" unchecked-value="0" size="large" :rail-style="railStyle"
+                      :default-value="true">
               <template #checked>
                 启用
               </template>
@@ -115,69 +116,84 @@
     >
       <n-table :bordered="false" :single-line="false">
         <thead>
-          <tr>
-            <th>姓名</th>
-            <th>性别</th>
-            <th>城市</th>
-            <th>生日</th>
-            <th width="150">操作</th>
-          </tr>
+        <tr>
+          <th>姓名</th>
+          <th>性别</th>
+          <th>城市</th>
+          <th>生日</th>
+          <th width="150">操作</th>
+        </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Ah jung</td>
-            <td>男</td>
-            <td>深圳</td>
-            <td>1993-11-09</td>
-            <td>
-              <n-space>
-                <n-button size="small" type="error">删除</n-button>
-                <n-button size="small" type="info">查看</n-button>
-              </n-space>
-            </td>
-          </tr>
-          <tr>
-            <td>西门飞雪</td>
-            <td>男</td>
-            <td>广州</td>
-            <td>1991-09-11</td>
-            <td>
-              <n-space>
-                <n-button size="small" type="error">删除</n-button>
-                <n-button size="small" type="info">查看</n-button>
-              </n-space>
-            </td>
-          </tr>
-          <tr>
-            <td>泰坦巨人</td>
-            <td>男</td>
-            <td>北京</td>
-            <td>1990-11-03</td>
-            <td>
-              <n-space>
-                <n-button size="small" type="error">删除</n-button>
-                <n-button size="small" type="info">查看</n-button>
-              </n-space>
-            </td>
-          </tr>
-          <tr>
-            <td>猎魔人</td>
-            <td>女</td>
-            <td>上海</td>
-            <td>1992-03-11</td>
-            <td>
-              <n-space>
-                <n-button size="small" type="error">删除</n-button>
-                <n-button size="small" type="info">查看</n-button>
-              </n-space>
-            </td>
-          </tr>
+        <tr>
+          <td>Ah jung</td>
+          <td>男</td>
+          <td>深圳</td>
+          <td>1993-11-09</td>
+          <td>
+            <n-space>
+              <n-button size="small" type="error">删除</n-button>
+              <n-button size="small" type="info">查看</n-button>
+            </n-space>
+          </td>
+        </tr>
+        <tr>
+          <td>西门飞雪</td>
+          <td>男</td>
+          <td>广州</td>
+          <td>1991-09-11</td>
+          <td>
+            <n-space>
+              <n-button size="small" type="error">删除</n-button>
+              <n-button size="small" type="info">查看</n-button>
+            </n-space>
+          </td>
+        </tr>
+        <tr>
+          <td>泰坦巨人</td>
+          <td>男</td>
+          <td>北京</td>
+          <td>1990-11-03</td>
+          <td>
+            <n-space>
+              <n-button size="small" type="error">删除</n-button>
+              <n-button size="small" type="info">查看</n-button>
+            </n-space>
+          </td>
+        </tr>
+        <tr>
+          <td>猎魔人</td>
+          <td>女</td>
+          <td>上海</td>
+          <td>1992-03-11</td>
+          <td>
+            <n-space>
+              <n-button size="small" type="error">删除</n-button>
+              <n-button size="small" type="info">查看</n-button>
+            </n-space>
+          </td>
+        </tr>
         </tbody>
       </n-table>
+    </n-card>
+
+    <n-card class="page-wrapper-footer">
+      <n-space justify="end">
+        <n-button>重置</n-button>
+        <n-button type="info">提交</n-button>
+      </n-space>
+
     </n-card>
   </div>
 </template>
 
 <script setup></script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.page-wrapper-footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  //z-index: 800;
+}
+</style>
