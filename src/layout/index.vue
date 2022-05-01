@@ -63,7 +63,7 @@
         <!--          <PageFooter />-->
         <!--        </NLayoutFooter>-->
       </n-layout-content>
-      <n-back-top :right="100" />
+<!--      <n-back-top :right="100" />-->
     </n-layout>
   </n-layout>
 </template>
