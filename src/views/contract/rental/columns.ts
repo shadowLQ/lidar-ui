@@ -32,67 +32,62 @@ export const columns = [
   },
   {
     title: '产品大类',
-    key: 'userTel',
+    key: 'productCategory',
     width: 100,
   },
   {
     title: '产品子类',
-    key: 'userMobile',
+    key: 'productSubCategory',
     width: 100,
   },
   {
     title: '主办客户经理',
-    key: 'userMobile',
+    key: 'mainManagerName',
     width: 150,
   },
   {
     title: '协办客户经理',
-    key: 'userMobile',
+    key: 'coManagerName',
     width: 150,
   },
   {
     title: '出租人',
-    key: 'userMobile',
+    key: 'leaserName',
     width: 100,
   },
   {
     title: '承租人',
-    key: 'userMobile',
+    key: 'lesseeName',
     width: 100,
   },
   {
     title: '资产描述',
-    key: 'userMobile',
+    key: 'assetDesc',
     width: 100,
   },
   {
-    title: '资产描述',
-    key: 'userMobile',
+    title: '租赁类型',
+    key: 'leaseCategory',
     width: 100,
   },
   {
-    title: '用户状态',
-    key: 'validInd',
-    width: 100,
-    render() {
-      return h(
-        NTag,
-        {
-          type: 1 ==1 ? 'success' : 'error',
-        },
-        {
-          default: () => (1 ==1? '正常' : '禁用'),
-        }
-      );
-    },
+    title: '合同状态',
+    key: 'contractStatus',
+    width: 100
   },
   {
-    title: '地址',
-    key: 'address',
-    auth: ['basic_list'], // 同时根据权限控制是否显示
-    ifShow: (_column) => {
-      return true; // 根据业务控制是否显示
-    },
+    title: '币种',
+    key: 'currencyCde',
+    width: 150,
+  },
+  {
+    title: '起租日期',
+    key: 'startDate',
+    width: 150,
+  },
+  {
+    title: '退组日期',
+    key: 'contractOverDate',
     width: 150,
   },
 ];

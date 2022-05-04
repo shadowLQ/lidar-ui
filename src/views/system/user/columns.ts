@@ -1,7 +1,8 @@
 import {CSSProperties, h} from "vue";
 import {NSwitch, useDialog} from "naive-ui";
 import {getDictLable, useDict} from "@/utils/dict";
-let {dict0103} = useDict("0103");
+// @ts-ignore
+let { dict0103 } = useDict("0103");
 
 export const columns = [
   {

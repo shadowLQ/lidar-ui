@@ -80,18 +80,6 @@
                   v-model:value="formParams.userTypeCd"
                 />
               </n-form-item-gi>
-              <n-form-item-gi>
-              </n-form-item-gi>
-              <n-form-item-gi label="状态" path="name">
-                <n-switch  checked-value="1" unchecked-value="0"  v-model:value="formParams.validInd"  size="large" :rail-style="railStyle" :default-value="true">
-                  <template #checked>
-                    启用
-                  </template>
-                  <template #unchecked>
-                    禁用
-                  </template>
-                </n-switch>
-              </n-form-item-gi>
             </n-grid>
           </n-form>
         </n-card>
@@ -145,7 +133,10 @@ import {addDictType} from "@/api/dict/dictType";
 
 
 const {proxy} = getCurrentInstance();
-const {dict0103} = proxy.$useDict("0103");
+// 合同状态
+const {dict7007} = proxy.$useDict("7007");
+// 币种
+const {dict1170} = proxy.$useDict("1170");
 
 
 const ofc = getOffices();
@@ -216,85 +207,76 @@ const startsData = ref([
 ]);
 const schemas = [
   {
-    field: 'userNm',
-    labelMessage: '这是一个提示',
+    field: 'contractId',
     component: 'NInput',
-    label: '姓名',
+    label: '合同ID',
     componentProps: {
-      placeholder: '请输入姓名',
+      placeholder: '请输入合同ID'
+    },
+  },
+  {
+    field: 'externalContractNbr',
+    component: 'NInput',
+    label: '外部合同编号',
+    componentProps: {
+      placeholder: '请输入外部合同编号'
+    },
+  },
+  {
+    field: 'projectName',
+    component: 'NInput',
+    label: '项目名称',
+    componentProps: {
+      placeholder: '请输入项目名称'
+    },
+  },
+  {
+    field: 'loginNm',
+    component: 'NInput',
+    label: '登录名',
+    componentProps: {
+      placeholder: '请输入登录名',
+      showButton: false,
       onInput: (e: any) => {
         console.log(e);
       },
     },
-    // rules: [{ required: true, message: '请输入姓名', trigger: ['blur'] }],
   },
   {
-    field: 'validInd',
+    field: 'contractStatus',
     component: 'NSelect',
-    label: '用户状态',
+    label: '合同状态',
     componentProps: {
-      placeholder: '请选择用户状态',
-      options: [
-        {
-          label: '启用',
-          value: 1,
-        },
-        {
-          label: '禁用',
-          value: 0,
-        },
-      ],
-      onUpdateValue: (e: any) => {
-        console.log(e);
-      },
+      placeholder: '请输入合同状态',
+      options: dict7007
     },
   },
+
   {
-    field: 'mobile',
-    component: 'NInputNumber',
-    label: '手机',
-    componentProps: {
-      placeholder: '请输入手机号码',
-      showButton: false,
-      onInput: (e: any) => {
-        console.log(e);
-      },
-    },
-  },
-  {
-    field: 'loginNm',
-    component: 'NInput',
-    label: '登录名',
+    field: 'currencyCde',
+    component: 'NSelect',
+    label: '币种',
     componentProps: {
       placeholder: '请输入登录名',
-      showButton: false,
-      onInput: (e: any) => {
-        console.log(e);
-      },
+      options: dict1170
     },
   },
   {
-    field: 'loginNm',
-    component: 'NInput',
-    label: '登录名',
+    field: 'currencyCde',
+    component: 'NSelect',
+    label: '币种',
     componentProps: {
       placeholder: '请输入登录名',
-      showButton: false,
-      onInput: (e: any) => {
-        console.log(e);
-      },
+      options: dict1170
     },
   },
   {
-    field: 'loginNm',
-    component: 'NInput',
-    label: '登录名',
+    field: 'currencyCde',
+    component: 'NSelect',
+    label: '币种',
     componentProps: {
       placeholder: '请输入登录名',
-      showButton: false,
-      onInput: (e: any) => {
-        console.log(e);
-      },
+      options: dict1170
     },
   },
 ];
@@ -309,7 +291,7 @@ const disabled = ref(false);
 const formBtnLoading = ref(false);
 
 const defaultValueRef = () => ({
-  userEmail: '',
+  contractId: '',
   loginNm: '',
   ofcId: '',
   depId: '',
@@ -386,8 +368,8 @@ const actionColumn = reactive({
 });
 
 const [register, {}] = useForm({
-  gridProps: {cols: '1 s:1 m:2 l:3 xl:4 2xl:4'},
-  labelWidth: 80,
+  gridProps: {cols: '1 s:1 m:2 l:3 xl:6 2xl:4'},
+  labelWidth: 100,
   schemas,
 });
 
@@ -397,27 +379,6 @@ function addTable() {
   handleReset();
 
 }
-
-// function reset() {
-//   if (!options.value) return
-//   options.value.forEach((it: FormItem) => {
-//     if (it.reset) {
-//       it.reset(it)
-//     } else {
-//       it.value.value = null
-//     }
-//   })
-// }
-
-const options = computed(() => {
-  return ['@126.com', '@163.com', '@qq.com', '@msfl.com.cn'].map((suffix) => {
-    const prefix = formParams.userEmail.split('@')[0]
-    return {
-      label: prefix + suffix,
-      value: prefix + suffix
-    }
-  })
-})
 
 const loadDataTable = async (res) => {
   return await getTableList({...params.value, ...res});
@@ -488,35 +449,6 @@ function handleReset() {
   formParams = Object.assign(unref(formParams), defaultValueRef());
 
 }
-
-// function rowProps(values: Recordable) {
-//   return {
-//     style: 'cursor: pointer;',
-//     onClick: () => {
-//       console.log(values);
-//       message.info('11111');
-//     },
-//   };
-// }
-
-function railStyle(info) {
-  const {checked, focused} = info;
-  const style: CSSProperties = {}
-  if (checked) {
-    style.background = '#2080f0'
-    if (focused) {
-      style.boxShadow = '0 0 0 2px #2080f040'
-    }
-  } else {
-    style.background = '#d03050'
-    if (focused) {
-      style.boxShadow = '0 0 0 2px #d0305040'
-    }
-  }
-  return style
-
-}
-
 
 // (()=> getOfficesByOfcTypeCd('010100000001').then(res=> console.log(res)))()
 
