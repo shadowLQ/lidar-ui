@@ -25,7 +25,7 @@
                 <PlusOutlined/>
               </n-icon>
             </template>
-            新建
+            手工录入
           </n-button>
         </template>
 
@@ -368,15 +368,16 @@ const actionColumn = reactive({
 });
 
 const [register, {}] = useForm({
-  gridProps: {cols: '1 s:1 m:2 l:3 xl:6 2xl:4'},
+  gridProps: {cols: '1 s:1 m:2 l:3 xl:4 2xl:4'},
   labelWidth: 100,
   schemas,
 });
 
 
 function addTable() {
-  showModal.value = true;
-  handleReset();
+  // showModal.value = true;
+  // handleReset();
+  router.push({ name: 'rental-contractform'});
 
 }
 

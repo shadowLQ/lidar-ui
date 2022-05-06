@@ -1,6 +1,7 @@
 import {getDicts} from '@/api/dict/dict'
 import {ref, toRefs} from "vue";
 import {getOfficesByOfcTypeCd} from "@/api/offices/offices";
+import {getCategoryByParentCode} from "@/api/category/category";
 
 /**
  * 获取字典数据
@@ -39,6 +40,16 @@ export function getDeps() {
     offices.value = res;
   });
   return offices;
+}
+
+/**
+ * 获取种类信息
+ * @param parentCode
+ */
+export async function getCategory(parentCode) {
+  // let category = ref()
+  return await getCategoryByParentCode(parentCode)
+  // return category;
 }
 
 

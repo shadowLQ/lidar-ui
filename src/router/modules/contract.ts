@@ -45,6 +45,16 @@ const routes: Array<RouteRecordRaw> = [
             component: () => import('@/views/contract/rental/rental.vue'),
           },
           {
+            path: 'rental-contractform/:id?',
+            name: 'rental-contractform',
+            meta: {
+              title: '手工录入',
+              hidden: true,
+              activeMenu: `${routeName}_rental_maintain`,
+            },
+            component: () => import('@/views/contract/rental/contractform.vue'),
+          },
+          {
             path: 'editCell',
             name: `${routeName}_table_editCell`,
             meta: {
@@ -62,6 +72,10 @@ const routes: Array<RouteRecordRaw> = [
           },
         ],
       },
+
+
+
+
       {
         path: 'purch',
         name: `${routeName}_purch`,
