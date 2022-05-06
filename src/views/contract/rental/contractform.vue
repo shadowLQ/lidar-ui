@@ -27,10 +27,10 @@
             <n-input type="text" placeholder="所属中心名称"/>
           </n-form-item-gi>
           <n-form-item-gi label="产品大类" path="password">
-            <n-select placeholder="产品大类" :options=dict7020  @update:value="handleUpdateValue" />
+            <n-select placeholder="产品大类" clearable :options=dict7020  @update:value="handleUpdateValue" />
           </n-form-item-gi>
           <n-form-item-gi label="产品子类" path="password">
-            <n-select placeholder="产品子类" :options="category" />
+            <n-select placeholder="产品子类" clearable :options="category"  :fallback-option=false  />
           </n-form-item-gi>
           <n-form-item-gi label="出租人">
             <n-input type="password" show-password-on="mousedown" placeholder="出租人"/>
