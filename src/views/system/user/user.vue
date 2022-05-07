@@ -140,14 +140,14 @@ import {addUser, getByUserId, getTableList} from '@/api/user/user';
 import {columns} from './columns';
 import {DeleteOutlined, FormOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
-import {getDeps, getOffices} from '@/utils/dict';
+import {getDeps, getOffices, getOffs} from '@/utils/dict';
 import {addDictType} from "@/api/dict/dictType";
 
 
 const {proxy} = getCurrentInstance();
 const {dict0103} = proxy.$useDict("0103");
 const ofc = getOffices();
-const dep = getDeps();
+const dep = getOffs();
 
 const rules = {
   loginNm: {

@@ -1,6 +1,6 @@
 import {getDicts} from '@/api/dict/dict'
 import {ref, toRefs} from "vue";
-import {getOfficesByOfcTypeCd} from "@/api/offices/offices";
+import {getOfficesByOfcGrdCd, getOfficesByOfcTypeCd} from "@/api/offices/offices";
 import {getCategoryByParentCode} from "@/api/category/category";
 
 /**
@@ -32,15 +32,27 @@ export function getOffices() {
 }
 
 /**
- * 获取部门数据
+ * 获取机构数据
  */
-export function getDeps() {
+export function getOffs() {
   let offices = ref();
   getOfficesByOfcTypeCd('010100000002').then(res => {
     offices.value = res;
   });
   return offices;
 }
+
+/**
+ * 获取三级机构数据
+ */
+export function getDeps() {
+  let offices = ref();
+  getOfficesByOfcGrdCd('010200000003').then(res => {
+    offices.value = res;
+  });
+  return offices;
+}
+
 
 /**
  * 获取种类信息

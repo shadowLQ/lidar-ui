@@ -18,3 +18,15 @@ export function getOfficesByOfcTypeCd(ofcTypeCd) {
     }
   )
 }
+
+/**
+ * 根据机构级别查询机构信息
+ * @param ofcGrdCd 机构级别
+ */
+export function getOfficesByOfcGrdCd(ofcGrdCd) {
+  return http.request({
+      url: '/system/cbaySysOffice/getByOfcGrdCd/' + ofcGrdCd,
+      method: 'get',
+    }
+  )
+}

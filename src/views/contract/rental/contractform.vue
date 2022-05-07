@@ -21,10 +21,10 @@
             <n-input clearable placeholder="项目名称"/>
           </n-form-item-gi>
           <n-form-item-gi label="发起部门名称">
-            <n-select filterable clearable placeholder="发起部门名称"/>
+            <n-select filterable clearable placeholder="发起部门名称" :options=dep @update:value="handleUpdateValueDep"/>
           </n-form-item-gi>
           <n-form-item-gi label="所属中心名称">
-            <n-input type="text" placeholder="所属中心名称"/>
+            <n-select filterable clearable placeholder="所属中心名称" :options=dep />
           </n-form-item-gi>
           <n-form-item-gi label="产品大类" path="password">
             <n-select placeholder="产品大类" clearable :options=dict7020  @update:value="handleUpdateValue" />
@@ -188,14 +188,24 @@ import {
   CSSProperties, getCurrentInstance, h, nextTick, reactive, ref, toRef, toRefs, unref, VNodeChild
 } from 'vue';
 import {SelectOption} from "naive-ui";
-import {getCategory} from "@/utils/dict";
+import {getCategory, getDeps} from "@/utils/dict";
 
 const {proxy} = getCurrentInstance();
 const {dict7020} = proxy.$useDict("7020");
-
+const dep = getDeps();
 let category=ref()
 // console.log(category)
 function  handleUpdateValue (value: string, option: SelectOption) {
+  // message.info('value: ' + JSON.stringify(value))
+   getCategory(value).then(va=>{
+    category.value=va
+  });
+
+   console.log(category)
+
+}
+
+function  handleUpdateValueDep (value: string, option: SelectOption) {
   // message.info('value: ' + JSON.stringify(value))
    getCategory(value).then(va=>{
     category.value=va
