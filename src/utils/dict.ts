@@ -1,10 +1,14 @@
 import {getDicts} from '@/api/dict/dict'
 import {ref, toRefs} from "vue";
-import {getOfficesByOfcGrdCd, getOfficesByOfcTypeCd} from "@/api/offices/offices";
+import {
+  getOfficesByOfcGrdCd,
+  getOfficesByOfcPrtId,
+  getOfficesByOfcTypeCd
+} from "@/api/offices/offices";
 import {getCategoryByParentCode} from "@/api/category/category";
 
 /**
- * 获取字典数据
+ * 获取字典数据以及下拉框其他数据
  */
 export function useDict(...args) {
   const res = ref({});
@@ -21,9 +25,9 @@ export function useDict(...args) {
 }
 
 /**
- * 获取公司数据
+ * 获取公司
  */
-export function getOffices() {
+export function getCompany() {
   let offices = ref();
   getOfficesByOfcTypeCd('010100000001').then(res => {
     offices.value = res;
@@ -32,9 +36,9 @@ export function getOffices() {
 }
 
 /**
- * 获取机构数据
+ * 获取部门
  */
-export function getOffs() {
+export function getDep() {
   let offices = ref();
   getOfficesByOfcTypeCd('010100000002').then(res => {
     offices.value = res;
@@ -43,14 +47,22 @@ export function getOffs() {
 }
 
 /**
- * 获取三级机构数据
+ * 获取三级部门
  */
-export function getDeps() {
+export function getThirdDep() {
   let offices = ref();
   getOfficesByOfcGrdCd('010200000003').then(res => {
     offices.value = res;
   });
   return offices;
+}
+
+/**
+ * 根据机构id获取机构
+ * @param ofcId
+ */
+export async function getOffByOfcPrtId(ofcId) {
+  return await getOfficesByOfcPrtId(ofcId)
 }
 
 
@@ -63,6 +75,8 @@ export async function getCategory(parentCode) {
   return await getCategoryByParentCode(parentCode)
   // return category;
 }
+
+
 
 
 export function getDictLable(a,dictValue){

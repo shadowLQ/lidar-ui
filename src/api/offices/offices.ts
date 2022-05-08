@@ -10,7 +10,10 @@ export function getTableListOffices(params) {
 }
 
 
-// 根据机构类型查询机构信息
+/**
+ * 根据机构类型查询机构信息
+ * @param ofcTypeCd 机构类型id
+ */
 export function getOfficesByOfcTypeCd(ofcTypeCd) {
   return http.request({
       url: '/system/cbaySysOffice/getByOfcTypeCd/' + ofcTypeCd,
@@ -26,6 +29,18 @@ export function getOfficesByOfcTypeCd(ofcTypeCd) {
 export function getOfficesByOfcGrdCd(ofcGrdCd) {
   return http.request({
       url: '/system/cbaySysOffice/getByOfcGrdCd/' + ofcGrdCd,
+      method: 'get',
+    }
+  )
+}
+
+/**
+ * 根据上级机构id查询子机构
+ * @param ofcId 机构id
+ */
+export function getOfficesByOfcPrtId(ofcId) {
+  return http.request({
+      url: '/system/cbaySysOffice/getByOfcPrtId/' + ofcId,
       method: 'get',
     }
   )
