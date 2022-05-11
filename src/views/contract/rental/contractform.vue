@@ -115,9 +115,11 @@
               <n-form-item-gi label="租期">
                 <n-input autosize   :style="{ width: '50%' }"  placeholder="租期"/>
 <!--                <n-button type="success">计算合同期限</n-button>-->
-                <template #icon>
-                  <n-icon><DollarCircleOutlined /></n-icon>
-                </template>
+                <n-button>
+                  <template #icon>
+                    <n-icon><DollarCircleOutlined /></n-icon>
+                  </template>
+                </n-button>
               </n-form-item-gi>
               <n-form-item-gi label="主办客户经理" path="userEmail">
                 <n-auto-complete :input-props="{autocomplete:'disabled'}" placeholder="主办客户经理"/>
