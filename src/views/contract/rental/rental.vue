@@ -128,7 +128,7 @@ import {getTableList} from '@/api/contract/rental/rental';
 import {columns} from './columns';
 import {DeleteOutlined, EditOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
-import {getDeps, getOffices} from '@/utils/dict';
+import {} from '@/utils/dict';
 import {addDictType} from "@/api/dict/dictType";
 
 
@@ -139,8 +139,8 @@ const {dict7007} = proxy.$useDict("7007");
 const {dict1170} = proxy.$useDict("1170");
 
 
-const ofc = getOffices();
-const dep = getDeps();
+// const ofc = getOffices();
+// const dep = getDeps();
 
 const rules = {
   loginNm: {
