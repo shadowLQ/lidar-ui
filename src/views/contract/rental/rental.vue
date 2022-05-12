@@ -50,10 +50,10 @@
                 <n-input clearable placeholder="请输入用户名" v-model:value="formParams.userNm"/>
               </n-form-item-gi>
               <n-form-item-gi label="归属公司">
-                <n-select  filterable clearable placeholder="归属公司" v-model:value="formParams.ofcId" :options="ofc"/>
+                <n-select  filterable clearable placeholder="归属公司" v-model:value="formParams.ofcId" />
               </n-form-item-gi>
               <n-form-item-gi label="归属部门">
-                <n-select  filterable clearable placeholder="归属部门" v-model:value="formParams.depId" :options="dep"/>
+                <n-select  filterable clearable placeholder="归属部门" v-model:value="formParams.depId" />
               </n-form-item-gi>
               <n-form-item-gi label="工号">
                 <n-input type="text" placeholder="工号"/>
@@ -128,7 +128,6 @@ import {getTableList} from '@/api/contract/rental/rental';
 import {columns} from './columns';
 import {DeleteOutlined, EditOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
-import {getDeps, getOffices} from '@/utils/dict';
 import {addDictType} from "@/api/dict/dictType";
 
 
@@ -139,8 +138,6 @@ const {dict7007} = proxy.$useDict("7007");
 const {dict1170} = proxy.$useDict("1170");
 
 
-const ofc = getOffices();
-const dep = getDeps();
 
 const rules = {
   loginNm: {
