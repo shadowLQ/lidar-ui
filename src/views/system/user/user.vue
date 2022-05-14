@@ -526,9 +526,6 @@ function renderLabel (option){
       }
     )]
 }
-
-// (()=> getOfficesByOfcTypeCd('010100000001').then(res=> console.log(res)))()
-
 </script>
 
 <style lang="less" scoped></style>
