@@ -34,7 +34,7 @@
         </template>
       </BasicTable>
 
-      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="用户添加"
+      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="showModalTitle"
                :style="{ width: '800px' }">
         <n-card
           class="mt-2"
@@ -44,19 +44,22 @@
                   label-placement="left">
             <n-grid :cols="2" x-gap="20" y-gap="10">
               <n-form-item-gi label="登录名" path="loginNm">
-                <n-input clearable :disabled="disabled" placeholder="请输入登录名" v-model:value="formParams.loginNm"/>
+                <n-input clearable :disabled="disabled" placeholder="请输入登录名"
+                         v-model:value="formParams.loginNm"/>
               </n-form-item-gi>
               <n-form-item-gi label="用户名" path="userNm">
                 <n-input clearable placeholder="请输入用户名" v-model:value="formParams.userNm"/>
               </n-form-item-gi>
               <n-form-item-gi label="归属公司">
-                <n-select  filterable clearable placeholder="归属公司" :render-label="renderLabel"  v-model:value="formParams.ofcId" :options="ofc"/>
+                <n-select filterable clearable placeholder="归属公司" :render-label="renderLabel"
+                          v-model:value="formParams.ofcId" :options="ofc"/>
               </n-form-item-gi>
               <n-form-item-gi label="归属部门">
-                <n-select  filterable clearable placeholder="归属部门" v-model:value="formParams.depId" :options="dep"/>
+                <n-select filterable clearable placeholder="归属部门" v-model:value="formParams.depId"
+                          :options="dep"/>
               </n-form-item-gi>
               <n-form-item-gi label="工号">
-                <n-input type="text" placeholder="工号"/>
+                <n-input type="text" clearable placeholder="工号" v-model:value="formParams.userNbr"/>
               </n-form-item-gi>
               <n-form-item-gi v-if="formParams.userId == undefined" label="密码" path="password">
                 <n-input type="password" show-password-on="mousedown"
@@ -83,7 +86,8 @@
               <n-form-item-gi>
               </n-form-item-gi>
               <n-form-item-gi label="状态" path="name">
-                <n-switch  checked-value="1" unchecked-value="0"  v-model:value="formParams.validInd"  size="large" :rail-style="railStyle" :default-value="true">
+                <n-switch checked-value="1" unchecked-value="0" v-model:value="formParams.validInd"
+                          size="large" :rail-style="railStyle" :default-value="true">
                   <template #checked>
                     启用
                   </template>
@@ -136,7 +140,7 @@ import {
 import {FormItemRule, NEllipsis, NIcon, SelectOption, useMessage} from 'naive-ui';
 import {BasicTable, TableAction} from '@/components/Table';
 import {BasicForm, useForm} from '@/components/Form/index';
-import {addUser, getByUserId, getTableList} from '@/api/user/user';
+import {saveOrUpdateUser, deleteSysUser, getByUserId, getTableList} from '@/api/user/user';
 import {columns} from './columns';
 import {DeleteOutlined, FormOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
@@ -303,6 +307,7 @@ const message = useMessage();
 const actionRef = ref();
 
 const showModal = ref(false);
+const showModalTitle = ref();
 const disabled = ref(false);
 const formBtnLoading = ref(false);
 
@@ -314,6 +319,7 @@ const defaultValueRef = () => ({
   userMobile: '',
   password: '',
   userNm: '',
+  userNbr: '',
   validInd: '1',
   userTypeCd: '',
   userId: undefined,
@@ -336,9 +342,12 @@ const actionColumn = reactive({
       style: 'text',
       actions: [
         {
+          popConfirm: {
+            title: '您真的,确定要删除吗?',
+            confirm: handleDelete.bind(null, record)
+          },
           label: '删除',
           icon: DeleteOutlined,
-          onClick: handleDelete.bind(null, record),
           // 根据业务控制是否显示 isShow 和 auth 是并且关系
           ifShow: () => {
             return true;
@@ -356,9 +365,7 @@ const actionColumn = reactive({
           auth: ['basic_list'],
         },
       ],
-      switchActions: [
-
-      ]
+      switchActions: []
       // dropDownActions: [
       //   {
       //     label: '启用',
@@ -392,7 +399,8 @@ const [register, {}] = useForm({
 
 function addTable() {
   showModal.value = true;
-  disabled.value=false;
+  showModalTitle.value= "用户添加"
+  disabled.value = false;
   handleReset();
 
 }
@@ -437,7 +445,7 @@ function confirmForm(e) {
   formRef.value.validate((errors) => {
     console.log(formRef)
     if (!errors) {
-      addUser(formParams).then(res => {
+      saveOrUpdateUser(formParams).then(res => {
         console.log(res)
         showModal.value = false;
         message.success(res.message);
@@ -459,9 +467,11 @@ function confirmForm(e) {
 
 function handleEdit(record: Recordable) {
   showModal.value = true;
+  showModalTitle.value= "用户修改"
+
   getByUserId(record.userId).then(res => {
     console.log(res)
-    disabled.value=true;
+    disabled.value = true;
     // formParams = Object.assign(unref(formParams), defaultValueRef());
     formParams = Object.assign(unref(formParams), res);
   })
@@ -469,10 +479,19 @@ function handleEdit(record: Recordable) {
   // router.push({name: 'basic-info', params: {id: record.id}});
 }
 
+// 删除用户
 function handleDelete(record: Recordable) {
-  console.log('点击了删除', record);
-  message.info('点击了删除');
+  deleteSysUser(record.userId).then(res => {
+    message.success(res.message);
+    reloadTable();
+  }).catch((err) => {
+    message.error(err);
+  })
 }
+
+
+
+
 
 function handleSubmit(values: Recordable) {
   console.log(values);
@@ -515,8 +534,9 @@ function railStyle(info) {
   return style
 
 }
+
 //
-function renderLabel (option){
+function renderLabel(option) {
   return [
     h(
       NEllipsis,

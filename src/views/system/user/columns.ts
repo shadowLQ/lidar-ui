@@ -1,6 +1,8 @@
 import {CSSProperties, h} from "vue";
-import {NSwitch, useDialog} from "naive-ui";
+import {NSwitch, useDialog, useMessage} from "naive-ui";
 import {getDictLable, useDict} from "@/utils/dict";
+import {updateStatusByUserId} from "@/api/user/user";
+
 // @ts-ignore
 let { dict0103 } = useDict("0103");
 
@@ -75,7 +77,18 @@ export const columns = [
     key: 'validInd',
     width: 100,
     render(row) {
+      const message = useMessage();
       const dialog = useDialog();
+
+      function updateStatus(row) {
+        updateStatusByUserId(row).then(res => {
+          message.success(res.message);
+          // reloadTable();
+        }).catch((err) => {
+          message.error(err);
+        })
+      }
+
       function systemOpenChange(value) {
         row.validInd=value;
         if (value) {
@@ -93,8 +106,7 @@ export const columns = [
             positiveText: '确定',
             negativeText: '取消',
             onPositiveClick: () => {
-              //message.success('操作成功');
-
+              updateStatus(row);
             },
             onNegativeClick: () => {
               row.validInd= value==="1"? "0":"1";
@@ -149,7 +161,6 @@ export const columns = [
   //   width: 150,
   // },
 ];
-
 
 
 

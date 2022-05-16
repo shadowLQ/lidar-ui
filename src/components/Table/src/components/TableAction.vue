@@ -4,13 +4,18 @@
       <template v-for="(action, index) in getActions" :key="`${index}-${action.label}`">
 
         <n-popconfirm v-if="action.popConfirm"
-          @positive-click="handlePositiveClick"
-          @negative-click="handleNegativeClick"
+          @positive-click="action.popConfirm.confirm" :positive-text="action.popConfirm.okText"
         >
           <template #trigger>
-            <n-switch>删除</n-switch>
+            <n-button icon-placement="left" v-bind="action" class="mx-2">{{action.label}}
+              <template #icon v-if="action.icon">
+                <n-icon  class="ml-1">
+                  <component :is="action.icon" />
+                </n-icon>
+              </template>
+            </n-button>
           </template>
-          您真的，确定要删除吗？
+         {{action.popConfirm.title}}
         </n-popconfirm>
 
         <n-button v-else icon-placement="left" v-bind="action" class="mx-2">{{ action.label }}

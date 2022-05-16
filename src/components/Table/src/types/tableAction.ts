@@ -1,7 +1,7 @@
-import { NButton } from 'naive-ui';
+
 import { PermissionsEnum } from '@/enums/permissionsEnum';
 export interface ActionItem extends NButton.props {
-  onClick?: Fn;
+  onClick?: Function;
   label?: string;
   color?: 'success' | 'error' | 'warning';
   icon?: string;
@@ -18,7 +18,7 @@ export interface PopConfirm {
   title: string;
   okText?: string;
   cancelText?: string;
-  confirm: Fn;
-  cancel?: Fn;
+  confirm: Function;
+  cancel?: Function;
   icon?: string;
 }
