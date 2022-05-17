@@ -500,8 +500,6 @@ function handleSubmit(values: Recordable) {
 }
 
 function handleReset() {
-  // console.log(values);
-
   formRef.value?.restoreValidation();
   formParams = Object.assign(unref(formParams), defaultValueRef());
 

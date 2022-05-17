@@ -48,7 +48,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: '字典管理',
         },
-        component: () => import('@/views/system/dict/dict.vue'),
+        component: () => import('@/views/system/dict/dictType.vue'),
       },
       {
         path: 'user',
