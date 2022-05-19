@@ -5,7 +5,7 @@ export const columnsDictType = [
   {
     title: '字典类型',
     key: 'dictTypeCd',
-    width: 30,
+    width: 100,
   },
   {
     title: '字典类型中文描述',
