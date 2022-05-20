@@ -23,7 +23,7 @@
   import { useProjectSetting } from '@/hooks/setting/useProjectSetting';
 
   export default defineComponent({
-    name: 'Dict',
+    name: 'Dict123',
     components: {},
     props: {
       mode: {

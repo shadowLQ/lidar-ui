@@ -57,7 +57,7 @@
           >
             <template #tableTitle>
               <n-space>
-                <n-input type="input" v-model:value="params.dictCd" clearable placeholder="请输入字典值">
+                <n-input type="input" v-model:value="params.dictCd" clearable placeholder="请输入字典值" @input="params.dictCd = params.dictCd.replace(/\s+/g,'')">
                   <template #prefix>
                     <n-icon size="18" class="cursor-pointer">
                       <SearchOutlined/>
@@ -112,7 +112,7 @@
       </template>
     </n-modal>
 
-    <Dict ref="createDictRef" :title="dictTitle"/>
+    <Dict ref="createDictRef" :title="dictTitle" :reload="actionRef" :dictTypeCd="dictTypeCd"/>
   </div>
 </template>
 <script lang="ts" setup>
@@ -161,6 +161,7 @@ const loading = ref(true);
 const pattern = ref('');
 
 const dictTitle = ref('');
+const dictTypeCd = ref('');
 
 const isDisabled = ref(true)
 
@@ -179,14 +180,7 @@ const defaultValueRef = () => ({
   appCd: ''
 });
 
-const defaultValueRefByDict = () => ({
-  dictTypeCd: '',
-  dictCd: '',
-  dictEnDesc: '',
-  dictCnDesc: '',
-});
 let formParams = reactive(defaultValueRef());
-let formParamsByDict = reactive(defaultValueRefByDict());
 
 const params = ref({
   dictCd: '',
@@ -201,7 +195,7 @@ function confirmForm(e) {
     if (!errors) {
       addDictType(formParams).then(res => {
         console.log(res)
-        showModalByDict.value = false;
+        showModal.value = false;
         message.success(res.message);
         reloadTable();
       })
@@ -276,8 +270,6 @@ function handleEditByDict(record: Recordable) {
   const {addTable,formParams} = createDictRef.value;
   addTable();
   getByDictId(record.dictId).then(res => {
-
-    // formParams = Object.assign(unref(formParams), defaultValueRef());
      Object.assign(unref(formParams), res);
   })
 }
@@ -317,12 +309,6 @@ function handleReset() {
   formParams = Object.assign(unref(formParams), defaultValueRef());
 }
 
-function handleResetByDict() {
-  formRef.value?.restoreValidation();
-  formParamsByDict = Object.assign(unref(formParamsByDict), defaultValueRefByDict());
-  console.log("handleResetByDict", params.value.dictTypeCd)
-  formParamsByDict.dictTypeCd = params.value.dictTypeCd;
-}
 
 onMounted(async () => {
   // const treeMenuList = await getMenuList();
@@ -345,7 +331,7 @@ function rowProps(values: Recordable) {
     onClick: () => {
       params.value.dictTypeCd = values.dictTypeCd;
       isDisabledAdd.value = false;
-      // formParamsByDict.dictTypeCd=values.dictTypeCd;
+      dictTypeCd.value=values.dictTypeCd;
       reloadTable()
     },
   };
