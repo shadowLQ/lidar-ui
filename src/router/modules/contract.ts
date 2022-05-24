@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/contract',
     name: routeName,
-    redirect: '/contract/dict',
+    redirect: '/contract/rental',
     component: Layout,
     meta: {
       title: '合同管理',

@@ -18,7 +18,7 @@
       <slot name="tableTitle"></slot>
     </div>
 
-    <div class="flex items-center table-toolbar-right">
+    <div class="flex items-center table-toolbar-right" v-if="rightTooltip">
       <!--顶部右侧区域-->
       <slot name="toolbar"></slot>
 

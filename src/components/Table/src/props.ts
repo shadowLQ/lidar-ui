@@ -12,6 +12,10 @@ export const basicProps = {
     type: String,
     default: null,
   },
+  rightTooltip: {
+    type: Boolean,
+    default: true,
+  },
   size: {
     type: String,
     default: 'medium',
