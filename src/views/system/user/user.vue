@@ -80,7 +80,7 @@
                 <n-select
                   placeholder="用户类型"
                   :options=dict0103
-                  v-model:value="formParams.userTypeCd"
+                  v-model:value="formParams.userTypeCd" clearable
                 />
               </n-form-item-gi>
               <n-form-item-gi>
@@ -321,7 +321,7 @@ const defaultValueRef = () => ({
   userNm: '',
   userNbr: '',
   validInd: '1',
-  userTypeCd: '',
+  userTypeCd: null,
   userId: undefined,
 });
 
