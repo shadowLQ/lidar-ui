@@ -1,9 +1,9 @@
-import { http } from '@/utils/http/axios';
+import {http} from '@/utils/http/axios';
 
 //折旧明细信息列表
 export function getAssetDepreciationDetailByAssetAddSeqno(params) {
   return http.request({
-    url: '/asset/olAssetDepreciationDetail/getAssetDepreciationDetailByAssetAddSeqno/'+params,
+    url: '/asset/olAssetDepreciationDetail/getAssetDepreciationDetailByAssetAddSeqno/' + params,
     method: 'get'
   });
 }
@@ -22,26 +22,26 @@ export function saveOrUpdate(params) {
     }
   );
 }
+
 /**
  * 根据主键id获取折旧明细信息
  */
 export function getOlAssetDepreciationDetailBySeqno(params) {
   return http.request({
-      url: '/asset/olAssetDepreciationDetail/getOlAssetDepreciationDetailBySeqno/'+params,
+      url: '/asset/olAssetDepreciationDetail/getOlAssetDepreciationDetailBySeqno/' + params,
       method: 'get'
     }
   );
 }
 
 /**
- * 删除用户
+ * 删除折旧明细信息
  * @param userId
  */
-export function deleteSysUser(userId) {
+export function deleteDepreciation(params) {
   return http.request({
-      url: '/system/cbaySysUser/delete/'+userId,
-      method: 'DELETE',
-      // params,
+      url: '/asset/olAssetDepreciationDetail/delete/'+params,
+      method: 'DELETE'
     },
     {
       isTransformResponse: false

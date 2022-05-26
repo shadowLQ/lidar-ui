@@ -9,11 +9,11 @@ export function getAssetAllowanceDetailByAssetAddSeqno(params) {
 }
 
 /**
- * 新增用户
+ * 新增/修改减值明细
  */
-export function saveOrUpdateUser(params) {
+export function saveOrUpdate(params) {
   return http.request({
-      url: '/system/cbaySysUser/saveOrUpdate',
+      url: '/asset/olAssetAllowanceDetail/saveOrUpdate',
       method: 'POST',
       params,
     },
