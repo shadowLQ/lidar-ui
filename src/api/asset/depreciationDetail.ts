@@ -49,18 +49,3 @@ export function deleteDepreciation(params) {
   );
 }
 
-/**
- * 用户启用/禁用
- * @param userId
- */
-export function updateStatusByUserId(params) {
-  return http.request({
-      url: '/system/cbaySysUser/updateStatus',
-      method: 'POST',
-      params,
-    },
-    {
-      isTransformResponse: false
-    }
-  );
-}
