@@ -23,11 +23,11 @@ export function saveOrUpdate(params) {
   );
 }
 /**
- * 根据用户id获取用户信息
+ * 根据主键id获取减值明细信息
  */
-export function getByUserId(params) {
+export function getOlAssetAllowanceDetailBySeqno(params) {
   return http.request({
-      url: '/system/cbaySysUser/getByUserId/'+params,
+      url: '/asset/olAssetAllowanceDetail/getOlAssetAllowanceDetailBySeqno/' + params,
       method: 'get'
     }
   );
