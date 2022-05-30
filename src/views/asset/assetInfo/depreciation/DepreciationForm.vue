@@ -30,10 +30,16 @@
               <n-input-number :show-button=false placeholder="折旧金额-原币"
                               v-model:value="formParams.depreciationAmt" clearable/>
             </n-form-item-gi>
+
             <n-form-item-gi label="折旧金额-人民币" path="depreciationAmtRmb">
-              <n-input-number :show-button=false placeholder="折旧金额-人民币"
-                              v-model:value="formParams.depreciationAmtRmb" clearable/>
+              <n-input placeholder="折旧金额-人民币"
+                       v-model:value="formParams.depreciationAmtRmb" clearable
+
+              />
             </n-form-item-gi>
+
+
+
             <n-form-item-gi label="折人民币汇率" path="exchRateRmb">
               <n-input placeholder="折人民币汇率" v-model:value="formParams.exchRateRmb" clearable/>
             </n-form-item-gi>
@@ -56,7 +62,7 @@
 <script lang="ts">
 
 
-import {ref, unref, reactive, defineComponent, getCurrentInstance} from 'vue';
+import {ref, unref, reactive, defineComponent, getCurrentInstance, computed, watch} from 'vue';
 import {useMessage} from 'naive-ui';
 import {saveOrUpdate} from '@/api/asset/depreciationDetail';
 import {useRoute} from "vue-router";
@@ -113,6 +119,8 @@ export default defineComponent({
     const formRef: any = ref(null);
     const {proxy} = getCurrentInstance();
     const {dict1170} = proxy.$useDict("1170");
+
+
     const defaultValueRefByDict = () => ({
       assetNo: '',
       assetName: '',
@@ -128,6 +136,26 @@ export default defineComponent({
     });
     let formParams = reactive(defaultValueRefByDict());
 
+    watch(() => formParams.depreciationAmtRmb, (newValue, oldValue) => {
+      console.log('watch 已触发', newValue)
+      if (newValue!=null){
+        formatter(String(newValue))
+      }
+    })
+
+   function formatter(value){
+     let values = value
+       .replace(/[^0-9.]/g,'')
+       .replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+       .replace(/,/g, '').split('.');
+     // const values = formParams.depreciationAmtRmb;
+     values[0] = values[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+     formParams.depreciationAmtRmb=values.join('.')
+   }
+    const parser = () => {
+      return formParams.depreciationAmtRmb.replace(/,/g, '')
+    };
+
     function addTable() {
       showModal.value = true;
       handleReset();
@@ -138,6 +166,7 @@ export default defineComponent({
       formBtnLoading.value = true;
       formRef.value.validate((errors) => {
         if (!errors) {
+          formParams.depreciationAmtRmb=parser();
           saveOrUpdate(formParams).then(res => {
             console.log(res)
             showModal.value = false;
@@ -171,7 +200,9 @@ export default defineComponent({
       handleReset,
       addTable,
       confirmForm,
-      dict1170
+      dict1170,
+      formatter,
+      parser
     };
   },
 });
