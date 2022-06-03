@@ -65,3 +65,11 @@ export function updateStatusByUserId(params) {
     }
   );
 }
+
+export function getUsersApi() {
+  return http.request({
+      url: '/system/cbaySysUser/getUsers/',
+      method: 'get'
+    }
+  );
+}
