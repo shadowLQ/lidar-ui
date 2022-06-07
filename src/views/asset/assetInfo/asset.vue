@@ -19,7 +19,7 @@
       >
         <template #tableTitle>
           <n-space>
-            <n-button type="primary" @click="addTable">
+            <n-button type="primary" @click="addTableAssetForm">
               <template #icon>
                 <n-icon>
                   <PlusOutlined/>
@@ -51,100 +51,8 @@
         </template>
       </BasicTable>
 
-      <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="showModalTitle"
-               :style="{ width: '800px' }">
-        <n-card
-          class="mt-2"
-          :segmented="true"
-        >
-          <n-form :rules="rules" ref="formRef" :model="formParams" label-width="80"
-                  label-placement="left">
-            <n-grid :cols="2" x-gap="20" y-gap="10">
-              <n-form-item-gi label="登录名" path="loginNm">
-                <n-input clearable :disabled="disabled" placeholder="请输入登录名"
-                         v-model:value="formParams.loginNm"/>
-              </n-form-item-gi>
-              <n-form-item-gi label="用户名" path="userNm">
-                <n-input clearable placeholder="请输入用户名" v-model:value="formParams.userNm"/>
-              </n-form-item-gi>
-              <n-form-item-gi label="归属公司">
-                <n-select filterable clearable placeholder="归属公司" :render-label="renderLabel"
-                          v-model:value="formParams.ofcId" :options="ofc"/>
-              </n-form-item-gi>
-              <n-form-item-gi label="归属部门">
-                <n-select filterable clearable placeholder="归属部门" v-model:value="formParams.depId"
-                          :options="dep"/>
-              </n-form-item-gi>
-              <n-form-item-gi label="工号">
-                <n-input type="text" clearable placeholder="工号" v-model:value="formParams.userNbr"/>
-              </n-form-item-gi>
-              <n-form-item-gi v-if="formParams.userId == undefined" label="密码" path="password">
-                <n-input type="password" show-password-on="mousedown"
-                         v-model:value="formParams.password" placeholder="密码"/>
-              </n-form-item-gi>
-              <n-form-item-gi v-if="formParams.userId == undefined" label="确认密码">
-                <n-input type="password" show-password-on="mousedown" placeholder="确认密码"/>
-              </n-form-item-gi>
-              <n-form-item-gi label="邮箱" path="userEmail">
-                <n-auto-complete :input-props="{autocomplete:'disabled'}" :options="options"
-                                 v-model:value="formParams.userEmail" placeholder="邮箱"/>
-              </n-form-item-gi>
-              <n-form-item-gi label="手机号" path="userMobile">
-                <!--                <n-input-number :show-button="false" placeholder="手机号" clearable max="99999999999"/>-->
-                <n-input placeholder="手机号" v-model:value="formParams.userMobile" clearable/>
-              </n-form-item-gi>
-              <n-form-item-gi label="用户类型">
-                <n-select
-                  placeholder="用户类型"
-                  :options=dict0103
-                  v-model:value="formParams.userTypeCd"
-                />
-              </n-form-item-gi>
-              <n-form-item-gi>
-              </n-form-item-gi>
-              <n-form-item-gi label="状态" path="name">
-                <n-switch checked-value="1" unchecked-value="0" v-model:value="formParams.validInd"
-                          size="large" :rail-style="railStyle" :default-value="true">
-                  <template #checked>
-                    启用
-                  </template>
-                  <template #unchecked>
-                    禁用
-                  </template>
-                </n-switch>
-              </n-form-item-gi>
-            </n-grid>
-          </n-form>
-        </n-card>
-        <!--        <n-form-->
-        <!--          :model="formParams"-->
-        <!--          :rules="rules"-->
-        <!--          ref="formRef"-->
-        <!--          label-placement="left"-->
-        <!--          :label-width="80"-->
-        <!--          class="py-4"-->
-        <!--        >-->
-        <!--          <n-form-item label="用户名" path="name">-->
-        <!--            <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>-->
-        <!--          </n-form-item>-->
-        <!--          <n-form-item label="用户编号" path="address">-->
-        <!--            <n-input type="textarea" placeholder="请输入用户编号" v-model:value="formParams.address"/>-->
-        <!--          </n-form-item>-->
-        <!--          &lt;!&ndash;        <n-form-item label="手机号" path="date">&ndash;&gt;-->
-        <!--          &lt;!&ndash;          <n-date-picker type="datetime" placeholder="请选择日期" v-model:value="formParams.date" />&ndash;&gt;-->
-        <!--          &lt;!&ndash;        </n-form-item>&ndash;&gt;-->
-        <!--          <n-form-item label="手机号" path="name">-->
-        <!--            <n-input placeholder="请输入用户名" v-model:value="formParams.name"/>-->
-        <!--          </n-form-item>-->
-        <!--        </n-form>-->
+      <AssetForm ref="createAssetFormRef" :title="showModalTitle" />
 
-        <template #action>
-          <n-space>
-            <n-button @click="() => (showModal = false)">取消</n-button>
-            <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
-          </n-space>
-        </template>
-      </n-modal>
     </n-card>
   </div>
 </template>
@@ -163,6 +71,7 @@ import {DeleteOutlined,FileExcelOutlined,UnorderedListOutlined, FormOutlined, Pl
 import {useRouter} from 'vue-router';
 import {getCompany, getDep} from '@/utils/dict';
 import {addDictType} from "@/api/dict/dictType";
+import AssetForm from '@/views/asset/assetInfo/AssetForm.vue';
 
 
 const {proxy} = getCurrentInstance();
@@ -412,14 +321,16 @@ const [register, {}] = useForm({
   labelWidth: 80,
   schemas,
 });
+const createAssetFormRef = ref();
 
-
-function addTable() {
-  showModal.value = true;
-  showModalTitle.value= "用户添加"
-  disabled.value = false;
-  handleReset();
-
+function addTableAssetForm() {
+  // showModal.value = true;
+  // showModalTitle.value= "用户添加"
+  // disabled.value = false;
+  // handleReset();
+  showModalTitle.value= "新增租赁物"
+  const {addTable,formParams} = createAssetFormRef.value;
+  addTable();
 }
 
 // function reset() {

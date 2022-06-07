@@ -27,7 +27,7 @@
                         filterable clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="折旧金额-原币" path="depreciationAmt">
-              <n-input-number :show-button=false placeholder="折旧金额-原币"
+              <n-input v-formatter="formParams.depreciationAmt" placeholder="折旧金额-原币"
                               v-model:value="formParams.depreciationAmt" clearable/>
             </n-form-item-gi>
 
@@ -62,7 +62,16 @@
 <script lang="ts">
 
 
-import {ref, unref, reactive, defineComponent, getCurrentInstance, computed, watch} from 'vue';
+import {
+  ref,
+  unref,
+  reactive,
+  defineComponent,
+  getCurrentInstance,
+  computed,
+  watch,
+  watchEffect
+} from 'vue';
 import {useMessage} from 'naive-ui';
 import {saveOrUpdate} from '@/api/asset/depreciationDetail';
 import {useRoute} from "vue-router";
@@ -136,11 +145,16 @@ export default defineComponent({
     });
     let formParams = reactive(defaultValueRefByDict());
 
-    watch(() => formParams.depreciationAmtRmb, (newValue, oldValue) => {
-      console.log('watch 已触发', newValue)
-      if (newValue!=null){
-        formatter(String(newValue))
-      }
+    // watch(() => formParams.depreciationAmtRmb, (newValue, oldValue) => {
+    //   // console.log('watch 已触发', newValue)
+    //   if (newValue!=null){
+    //     formatter(String(newValue))
+    //   }
+    // })
+
+    watchEffect(()=>{
+      formParams.depreciationAmtRmb=formatter(formParams.depreciationAmtRmb)
+      console.log(111)
     })
 
    function formatter(value){
@@ -150,7 +164,8 @@ export default defineComponent({
        .replace(/,/g, '').split('.');
      // const values = formParams.depreciationAmtRmb;
      values[0] = values[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-     formParams.depreciationAmtRmb=values.join('.')
+     // formParams.depreciationAmtRmb=values.join('.')
+     return values.join('.')
    }
     const parser = () => {
       return formParams.depreciationAmtRmb.replace(/,/g, '')

@@ -137,6 +137,7 @@ import {
   getOlAssetAllowanceDetailBySeqno
 } from "@/api/asset/allowanceDetail";
 import {deleteDictType} from "@/api/dict/dictType";
+import {assignSame} from "@/utils/dataUtils";
 
 const {proxy} = getCurrentInstance();
 const {dict7020} = proxy.$useDict("7020");
@@ -174,7 +175,8 @@ function addDepreciationForm() {
   const {addTable,formParams} = createDepreciationFormRef.value;
   addTable();
   getOlAssetInfoAddBySeqno(seqno).then(res => {
-    Object.assign(unref(formParams), res);
+    // Object.assign(unref(formParams), res);
+    assignSame(unref(formParams),res)
   })
 }
 // 修改折旧明细
@@ -231,7 +233,8 @@ function addAllowanceForm() {
   const {addTable,formParams} = createAllowanceFormRef.value;
   addTable();
   getOlAssetInfoAddBySeqno(seqno).then(res => {
-    Object.assign(unref(formParams), res);
+    // Object.assign(unref(formParams), res);
+    assignSame(unref(formParams),res)
   })
 }
 // 修改减值明细
