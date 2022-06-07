@@ -6,6 +6,7 @@ import {
   getOfficesByOfcTypeCd
 } from "@/api/offices/offices";
 import {getCategoryByParentCode} from "@/api/category/category";
+import {getUsersApi} from "@/api/user/user";
 
 /**
  * 获取字典数据以及下拉框其他数据
@@ -58,6 +59,17 @@ export function getThirdDep() {
 }
 
 /**
+ * 获取用户信息
+ */
+export function getUsers() {
+  let users = ref();
+  getUsersApi().then(res => {
+    users.value = res;
+  });
+  return users;
+}
+
+/**
  * 根据机构id获取机构
  * @param ofcId
  */
@@ -77,15 +89,13 @@ export async function getCategory(parentCode) {
 }
 
 
-
-
-export function getDictLable(a,dictValue){
-  let lab="";
-  const arr=Array.isArray(a) ? a : [String(a )];
-  dictValue.value.forEach((d)=>{
-    if (arr.includes(d.value)){
+export function getDictLable(a, dictValue) {
+  let lab = "";
+  const arr = Array.isArray(a) ? a : [String(a)];
+  dictValue.value.forEach((d) => {
+    if (arr.includes(d.value)) {
       console.log(d.label)
-      lab=d.label
+      lab = d.label
       return;
     }
   })
