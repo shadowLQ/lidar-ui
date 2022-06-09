@@ -1,12 +1,12 @@
 <template>
   <div>
-    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="title"
-             :style="{ width: '860px' }">
+    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :trap-focus="false" :title="title"
+             :style="{ width: '920px' }">
       <n-card
         class="mt-2"
         :segmented="true"
       >
-        <n-form :rules="rules" ref="formRef" :model="formParams" label-width="110"
+        <n-form :rules="rules" ref="formRef" :model="formParams" label-width="120"
                 label-placement="left">
           <n-grid :cols="3" x-gap="20" y-gap="10">
             <n-form-item-gi label="租赁物编号" path="assetNo">
@@ -22,16 +22,16 @@
                              v-model:formatted-value="formParams.countDate" type="date"
                              clearable/>
             </n-form-item-gi>
-            <n-form-item-gi label="原币币种">
+            <n-form-item-gi label="原币币种" path="currency">
               <n-select placeholder="原币币种" v-model:value="formParams.currency" :options=dict1170
                         filterable clearable/>
             </n-form-item-gi>
-            <n-form-item-gi label="计提金额-原币">
-              <n-input-number :show-button=false placeholder="计提金额-原币"
+            <n-form-item-gi label="计提金额-原币" path="allowanceAmt">
+              <n-input-number :show-button=false placeholder="计提金额-原币" :parse="parse" :format="format"
                               v-model:value="formParams.allowanceAmt" clearable/>
             </n-form-item-gi>
-            <n-form-item-gi label="计提金额-人民币" path="depreciationAmtRmb">
-              <n-input-number :show-button=false placeholder="计提金额-人民币"
+            <n-form-item-gi label="计提金额-人民币" path="allowanceAmtRmb">
+              <n-input-number :show-button=false placeholder="计提金额-人民币" :parse="parse" :format="format"
                               v-model:value="formParams.allowanceAmtRmb" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="折人民币汇率" path="exchRateRmb">
@@ -77,6 +77,21 @@ const rules = {
     required: true,
     trigger: ['blur', 'change'],
     message: '请输入计提日期',
+  },
+  currency: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '请选择原币币种',
+  },
+  allowanceAmt: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '请计提金额-原币',
+  },
+  allowanceAmtRmb: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '计提金额-人民币',
   },
 };
 
@@ -163,7 +178,17 @@ export default defineComponent({
       handleReset,
       addTable,
       confirmForm,
-      dict1170
+      dict1170,
+      parse: (input: string) => {
+        const nums = input.replace(/,/g, '').trim()
+        if (/^\d+(\.(\d+)?)?$/.test(nums)) return Number(nums)
+        return nums === '' ? null : Number.NaN
+
+      },
+      format: (value: number | null) => {
+        if (value === null) return ''
+        return value.toLocaleString('en-US')
+      }
     };
   },
 });

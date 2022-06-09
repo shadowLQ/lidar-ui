@@ -1,12 +1,12 @@
 <template>
   <div>
-    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :title="title"
+    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :trap-focus="false" :title="title"
              :style="{ width: '920px' }">
       <n-card
         class="mt-2"
         :segmented="true"
       >
-        <n-form :rules="rules" ref="formRef" :model="formParams" label-width="110"
+        <n-form :rules="rules" ref="formRef" :model="formParams" label-width="120"
                 label-placement="left">
           <n-grid :cols="3" x-gap="20" y-gap="10">
             <n-form-item-gi label="租赁物编号" path="assetNo">
@@ -22,23 +22,19 @@
                              v-model:formatted-value="formParams.depreciationDate" type="date"
                              clearable/>
             </n-form-item-gi>
-            <n-form-item-gi label="原币币种">
+            <n-form-item-gi label="原币币种" path="currency">
               <n-select placeholder="原币币种" v-model:value="formParams.currency" :options=dict1170
                         filterable clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="折旧金额-原币" path="depreciationAmt">
-              <n-input v-formatter="formParams.depreciationAmt" placeholder="折旧金额-原币"
+              <n-input-number :show-button=false  placeholder="折旧金额-原币" :parse="parse" :format="format"
                               v-model:value="formParams.depreciationAmt" clearable/>
             </n-form-item-gi>
 
             <n-form-item-gi label="折旧金额-人民币" path="depreciationAmtRmb">
-              <n-input placeholder="折旧金额-人民币"
-                       v-model:value="formParams.depreciationAmtRmb" clearable
-
-              />
+              <n-input-number :show-button=false placeholder="折旧金额-人民币" :parse="parse" :format="format"
+                       v-model:value="formParams.depreciationAmtRmb" clearable/>
             </n-form-item-gi>
-
-
 
             <n-form-item-gi label="折人民币汇率" path="exchRateRmb">
               <n-input placeholder="折人民币汇率" v-model:value="formParams.exchRateRmb" clearable/>
@@ -89,10 +85,24 @@ const rules = {
     message: '请输入字典值中文描述',
   },
   depreciationDate: {
-
     required: true,
     trigger: ['blur', 'change'],
     message: '请输入折旧日期',
+  },
+  currency: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '请选择原币币种',
+  },
+  depreciationAmt: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '请输入折旧金额-原币',
+  },
+  depreciationAmtRmb: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '请输入折旧金额-人民币',
   },
 };
 
@@ -145,31 +155,19 @@ export default defineComponent({
     });
     let formParams = reactive(defaultValueRefByDict());
 
-    // watch(() => formParams.depreciationAmtRmb, (newValue, oldValue) => {
-    //   // console.log('watch 已触发', newValue)
-    //   if (newValue!=null){
-    //     formatter(String(newValue))
-    //   }
-    // })
-
-    watchEffect(()=>{
-      formParams.depreciationAmtRmb=formatter(formParams.depreciationAmtRmb)
-      console.log(111)
-    })
-
-   function formatter(value){
-     let values = value
-       .replace(/[^0-9.]/g,'')
-       .replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
-       .replace(/,/g, '').split('.');
-     // const values = formParams.depreciationAmtRmb;
-     values[0] = values[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-     // formParams.depreciationAmtRmb=values.join('.')
-     return values.join('.')
-   }
-    const parser = () => {
-      return formParams.depreciationAmtRmb.replace(/,/g, '')
-    };
+   // function formatter(value){
+   //   let values = value
+   //     .replace(/[^0-9.]/g,'')
+   //     .replace('.', '$#$').replace(/\./g, '').replace('$#$', '.')
+   //     .replace(/,/g, '').split('.');
+   //   // const values = formParams.depreciationAmtRmb;
+   //   values[0] = values[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+   //   // formParams.depreciationAmtRmb=values.join('.')
+   //   return values.join('.')
+   // }
+   //  const parser = () => {
+   //    return formParams.depreciationAmtRmb.replace(/,/g, '')
+   //  };
 
     function addTable() {
       showModal.value = true;
@@ -181,7 +179,7 @@ export default defineComponent({
       formBtnLoading.value = true;
       formRef.value.validate((errors) => {
         if (!errors) {
-          formParams.depreciationAmtRmb=parser();
+          // formParams.depreciationAmtRmb=parser();
           saveOrUpdate(formParams).then(res => {
             console.log(res)
             showModal.value = false;
@@ -216,8 +214,16 @@ export default defineComponent({
       addTable,
       confirmForm,
       dict1170,
-      formatter,
-      parser
+      parse: (input: string) => {
+        const nums = input.replace(/,/g, '').trim()
+        if (/^\d+(\.(\d+)?)?$/.test(nums)) return Number(nums)
+        return nums === '' ? null : Number.NaN
+
+      },
+      format: (value: number | null) => {
+        if (value === null) return ''
+        return value.toLocaleString('en-US')
+      }
     };
   },
 });
