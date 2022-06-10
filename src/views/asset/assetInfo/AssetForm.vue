@@ -15,7 +15,7 @@
             <n-form-item-gi label="租赁物名称" path="assetName">
               <n-input clearable placeholder="租赁物名称" v-model:value="formParams.assetName"/>
             </n-form-item-gi>
-            <n-form-item-gi label="原币币种">
+            <n-form-item-gi label="原币币种" path="currency">
               <n-select placeholder="原币币种" v-model:value="formParams.currency" :options=dict1170
                         filterable clearable/>
             </n-form-item-gi>
@@ -23,13 +23,13 @@
               <n-input-number :show-button=false placeholder="资产原值-原币"
                               v-model:value="formParams.origPrice" clearable/>
             </n-form-item-gi>
-            <n-form-item-gi label="资产原值-人民币" path="depreciationAmtRmb">
+            <n-form-item-gi label="资产原值-人民币" path="origPriceRmb" >
               <n-input-number :show-button=false placeholder="资产原值-人民币"
                               v-model:value="formParams.origPriceRmb" clearable/>
             </n-form-item-gi>
-            <n-form-item-gi label="累计折旧-原币" path="depreciationAmtRmb">
+            <n-form-item-gi label="累计折旧-原币" path="depreciationAmt">
               <n-input-number :show-button=false placeholder="累计折旧-原币"
-                              v-model:value="formParams.depreciationAmt" clearable/>
+                              :parse="parse" :format="format"     v-model:value="formParams.depreciationAmt" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="累计折旧-人民币" path="depreciationAmtRmb">
               <n-input-number :show-button=false placeholder="累计折旧-人民币"
@@ -39,7 +39,7 @@
               <n-input-number :show-button=false placeholder="每月折旧(原币)"
                               v-model:value="formParams.monthDepreciationAmt" clearable/>
             </n-form-item-gi>
-            <n-form-item-gi label="预计净残值-原币" path="depreciationAmtRmb">
+            <n-form-item-gi label="预计净残值-原币" path="estimateSalvageAmt">
               <n-input-number :show-button=false placeholder="预计净残值-原币"
                               v-model:value="formParams.estimateSalvageAmt" clearable/>
             </n-form-item-gi>
@@ -52,23 +52,23 @@
                               v-model:value="formParams.estimateSalvageRatio" clearable/>
             </n-form-item-gi>
 
-            <n-form-item-gi label="资产所属SPV名称" path="depreciationAmtRmb">
+            <n-form-item-gi label="资产所属SPV名称" path="ofcId">
               <n-select placeholder="资产所属SPV名称" v-model:value="formParams.ofcId" :options="ofc" filterable clearable/>
             </n-form-item-gi>
 
-            <n-form-item-gi label="资产所属部门名称" path="depreciationAmtRmb">
+            <n-form-item-gi label="资产所属部门名称" path="ownerDepartmentCde">
               <n-select v-model:value="formParams.ownerDepartmentCde" filterable clearable placeholder="资产所属部门名称" :options=thirdDep />
             </n-form-item-gi>
 
-            <n-form-item-gi label="主办客户经理" path="depreciationAmtRmb">
+            <n-form-item-gi label="主办客户经理">
               <n-select placeholder="主办客户经理" v-model:value="formParams.mainManagerId" clearable :options="users"  :fallback-option=false  />
             </n-form-item-gi>
 
-            <n-form-item-gi label="协办客户经理" path="depreciationAmtRmb">
+            <n-form-item-gi label="协办客户经理" >
               <n-select placeholder="协办客户经理" v-model:value="formParams.coManagerId" clearable :options="users"  :fallback-option=false  />
             </n-form-item-gi>
 
-            <n-form-item-gi label="项目名称" path="depreciationAmtRmb">
+            <n-form-item-gi label="项目名称" >
               <n-input  placeholder="项目名称"
                               v-model:value="formParams.projectName" clearable/>
             </n-form-item-gi>
@@ -84,11 +84,11 @@
               <n-input  placeholder="每月折旧(原币)"
                               v-model:value="formParams.unitName" clearable/>
             </n-form-item-gi>
-            <n-form-item-gi label="减值准备-原币" path="depreciationAmtRmb">
+            <n-form-item-gi label="减值准备-原币" >
               <n-input-number :show-button=false placeholder="减值准备-原币"
                               v-model:value="formParams.allowanceAmt" clearable/>
             </n-form-item-gi>
-            <n-form-item-gi label="减值准备-人民币" path="depreciationAmtRmb">
+            <n-form-item-gi label="减值准备-人民币" path="allowanceAmtRmb">
               <n-input-number :show-button=false placeholder="减值准备-人民币"
                               v-model:value="formParams.allowanceAmtRmb" clearable/>
             </n-form-item-gi>
@@ -289,6 +289,16 @@ export default defineComponent({
       // formParams.dictTypeCd=props.dictTypeCd;
     }
 
+    // const formatter = (value) => {
+    //   const values = String(value).split('.');
+    //   values[0]=values[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    //   // console.log(value)
+    //   // console.log(111)
+    //   return values.join('.')
+    // };
+
+
+
     return {
       formRef,
       formBtnLoading,
@@ -304,7 +314,17 @@ export default defineComponent({
       category,
       thirdDep,
       users,
-      handleUpdateValue
+      handleUpdateValue,
+      parse: (input: string) => {
+       const nums = input.replace(/,/g, '').trim()
+        if (/^\d+(\.(\d+)?)?$/.test(nums)) return Number(nums)
+        return nums === '' ? null : Number.NaN
+
+      },
+      format: (value: number | null) => {
+        if (value === null) return ''
+        return value.toLocaleString('en-US')
+      }
     };
   },
 });
