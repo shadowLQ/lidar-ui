@@ -10,11 +10,11 @@ export function getTableList(params) {
 }
 
 /**
- * 新增用户
+ * 新增更新租赁物
  */
-export function saveOrUpdateUser(params) {
+export function saveOrUpdate(params) {
   return http.request({
-      url: '/system/cbaySysUser/saveOrUpdate',
+      url: '/asset/olAssetInfoAdd/saveOrUpdate',
       method: 'POST',
       params,
     },
