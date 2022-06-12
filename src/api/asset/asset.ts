@@ -35,12 +35,12 @@ export function getOlAssetInfoAddBySeqno(params) {
 }
 
 /**
- * 删除用户
- * @param userId
+ * 删除租赁物
+ * @param seqno
  */
-export function deleteSysUser(userId) {
+export function deleteAssetInfoAdd(seqno) {
   return http.request({
-      url: '/system/cbaySysUser/delete/'+userId,
+      url: '/asset/olAssetInfoAdd/delete/'+seqno,
       method: 'DELETE',
       // params,
     },
