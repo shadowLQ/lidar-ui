@@ -65,20 +65,23 @@ import {
 import {FormItemRule, NEllipsis, NIcon, SelectOption, useMessage} from 'naive-ui';
 import {BasicTable, TableAction} from '@/components/Table';
 import {BasicForm, useForm} from '@/components/Form';
-import {saveOrUpdateUser, deleteSysUser, getOlAssetInfoAddBySeqno, getTableList} from '@/api/asset/asset';
+import { deleteAssetInfoAdd, getOlAssetInfoAddBySeqno, getTableList} from '@/api/asset/asset';
 import {columns} from './columns';
 import {DeleteOutlined,FileExcelOutlined,UnorderedListOutlined, FormOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
-import {getCompany, getDep} from '@/utils/dict';
+import {getCategory, getCompany, getDep, getThirdDep} from '@/utils/dict';
 import {addDictType} from "@/api/dict/dictType";
 import AssetForm from '@/views/asset/assetInfo/AssetForm.vue';
+import {getOlAssetAllowanceDetailBySeqno} from "@/api/asset/allowanceDetail";
+import {assignSame} from "@/utils/dataUtils";
 
 
 const {proxy} = getCurrentInstance();
-const {dict0103} = proxy.$useDict("0103");
+const {dict1170} = proxy.$useDict("1170");
+const {dict7020} = proxy.$useDict("7020");
 const ofc = getCompany();
-const dep = getDep();
-
+const thirdDep = getThirdDep();
+let category=ref()
 const rules = {
   loginNm: {
     required: true,
@@ -132,97 +135,83 @@ const rules = {
     }
   }
 };
-const startsData = ref([
-  {
-    label: '舒适性11',
-    value: 1,
-  },
-  {
-    label: '经济性',
-    value: 2,
-  },
-]);
 const schemas = [
   {
-    field: 'userNm',
-    labelMessage: '这是一个提示',
+    field: 'assetNo',
     component: 'NInput',
-    label: '姓名',
+    label: '租赁物编号',
     componentProps: {
-      placeholder: '请输入姓名',
-      onInput: (e: any) => {
-        console.log(e);
-      },
+      placeholder: '请输入租赁物编号'
     },
-    // rules: [{ required: true, message: '请输入姓名', trigger: ['blur'] }],
   },
   {
-    field: 'validInd',
+    field: 'assetName',
+    component: 'NInput',
+    label: '租赁物名称',
+    componentProps: {
+      placeholder: '请输入租赁物名称'
+    },
+  },
+  {
+    field: 'currency',
     component: 'NSelect',
-    label: '用户状态',
+    label: '原币币种',
     componentProps: {
-      placeholder: '请选择用户状态',
-      options: [
-        {
-          label: '启用',
-          value: 1,
-        },
-        {
-          label: '禁用',
-          value: 0,
-        },
-      ],
+      placeholder: '请选择原币币种',
+      options: dict1170
+    },
+  },
+  {
+    field: 'projectName',
+    component: 'NInput',
+    label: '项目名称',
+    componentProps: {
+      placeholder: '请输入项目名称'
+    },
+  },
+  {
+    field: 'productCategory',
+    component: 'NSelect',
+    label: '产品大类',
+    componentProps: {
+      placeholder: '请输入产品大类',
+      options: dict7020,
       onUpdateValue: (e: any) => {
-        console.log(e);
+        getCategory(e).then(va=>category.value=va);
+
       },
     },
   },
   {
-    field: 'mobile',
-    component: 'NInputNumber',
-    label: '手机',
+    field: 'productSubCategory',
+    component: 'NSelect',
+    label: '产品子类',
     componentProps: {
-      placeholder: '请输入手机号码',
-      showButton: false,
-      onInput: (e: any) => {
-        console.log(e);
-      },
+      fallbackOption: false,
+      placeholder: '请输入产品子类',
+      options: category
     },
   },
   {
-    field: 'loginNm',
-    component: 'NInput',
-    label: '登录名',
+    field: 'ownerDepartmentCde',
+    component: 'NSelect',
+    label: '资产所属部门名称',
     componentProps: {
-      placeholder: '请输入登录名',
-      showButton: false,
-      onInput: (e: any) => {
-        console.log(e);
-      },
+      placeholder: '请输入资产所属部门名称',
+      options:thirdDep,
+      filterable: true,
+      clearable: true
     },
   },
   {
-    field: 'loginNm',
-    component: 'NInput',
-    label: '登录名',
+    field: 'ownerSpvId',
+    component: 'NSelect',
+    label: '资产所属SPV名称',
     componentProps: {
-      placeholder: '请输入登录名',
-      showButton: false,
-      onInput: (e: any) => {
-        console.log(e);
-      },
-    },
-  },
-  {
-    field: 'loginNm',
-    component: 'NInput',
-    label: '登录名',
-    componentProps: {
-      placeholder: '请输入登录名',
-      showButton: false,
-      onInput: (e: any) => {
-        console.log(e);
-      },
+      placeholder: '请输入资产所属SPV名称',
+      options:ofc,
+      filterable: true,
+      clearable: true
     },
   },
 ];
@@ -252,6 +241,7 @@ const defaultValueRef = () => ({
 });
 
 let formParams = reactive(defaultValueRef());
+
 
 
 const params = ref();
@@ -317,8 +307,8 @@ const actionColumn = reactive({
 });
 
 const [register, {}] = useForm({
-  gridProps: {cols: '1 s:1 m:2 l:3 xl:4 2xl:4'},
-  labelWidth: 80,
+  gridProps: {cols: '1 s:1 m:2 l:3 xl:3 2xl:4'},
+  labelWidth: 130,
   schemas,
 });
 const createAssetFormRef = ref();
@@ -332,6 +322,8 @@ function addTableAssetForm() {
   const {addTable,formParams} = createAssetFormRef.value;
   addTable();
 }
+
+
 
 // function reset() {
 //   if (!options.value) return
@@ -382,49 +374,31 @@ function reloadTable() {
 }
 
 
-function confirmForm(e) {
-  e.preventDefault();
-  formBtnLoading.value = true;
-  formRef.value.validate((errors) => {
-    console.log(formRef)
-    if (!errors) {
-      saveOrUpdateUser(formParams).then(res => {
-        console.log(res)
-        showModal.value = false;
-        message.success(res.message);
-        reloadTable();
-      }).catch((err) => {
-        message.error(err);
-      })
-      // message.success('新建成功');
-      // setTimeout(() => {
-      //   showModal.value = false;
-      //   reloadTable();
-      // });
-    } else {
-      message.error('请填写完整信息');
-    }
-    formBtnLoading.value = false;
-  });
-}
-
+// function handleEdit(record: Recordable) {
+//   showModalTitle.value= "修改租赁物"
+//   getOlAssetInfoAddBySeqno(record.userId).then(res => {
+//     console.log(res)
+//     disabled.value = true;
+//     // formParams = Object.assign(unref(formParams), defaultValueRef());
+//     formParams = Object.assign(unref(formParams), res);
+//   })
+//   console.log('点击了编辑', record);
+//   // router.push({name: 'basic-info', params: {id: record.id}});
+// }
 function handleEdit(record: Recordable) {
-  showModal.value = true;
-  showModalTitle.value= "用户修改"
+  showModalTitle.value= "修改租赁物"
+  const {addTable,formParams} = createAssetFormRef.value;
+  addTable();
+  getOlAssetInfoAddBySeqno(record.seqno).then(res => {
+    // Object.assign(unref(formParams), res);
+    assignSame(unref(formParams),res)
 
-  getOlAssetInfoAddBySeqno(record.userId).then(res => {
-    console.log(res)
-    disabled.value = true;
-    // formParams = Object.assign(unref(formParams), defaultValueRef());
-    formParams = Object.assign(unref(formParams), res);
   })
-  console.log('点击了编辑', record);
-  // router.push({name: 'basic-info', params: {id: record.id}});
 }
 
-// 删除用户
+// 删除租赁物
 function handleDelete(record: Recordable) {
-  deleteSysUser(record.userId).then(res => {
+  deleteAssetInfoAdd(record.seqno).then(res => {
     message.success(res.message);
     reloadTable();
   }).catch((err) => {

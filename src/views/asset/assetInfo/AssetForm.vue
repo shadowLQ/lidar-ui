@@ -20,11 +20,11 @@
                         filterable clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="资产原值-原币">
-              <n-input-number :show-button=false placeholder="资产原值-原币"
+              <n-input-number :show-button=false placeholder="资产原值-原币" :parse="parse" :format="format"
                               v-model:value="formParams.origPrice" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="资产原值-人民币" path="origPriceRmb" >
-              <n-input-number :show-button=false placeholder="资产原值-人民币"
+              <n-input-number :show-button=false placeholder="资产原值-人民币" :parse="parse" :format="format"
                               v-model:value="formParams.origPriceRmb" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="累计折旧-原币" path="depreciationAmt">
@@ -32,15 +32,15 @@
                               :parse="parse" :format="format"     v-model:value="formParams.depreciationAmt" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="累计折旧-人民币" path="depreciationAmtRmb">
-              <n-input-number :show-button=false placeholder="累计折旧-人民币"
+              <n-input-number :show-button=false placeholder="累计折旧-人民币" :parse="parse" :format="format"
                               v-model:value="formParams.depreciationAmtRmb" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="每月折旧(原币)" path="depreciationAmtRmb">
-              <n-input-number :show-button=false placeholder="每月折旧(原币)"
+              <n-input-number :show-button=false placeholder="每月折旧(原币)" :parse="parse" :format="format"
                               v-model:value="formParams.monthDepreciationAmt" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="预计净残值-原币" path="estimateSalvageAmt">
-              <n-input-number :show-button=false placeholder="预计净残值-原币"
+              <n-input-number :show-button=false placeholder="预计净残值-原币" :parse="parse" :format="format"
                               v-model:value="formParams.estimateSalvageAmt" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="折旧算法" path="depreciationAmtRmb">
@@ -52,12 +52,12 @@
                               v-model:value="formParams.estimateSalvageRatio" clearable/>
             </n-form-item-gi>
 
-            <n-form-item-gi label="资产所属SPV名称" path="ofcId">
-              <n-select placeholder="资产所属SPV名称" v-model:value="formParams.ofcId" :options="ofc" filterable clearable/>
+            <n-form-item-gi label="资产所属SPV名称" path="ownerSpvId">
+              <n-select placeholder="资产所属SPV名称" v-model:value="formParams.ownerSpvId" :options="ofc" :fallback-option=false filterable clearable  />
             </n-form-item-gi>
 
             <n-form-item-gi label="资产所属部门名称" path="ownerDepartmentCde">
-              <n-select v-model:value="formParams.ownerDepartmentCde" filterable clearable placeholder="资产所属部门名称" :options=thirdDep />
+              <n-select placeholder="资产所属部门名称" v-model:value="formParams.ownerDepartmentCde" :options=thirdDep :fallback-option=false filterable clearable   />
             </n-form-item-gi>
 
             <n-form-item-gi label="主办客户经理">
@@ -85,32 +85,32 @@
                               v-model:value="formParams.unitName" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="减值准备-原币" >
-              <n-input-number :show-button=false placeholder="减值准备-原币"
+              <n-input-number :show-button=false placeholder="减值准备-原币" :parse="parse" :format="format"
                               v-model:value="formParams.allowanceAmt" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="减值准备-人民币" path="allowanceAmtRmb">
-              <n-input-number :show-button=false placeholder="减值准备-人民币"
+              <n-input-number :show-button=false placeholder="减值准备-人民币" :parse="parse" :format="format"
                               v-model:value="formParams.allowanceAmtRmb" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="EAS资产卡片累计折旧-原币" path="depreciationAmtRmb">
-              <n-input-number :show-button=false placeholder="EAS资产卡片累计折旧-原币"
+              <n-input-number :show-button=false placeholder="EAS资产卡片累计折旧-原币" :parse="parse" :format="format"
                               v-model:value="formParams.cardDepreciationAmt" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="EAS资产卡片原值-原币" path="depreciationAmtRmb">
-              <n-input-number :show-button=false placeholder="EAS资产卡片原值-原币"
+              <n-input-number :show-button=false placeholder="EAS资产卡片原值-原币" :parse="parse" :format="format"
                               v-model:value="formParams.cardOrigPrice" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="EAS资产卡片减值准备-原币" path="depreciationAmtRmb">
-              <n-input-number :show-button=false placeholder="EAS资产卡片减值准备-原币"
+              <n-input-number :show-button=false placeholder="EAS资产卡片减值准备-原币" :parse="parse" :format="format"
                               v-model:value="formParams.cardAllowanceAmt" clearable/>
             </n-form-item-gi>
             <n-form-item-gi label="EAS资产卡片租赁物编号" path="exchRateRmb">
               <n-input placeholder="EAS资产卡片租赁物编号" v-model:value="formParams.cardAssetNo" clearable/>
             </n-form-item-gi>
-            <n-form-item-gi label="产品大类" path="password">
-              <n-select placeholder="产品大类" v-model:value="formParams.productCategory" clearable :options=dict7020  @update:value="handleUpdateValue" />
+            <n-form-item-gi label="产品大类" path="productCategory">
+              <n-select placeholder="产品大类" v-model:value="formParams.productCategory" clearable :options=dict7020 :fallback-option=false   />
             </n-form-item-gi>
-            <n-form-item-gi label="产品子类" path="password">
+            <n-form-item-gi label="产品子类">
               <n-select placeholder="产品子类" v-model:value="formParams.productSubCategory" clearable :options="category"  :fallback-option=false  />
             </n-form-item-gi>
             <n-form-item-gi label="资产差异" path="memo">
@@ -180,10 +180,9 @@
 <script lang="ts">
 
 
-import {ref, unref, reactive, defineComponent, getCurrentInstance} from 'vue';
-import {SelectOption, useMessage} from 'naive-ui';
-import {useRoute} from "vue-router";
-import {saveOrUpdate} from '@/api/asset/allowanceDetail';
+import {ref, unref, reactive, defineComponent, getCurrentInstance, watch} from 'vue';
+import {useMessage} from 'naive-ui';
+import {saveOrUpdate} from '@/api/asset/asset';
 import {getCategory, getCompany, getThirdDep, getUsers} from "@/utils/dict";
 
 
@@ -202,6 +201,26 @@ const rules = {
     required: true,
     trigger: ['blur', 'change'],
     message: '请输入计提日期',
+  },
+  currency: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '请输入原币币种',
+  },
+  ownerSpvId: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '请选择资产所属SPV名称',
+  },
+  ownerDepartmentCde: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '请选择资产所属部门名称',
+  },
+  productCategory: {
+    required: true,
+    trigger: ['blur', 'change'],
+    message: '请选择产品大类',
   },
 };
 
@@ -224,8 +243,6 @@ export default defineComponent({
   },
   setup(props) {
     const ofc = getCompany();
-    let route = useRoute();
-    let assetAddSeqno = route.params.seqno;
     const message = useMessage();
     const showModal = ref(false);
     const formBtnLoading = ref(false);
@@ -239,14 +256,49 @@ export default defineComponent({
     const defaultValueRefByDict = () => ({
       assetNo: '',
       assetName: '',
-      countDate: null,
       currency: null,
+      origPrice: null,
+      origPriceRmb: '',
+      depreciationAmt: '',
+      depreciationAmtRmb: '',
+      monthDepreciationAmt: '',
+      estimateSalvageAmt: '',
+      depreciationMethod: '',
+      estimateSalvageRatio: '',
+      ownerSpvId: '',
+      ownerDepartmentCde: '',
+      mainManagerId: '',
+      coManagerId: '',
+      projectName: '',
+      projectName2: '',
+      projectName3: '',
+      unitName: '',
       allowanceAmt: '',
       allowanceAmtRmb: '',
-      exchRateRmb: '',
-      memo: '',
-      seqno: '',
-      assetAddSeqno: assetAddSeqno
+      cardDepreciationAmt: '',
+      cardOrigPrice: '',
+      cardAllowanceAmt: '',
+      cardAssetNo: '',
+      productCategory: '',
+      productSubCategory: '',
+      origPriceDiff: '',
+      assetStatusDesc: '',
+      allowanceDiffAmt: '',
+      depreciationDiffAmt: '',
+      planeMsn: '',
+      planeType: '',
+      planeRegno: '',
+      shipName: '',
+      shipType: '',
+      shipImo: '',
+      shipCallSign: '',
+      shipNative: '',
+      shipClassSociety: '',
+      shipTon: '',
+      shipDimension: '',
+      manufacturer: '',
+      regAddress: '',
+      seqno: ''
     });
     let formParams = reactive(defaultValueRefByDict());
 
@@ -254,6 +306,15 @@ export default defineComponent({
       showModal.value = true;
       handleReset();
     }
+
+
+    watch(() => formParams.productCategory, (newValue) => {
+      console.log('watch 已触发', newValue)
+      if (newValue!=null&&newValue!=''){
+      handleUpdateValue(formParams.productCategory)
+
+      }
+    })
 
     function  handleUpdateValue (value: string) {
       // message.info('value: ' + JSON.stringify(value))
