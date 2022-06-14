@@ -86,6 +86,15 @@ const routes: Array<RouteRecordRaw> = [
         },
         children: [
           {
+            path: 'paymentApproval',
+            name: `${routeName}_paymentApproval`,
+            meta: {
+              title: '申请单',
+              hidden: false,
+            },
+            component: () => import('@/views/contract/purch/PaymentApproval.vue'),
+          },
+          {
             path: 'basic',
             name: `${routeName}_table_basic`,
             meta: {
