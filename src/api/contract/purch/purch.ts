@@ -10,11 +10,11 @@ export function getTableList(params) {
 }
 
 /**
- * 新增用户
+ *
  */
 export function addUser(params) {
   return http.request({
-      url: '/system/cbaySysUser/add',
+      url: '/system/cbaySysUser/save',
       method: 'POST',
       params,
     },
