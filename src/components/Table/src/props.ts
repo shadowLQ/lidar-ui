@@ -41,6 +41,10 @@ export const basicProps = {
     type: [Object, Boolean],
     default: () => {},
   },
+  data: {
+    type: [Object],
+    default: () => {},
+  },
   //废弃
   showPagination: {
     type: [String, Boolean],

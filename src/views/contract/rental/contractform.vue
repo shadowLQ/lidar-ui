@@ -445,7 +445,19 @@
           </td>
         </tr>
         <tr>
-          <td>猎魔人</td>
+          <td>猎魔人1</td>
+          <td>女</td>
+          <td>上海</td>
+          <td>1992-03-11</td>
+          <td>
+            <n-space>
+              <n-button size="small" type="error">删除</n-button>
+              <n-button size="small" type="info">查看</n-button>
+            </n-space>
+          </td>
+        </tr>
+        <tr>
+          <td>猎魔人2</td>
           <td>女</td>
           <td>上海</td>
           <td>1992-03-11</td>
