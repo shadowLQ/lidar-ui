@@ -180,7 +180,7 @@
         name="files"
         :action="`${uploadUrl}/purch/olPurchPaymentApproval/save`"
         :default-upload="false"
-        :data="formParams"
+        :data="olPurchPaymentApproval"
         multiple
         @change="handleChange"
       >
@@ -328,7 +328,10 @@ const defaultValueRefByDict = () => ({
   seqno: ''
 });
 let formParams = reactive(defaultValueRefByDict());
-
+let olPurchPaymentApproval={
+  olPurchPaymentApproval:formParams,
+  olPurchPaymentExtraList:[]
+}
 function addPaymentExtraForm() {
   showModalTitle.value= "添加采购附加明细明细"
   const {addTable,formParams} = createPaymentExtraForm.value;
@@ -343,24 +346,27 @@ const formRef: any = ref(null);
 function handleClick () {
   uploadRef.value?.submit()
 }
+function handleClick11() {
 
+}
 function confirmForm(e) {
   e.preventDefault();
   formBtnLoading.value = true;
       console.log(formParams)
+      console.log(olPurchPaymentApproval)
   formRef.value.validate((errors) => {
     if (!errors) {
-      // formParams.depreciationAmtRmb=parser();
-      // saveOrUpdate(formParams).then(res => {
-      //   console.log(res)
-      //   showModal.value = false;
-      //   message.success(res.message);
-      //   //props.reload.reload()
-      // })
-      // console.log(tata)
-      // message.success('新建成功');
-      // setTimeout(() => {
-      // });
+      if (fileListLengthRef.value>0){
+        uploadRef.value?.submit()
+      }else {
+        savePaymentApproval(olPurchPaymentApproval).then(res => {
+          console.log(res)
+          //showModal.value = false;
+          message.success(res.message);
+          //props.reload.reload()
+        })
+      }
+
     } else {
       message.error('请填写完整信息');
     }
