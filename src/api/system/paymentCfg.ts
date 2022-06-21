@@ -6,3 +6,10 @@ export function findAllRecvAccounts() {
     method: 'get'
   })
 }
+
+export function findBpBizPtnrAcctInfo() {
+  return http.request({
+    url: '/system/cbayBpBizPtnrAcctInfo/findBpBizPtnrAcctInfo',
+    method: 'get'
+  })
+}

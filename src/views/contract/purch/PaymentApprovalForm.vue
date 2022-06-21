@@ -236,6 +236,7 @@ import { UploadFileInfo, UploadInst, useMessage} from "naive-ui";
 import {
   getAssetInfoAdd,
   getCompany, getRecvAccounts,
+  getRecvAcctNo,
   getThirdDep,
   getUsers
 } from "@/utils/dict";

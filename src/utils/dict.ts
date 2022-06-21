@@ -8,7 +8,7 @@ import {
 import {getCategoryByParentCode} from "@/api/category/category";
 import {getUsersApi} from "@/api/user/user";
 import {getOlAssetInfoAddBySpvId} from "@/api/asset/asset";
-import {findAllRecvAccounts} from "@/api/system/paymentCfg";
+import {findAllRecvAccounts, findBpBizPtnrAcctInfo} from "@/api/system/paymentCfg";
 
 /**
  * 获取字典数据以及下拉框其他数据
@@ -113,11 +113,22 @@ export function getDictLable(a, dictValue) {
 }
 
 /**
- * 收款账号
+ * 内部账号
  */
 export function getRecvAccounts() {
   let offices = ref();
   findAllRecvAccounts().then(res => {
+    offices.value = res;
+  });
+  return offices;
+}
+
+/**
+ * 合作伙伴账号
+ */
+export function getRecvAcctNo() {
+  let offices = ref();
+  findBpBizPtnrAcctInfo().then(res => {
     offices.value = res;
   });
   return offices;
