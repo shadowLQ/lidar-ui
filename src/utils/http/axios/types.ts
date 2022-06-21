@@ -14,7 +14,7 @@ export interface UploadFileParams {
   // 文件参数接口字段名
   name?: string;
   // 文件
-  file: File | Blob;
+  file: File[] ;
   // 文件名称
   filename?: string;
   [key: string]: any;

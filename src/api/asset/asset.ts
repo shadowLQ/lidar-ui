@@ -1,4 +1,4 @@
-import { http } from '@/utils/http/axios';
+import {http} from '@/utils/http/axios';
 
 //租赁物信息列表
 export function getTableList(params) {
@@ -23,12 +23,13 @@ export function saveOrUpdate(params) {
     }
   );
 }
+
 /**
  * 根据租赁物id获取租赁物信息
  */
 export function getOlAssetInfoAddBySeqno(params) {
   return http.request({
-      url: '/asset/olAssetInfoAdd/getOlAssetInfoAddBySeqno/'+params,
+      url: '/asset/olAssetInfoAdd/getOlAssetInfoAddBySeqno/' + params,
       method: 'get'
     }
   );
@@ -40,7 +41,7 @@ export function getOlAssetInfoAddBySeqno(params) {
  */
 export function deleteAssetInfoAdd(seqno) {
   return http.request({
-      url: '/asset/olAssetInfoAdd/delete/'+seqno,
+      url: '/asset/olAssetInfoAdd/delete/' + seqno,
       method: 'DELETE',
       // params,
     },
@@ -51,17 +52,14 @@ export function deleteAssetInfoAdd(seqno) {
 }
 
 /**
- * 用户启用/禁用
- * @param userId
+ * 根据资产所属spvId获取资产信息
+ * @param spvId
  */
-export function updateStatusByUserId(params) {
+export function getOlAssetInfoAddBySpvId(spvId) {
   return http.request({
-      url: '/system/cbaySysUser/updateStatus',
-      method: 'POST',
-      params,
-    },
-    {
-      isTransformResponse: false
+      url: '/asset/olAssetInfoAdd/getOlAssetInfoAddBySpvId/' + spvId,
+      method: 'get'
     }
   );
 }
+

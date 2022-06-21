@@ -42,7 +42,7 @@ export const basicProps = {
     default: () => {},
   },
   data: {
-    type: [Object],
+    type: [],
     default: () => {},
   },
   //废弃
