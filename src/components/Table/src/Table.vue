@@ -64,7 +64,7 @@
       :pagination="pagination"
       @update:page="updatePage"
       @update:page-size="updatePageSize"
-      :data="data"
+
     >
       <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
         <slot :name="item" v-bind="data"></slot>
@@ -203,14 +203,17 @@
 
       //组装表格信息
       const getBindValues = computed(() => {
+        // debugger
+        console.log("===============================",props.data)
         const tableData = unref(getDataSourceRef);
+        console.log("###############################",tableData)
         const maxHeight = tableData.length ? `${unref(deviceHeight)}px` : 'auto';
         return {
           ...unref(getProps),
           loading: unref(getLoading),
           columns: toRaw(unref(getPageColumns)),
           rowKey: unref(getRowKey),
-          data: tableData,
+          data: tableData.length?tableData: props.data,
           size: unref(getTableSize),
           remote: true,
           'max-height': maxHeight,

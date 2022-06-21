@@ -7,6 +7,8 @@ import {
 } from "@/api/offices/offices";
 import {getCategoryByParentCode} from "@/api/category/category";
 import {getUsersApi} from "@/api/user/user";
+import {getOlAssetInfoAddBySpvId} from "@/api/asset/asset";
+import {findAllRecvAccounts} from "@/api/system/paymentCfg";
 
 /**
  * 获取字典数据以及下拉框其他数据
@@ -31,6 +33,14 @@ export function useDict(...args) {
 export function getCompany() {
   let offices = ref();
   getOfficesByOfcTypeCd('010100000001').then(res => {
+    offices.value = res;
+  });
+  return offices;
+}
+
+export function getAssetInfoAdd() {
+  let offices = ref();
+  getOlAssetInfoAddBySpvId("").then(res => {
     offices.value = res;
   });
   return offices;
@@ -100,5 +110,16 @@ export function getDictLable(a, dictValue) {
     }
   })
   return lab;
+}
+
+/**
+ * 收款账号
+ */
+export function getRecvAccounts() {
+  let offices = ref();
+  findAllRecvAccounts().then(res => {
+    offices.value = res;
+  });
+  return offices;
 }
 

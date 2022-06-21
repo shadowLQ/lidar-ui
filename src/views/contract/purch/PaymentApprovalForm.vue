@@ -18,26 +18,30 @@
             <n-date-picker placeholder="申请放款时间" value-format="yyyy-MM-dd" type="date" v-model:formatted-value="formParams.applyLoanDate" clearable />
           </n-form-item-gi>
           <n-form-item-gi label="资产所属SPV名称" path="spvId">
-            <n-input clearable placeholder="资产所属SPV名称" v-model:value="formParams.spvId"/>
+            <n-select placeholder="资产所属SPV名称"   v-model:show="show2" v-model:value="formParams.spvId" :options="spvId"  :fallback-option=false filterable clearable  >
+              <template v-if="show2" #arrow>
+                <md-search />
+              </template>
+            </n-select>
           </n-form-item-gi>
           <n-form-item-gi label="代付spv名称">
-            <n-select filterable clearable placeholder="代付spv名称" :options=thirdDep v-model:value="formParams.agentSpvId"/>
+            <n-select placeholder="代付spv名称" v-model:value="formParams.agentSpvId" :options="spvId" :fallback-option=false filterable clearable  />
           </n-form-item-gi>
           <n-form-item-gi label="相关资产" path="assetInfoAddSeqno">
-            <n-select filterable clearable placeholder="相关资产" :options=section v-model:value="formParams.assetInfoAddSeqno"/>
+            <n-select filterable clearable placeholder="相关资产" :options=assetInfoAddSeqno v-model:value="formParams.assetInfoAddSeqno" :fallback-option=false />
             <n-button tertiary ghost type="info">新增资产</n-button>
           </n-form-item-gi>
-          <n-form-item-gi label="其他相关资产" path="otherAssetInfoAddSeqno">
-            <n-select placeholder="其他相关资产" clearable :options=dict7020  v-model:value="formParams.otherAssetInfoAddSeqno" />
+          <n-form-item-gi label="其他相关资产" >
+            <n-select placeholder="其他相关资产" filterable multiple  clearable :options=assetInfoAdd  v-model:value="formParams.otherAssetInfoAddSeqno"  />
           </n-form-item-gi>
           <n-form-item-gi label="申请实付金额" path="loanTotalAmt">
             <n-input clearable placeholder="申请实付金额" v-model:value="formParams.loanTotalAmt"/>
           </n-form-item-gi>
           <n-form-item-gi label="币种" path="currencyCde">
-            <n-select placeholder="币种" clearable :options=dict7020  v-model:value="formParams.currencyCde" />
+            <n-select placeholder="币种" clearable :options=dict1170  v-model:value="formParams.currencyCde" />
           </n-form-item-gi>
           <n-form-item-gi label="支付类型" >
-            <n-select placeholder="支付类型" clearable :options="category" v-model:value="formParams.payStyle"  :fallback-option=false  />
+            <n-select placeholder="支付类型" clearable :options=dict7062 v-model:value="formParams.payStyle" />
           </n-form-item-gi>
 
           <n-form-item-gi label="申请中心名称">
@@ -45,7 +49,7 @@
           </n-form-item-gi>
 
           <n-form-item-gi label="增值税率" >
-            <n-select placeholder="增值税率" clearable :options="category" v-model:value="formParams.vatRate"  :fallback-option=false  />
+            <n-select placeholder="增值税率" clearable :options=dict7003 v-model:value="formParams.vatRate" />
           </n-form-item-gi>
 
           <n-form-item-gi :span="2" label="付款说明" path="loanDesc">
@@ -61,11 +65,11 @@
           </n-form-item-gi>
 
           <n-form-item-gi label="付款账号">
-            <n-input  placeholder="付款账号" v-model:value="formParams.payAcctNo"/>
+            <n-select  placeholder="付款账号" clearable filterable :options=payAcctNo v-model:value="formParams.payAcctNo"/>
           </n-form-item-gi>
 
           <n-form-item-gi label="收款人银行账号">
-            <n-input  placeholder="收款人银行账号" v-model:value="formParams.recvAcctNo"/>
+            <n-select  placeholder="收款人银行账号" clearable filterable :options=recvAcctNo v-model:value="formParams.recvAcctNo"/>
           </n-form-item-gi>
 
           <n-form-item-gi label="收款人账号名称">
@@ -73,7 +77,7 @@
           </n-form-item-gi>
 
           <n-form-item-gi label="支付方式" >
-            <n-select placeholder="支付方式" clearable :options="category" v-model:value="formParams.payWay"  :fallback-option=false  />
+            <n-select placeholder="支付方式" clearable :options=dict7049 v-model:value="formParams.payWay"   />
           </n-form-item-gi>
 
           <n-form-item-gi label="收款人开户银行">
@@ -221,12 +225,21 @@
 <script lang="ts" setup>
 
 import {
-  computed,
-  CSSProperties, getCurrentInstance, h, nextTick, reactive, ref, toRef, toRefs, unref, VNodeChild
+  getCurrentInstance,
+  h,
+  reactive,
+  ref,
+  unref,
+  watch
 } from 'vue';
-import {SelectOption, UploadFileInfo, UploadInst, useMessage} from "naive-ui";
-import {getCategory, getDep, getOffByOfcPrtId, getThirdDep, getUsers} from "@/utils/dict";
-import {DeleteOutlined, DollarCircleOutlined, FormOutlined} from '@vicons/antd';
+import { UploadFileInfo, UploadInst, useMessage} from "naive-ui";
+import {
+  getAssetInfoAdd,
+  getCompany, getRecvAccounts,
+  getThirdDep,
+  getUsers
+} from "@/utils/dict";
+import {DeleteOutlined, FormOutlined} from '@vicons/antd';
 import {columns} from './paymentExtra/columns';
 import {BasicTable, TableAction} from '@/components/Table';
 import {savePaymentApproval} from "@/api/contract/purch/paymentapproval";
@@ -234,19 +247,16 @@ import {
   getAssetDepreciationDetailByAssetAddSeqno, saveOrUpdate
 } from "@/api/asset/depreciationDetail";
 import  PaymentExtraForm from '@/views/contract/purch/paymentExtra/PaymentExtraForm.vue';
-import {getOlAssetInfoAddBySeqno} from "@/api/asset/asset";
-import {assignSame} from "@/utils/dataUtils";
 import {useGlobSetting} from "@/hooks/setting";
 import {formatToDate} from "@/utils/dateUtil";
-import {nanoid} from 'nanoid'
-import {getOlAssetAllowanceDetailBySeqno} from "@/api/asset/allowanceDetail";
 import {useRouter} from "vue-router";
+import {getOlAssetInfoAddBySpvId} from "@/api/asset/asset";
+import MdSearch from '@vicons/ionicons4/MdSearch'
+
 const message = useMessage()
 let data =reactive([])
 
-const loadDataTableDepreciationDetail = async (res) => {
-  return await getAssetDepreciationDetailByAssetAddSeqno(12);
-};
+
 const globSetting = useGlobSetting();
 const { uploadUrl } = globSetting;
 const actionColumnDepreciation = reactive({
@@ -290,6 +300,7 @@ const createPaymentExtraForm = ref();
 const showModalTitle = ref();
 
 const fileListLengthRef = ref(0)
+const show2 = ref(false)
 const fileListRef = ref<UploadFileInfo[]>([])
 const uploadRef = ref<UploadInst | null>(null)
 
@@ -360,15 +371,15 @@ const defaultValueRefByDict = () => ({
   otherAssetInfoAddSeqno:'',
   loanTotalAmt:'',
   currencyCde: null,
-  payStyle: '',
+  payStyle: null,
   applySectionName: '',
-  vatRate: '',
+  vatRate: null,
   loanDesc: '',
   payAcctDesc: '',
-  payAcctNo: '',
+  payAcctNo: null,
   recvAcctNo: '',
   recvAcctName: '',
-  payWay: '',
+  payWay: null,
   recvAcctBank: '',
   recvBankSwiftCode: '',
   recvTransferBank: '',
@@ -465,14 +476,6 @@ function confirmForm(e) {
   });
 }
 
-const loadDataTable = async (res) => {
-  debugger
-  return new Promise((resolve) => {
-      resolve(data)
-  })
-  // return await getAssetDepreciationDetailByAssetAddSeqno(seqno);
-};
-
 
 function handleRemove (data: { file: UploadFileInfo; fileList: UploadFileInfo[] }) {
   if (data.file.id === 'text-message') {
@@ -496,24 +499,32 @@ function handleRemove (data: { file: UploadFileInfo; fileList: UploadFileInfo[] 
 
 
 const {proxy} = getCurrentInstance();
-const {dict7020} = proxy.$useDict("7020");
+const {dict1170} = proxy.$useDict("1170");
+const {dict7062} = proxy.$useDict("7062");
+const {dict7003} = proxy.$useDict("7003");
+const {dict7049} = proxy.$useDict("7049");
+
 const thirdDep = getThirdDep();
+const spvId = getCompany();
+const payAcctNo = getRecvAccounts();
+const recvAcctNo = getRecvAcctNo();
+const assetInfoAdd = getAssetInfoAdd();
 const users = getUsers();
-let category=ref()
-// console.log(category)
-function  handleUpdateValue (value: string, option: SelectOption) {
-  // message.info('value: ' + JSON.stringify(value))
-   getCategory(value).then(va=>{
-    category.value=va
-  });
-}
+let assetInfoAddSeqno=ref()
 let section=ref()
 
-function  handleUpdateSection(value: string, option: SelectOption) {
+
+watch(() => formParams.spvId, (newValue) => {
+  console.log('watch 已触发', newValue)
+  if (newValue!=null&&newValue!=''){
+    handleUpdateValue(formParams.spvId)
+
+  }
+})
+
+function  handleUpdateValue (value: string) {
   // message.info('value: ' + JSON.stringify(value))
-  getOffByOfcPrtId(value).then(va=>{
-    section.value=va
-  });
+  getOlAssetInfoAddBySpvId(value).then(va=>assetInfoAddSeqno.value=va);
 }
 
 function handleDelete(record: Recordable) {

@@ -110,26 +110,51 @@ export class VAxios {
    * @description:  文件上传
    */
   uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams) {
+    // let conf: AxiosRequestConfig = cloneDeep(config);
+    // const transform = this.getTransform();
+    //
+    // const { requestOptions } = this.options;
+    //
+    // const opt: RequestOptions = Object.assign({}, requestOptions, options);
+    //
+    // const { beforeRequestHook, requestCatch, transformRequestData } = transform || {};
+    // if (beforeRequestHook && isFunction(beforeRequestHook)) {
+    //   conf = beforeRequestHook(conf, opt);
+    // }
+
+    //这里重新 赋值成最新的配置
+    // @ts-ignore
+    // conf.requestOptions = opt;
+
+
     const formData = new window.FormData();
     const customFilename = params.name || 'file';
-
-    if (params.filename) {
-      formData.append(customFilename, params.file, params.filename);
-    } else {
-      formData.append(customFilename, params.file);
+    if (params.file.length>0){
+      if (params.filename) {
+        for (let f of params.file) {
+          formData.append(customFilename, f, params.filename);
+        }
+      } else {
+        for (let f of params.file) {
+          formData.append(customFilename, f);
+        }
+      }
     }
+
+
 
     if (params.data) {
       Object.keys(params.data).forEach((key) => {
-        const value = params.data![key];
-        if (Array.isArray(value)) {
-          value.forEach((item) => {
-            formData.append(`${key}[]`, item);
-          });
-          return;
-        }
-
-        formData.append(key, params.data![key]);
+        // const value = params.data![key];
+        // if (Array.isArray(value)) {
+        //   value.forEach((item) => {
+        //     formData.append(`${key}[]`, item);
+        //   });
+        //   return;
+        // }
+        debugger
+        formData.append(key, new Blob([JSON.stringify(params.data![key])], {type: "application/json"}));
+        // formData.append(key, params.data![key]);
       });
     }
 
