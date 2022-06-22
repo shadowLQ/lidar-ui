@@ -5,6 +5,8 @@ import {getDictLable, useDict} from "@/utils/dict";
 
 // @ts-ignore
 let {dict3019} = useDict("3019");
+// @ts-ignore
+let {dict1272} = useDict("1272");
 
 export const columns = [
   {
@@ -37,78 +39,33 @@ export const columns = [
     },
   },
   {
-    title: '外部合同编号',
-    key: 'externalContractNbr',
+    title: '银行账户户名',
+    key: 'bankAcctNm',
     width: 100,
   },
   {
-    title: '付款账号',
-    key: 'payAcctNo',
+    title: '银行账户账号',
+    key: 'bankAcctNbr',
     width: 100,
   },
   {
-    title: '收款人银行账号',
-    key: 'recvAcctNo',
-    width: 100,
-  },
-  {
-    title: '收款人开户银行',
-    key: 'recvAcctBank',
-    width: 100,
-  },
-  {
-    title: '其中投放款',
-    key: 'applyContractAmt',
-    width: 100,
-  },
-  {
-    title: '申请放款实际时间',
-    key: 'applyLoanDate',
-    width: 100,
-  },
-  {
-    title: '其中税费其他',
-    key: 'applyFeeAmt',
-    width: 100,
-  },
-  {
-    title: '币种',
-    key: 'currencyCde',
+    title: '银行账户用途',
+    key: 'bankAcctPrpsCd',
     width: 100,
     render(row) {
       return h(
-        () => (row.currencyCde != null ? getDictLable(row.currencyCde, dict1170) : row.currencyCde)
+        () => (row.bankAcctPrpsCd != null ? getDictLable(row.bankAcctPrpsCd, dict1272) : row.bankAcctPrpsCd)
       );
     },
   },
   {
-    title: '申请实付金额',
-    key: 'loanTotalAmt',
+    title: '备注',
+    key: 'remark',
     width: 100,
-    render(row) {
-      return h(
-        () => (Number(row.loanTotalAmt).toLocaleString())
-      );
-    }
   },
   {
-    title: '后续还需付金额',
-    key: 'loanAmtLater',
+    title: '创建时间',
+    key: 'creatTime',
     width: 100,
-    render(row) {
-      return h(
-        () => (Number(row.loanAmtLater).toLocaleString())
-      );
-    }
-  },
-  {
-    title: '审批状态',
-    key: 'approveStatus',
-    width: 100,
-    render(row) {
-      return h(
-        () => (row.approveStatus != null ? getDictLable(row.approveStatus, dict7050) : row.approveStatus)
-      );
-    },
   }
 ];
