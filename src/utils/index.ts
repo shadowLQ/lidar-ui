@@ -1,6 +1,6 @@
 import { h, unref } from 'vue';
 import type { App, Plugin } from 'vue';
-import { NIcon, NTag } from 'naive-ui';
+import {NEllipsis, NIcon, NTag} from 'naive-ui';
 import { PageEnum } from '@/enums/pageEnum';
 import { isObject } from './is/index';
 import { cloneDeep } from 'lodash-es';
@@ -40,6 +40,8 @@ export function generatorMenu(routerMap: Array<any>) {
       ...info,
       ...info.meta,
       label: info.meta?.title,
+      title:  () =>
+        h(NEllipsis, null, { default: () => info.meta?.title }),
       key: info.name,
       icon: isRoot ? item.meta?.icon : info.meta?.icon,
     };

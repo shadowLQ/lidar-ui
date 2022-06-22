@@ -369,7 +369,7 @@ const defaultValueRefByDict = () => ({
   spvId: '',
   agentSpvId:'',
   assetInfoAddSeqno:'',
-  otherAssetInfoAddSeqno:'',
+  otherAssetInfoAddSeqno:null,
   loanTotalAmt:'',
   currencyCde: null,
   payStyle: null,
@@ -441,6 +441,8 @@ function handleUploadChange (data: { fileList: UploadFileInfo[] }) {
   // }
 }
 const router = useRouter();
+
+
 
 function confirmForm(e) {
   e.preventDefault();
