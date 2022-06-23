@@ -314,8 +314,8 @@ const formBtnLoading = ref(false);
 const defaultValueRef = () => ({
   userEmail: '',
   loginNm: '',
-  ofcId: '',
-  depId: '',
+  ofcId: null,
+  depId: null,
   userMobile: '',
   password: '',
   userNm: '',

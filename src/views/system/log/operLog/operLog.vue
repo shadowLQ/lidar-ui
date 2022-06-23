@@ -11,12 +11,12 @@
       <BasicTable
         :columns="columns"
         :request="loadDataTable"
-        :row-key="(row) => row.userId"
+        :row-key="(row) => row.operId"
         ref="actionRef"
         :actionColumn="actionColumn"
 
         @update:checked-row-keys="onCheckedRow"
-        :scroll-x="1090"
+        :scroll-x="1000"
       >
         <template #tableTitle>
           <n-button type="primary" @click="addTable">
@@ -140,9 +140,9 @@ import {
 import {FormItemRule, NEllipsis, NIcon, SelectOption, useMessage} from 'naive-ui';
 import {BasicTable, TableAction} from '@/components/Table';
 import {BasicForm, useForm} from '@/components/Form/index';
-import {saveOrUpdateUser, deleteSysUser, getByUserId, getTableList} from '@/api/user/user';
+import {saveOrUpdateUser, deleteSysUser, getByUserId, getTableList} from '@/api/system/operLog';
 import {columns} from './columns';
-import {DeleteOutlined, FormOutlined, PlusOutlined} from '@vicons/antd';
+import {DeleteOutlined, EyeOutlined, FormOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
 import {getCompany, getDep} from '@/utils/dict';
 import {addDictType} from "@/api/dict/dictType";
@@ -333,7 +333,7 @@ const params = ref();
 const valueRef = ref('')
 
 const actionColumn = reactive({
-  width: 220,
+  width: 80,
   title: '操作',
   key: 'action',
   fixed: 'right',
@@ -342,50 +342,15 @@ const actionColumn = reactive({
       style: 'text',
       actions: [
         {
-          popConfirm: {
-            title: '您真的,确定要删除吗?',
-            confirm: handleDelete.bind(null, record)
-          },
-          label: '删除',
-          icon: DeleteOutlined,
-          // 根据业务控制是否显示 isShow 和 auth 是并且关系
-          ifShow: () => {
-            return true;
-          },
-          // 根据权限控制是否显示: 有权限，会显示，支持多个
-          auth: ['basic_list'],
-        },
-        {
-          label: '编辑',
-          icon: FormOutlined,
+          label: '详情',
+          icon: EyeOutlined,
           onClick: handleEdit.bind(null, record),
           ifShow: () => {
             return true;
           },
           auth: ['basic_list'],
         },
-      ],
-      switchActions: []
-      // dropDownActions: [
-      //   {
-      //     label: '启用',
-      //     key: 'enabled',
-      //     // 根据业务控制是否显示: 非enable状态的不显示启用按钮
-      //     ifShow: () => {
-      //       return true;
-      //     },
-      //   },
-      //   {
-      //     label: '禁用',
-      //     key: 'disabled',
-      //     ifShow: () => {
-      //       return true;
-      //     },
-      //   },
-      // ],
-      // select: (key) => {
-      //   message.info(`您点击了，${key} 按钮`);
-      // },
+      ]
     });
   },
 });

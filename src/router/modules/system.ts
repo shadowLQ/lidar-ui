@@ -73,7 +73,7 @@ const routes: Array<RouteRecordRaw> = [
             meta: {
               title: '操作日志',
             },
-            component: () => import('@/views/system/log/operLog.vue'),
+            component: () => import('@/views/system/log/operLog/operLog.vue'),
           },
           {
             path: 'loginLog',
