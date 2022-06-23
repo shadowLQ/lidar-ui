@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
-import { Layout } from '@/router/constant';
+import {Layout, ParentLayout} from '@/router/constant';
 import { OptionsSharp } from '@vicons/ionicons5';
 import { renderIcon } from '@/utils/index';
 
@@ -57,6 +57,33 @@ const routes: Array<RouteRecordRaw> = [
           title: '用户管理',
         },
         component: () => import('@/views/system/user/user.vue'),
+      },
+      {
+        path: 'log',
+        name: 'system_log',
+        redirect: '/system/log/operLog',
+        component: ParentLayout,
+        meta: {
+          title: '日志管理',
+        },
+        children: [
+          {
+            path: 'operLog',
+            name: `system_log_oper`,
+            meta: {
+              title: '操作日志',
+            },
+            component: () => import('@/views/system/log/operLog.vue'),
+          },
+          {
+            path: 'loginLog',
+            name: `system_log_login`,
+            meta: {
+              title: '登录日志',
+            },
+            component: () => import('@/views/comp/table/editCell.vue'),
+          },
+        ],
       },
     ],
   },
