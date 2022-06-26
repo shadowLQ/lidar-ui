@@ -99,6 +99,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/comp/upload/index.vue'),
       },
       {
+        path: 'bigupload',
+        name: `${routeName}_bigupload`,
+        meta: {
+          title: '大文件分片上传',
+        },
+        component: () => import('@/views/comp/upload/bigFile/index.vue'),
+      },
+      {
         path: 'modal',
         name: `${routeName}_modal`,
         meta: {

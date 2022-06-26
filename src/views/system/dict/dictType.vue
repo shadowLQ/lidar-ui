@@ -13,9 +13,6 @@
               <n-button type="success" @click="addTable">
                 新建
               </n-button>
-              <n-button :disabled="isDisabledEdit" type="primary" @click="">
-                编辑
-              </n-button>
               <n-button :disabled="isDisabled" type="error" @click="handleDelete">
                 删除
               </n-button>
@@ -81,7 +78,7 @@
       </n-gi>
     </n-grid>
 
-    <n-modal v-model:show="showModalByDictType" :show-icon="false" preset="dialog" title="添加字典类型">
+    <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" title="添加字典类型">
       <n-form
         :model="formParams"
         :rules="rules"
@@ -106,7 +103,7 @@
 
       <template #action>
         <n-space>
-          <n-button @click="() => (showModalByDictType = false)">取消</n-button>
+          <n-button @click="() => (showModal = false)">取消</n-button>
           <n-button type="info" :loading="formBtnLoading" @click="confirmForm">确定</n-button>
         </n-space>
       </template>
@@ -199,10 +196,6 @@ function confirmForm(e) {
         message.success(res.message);
         reloadTable();
       })
-      // console.log(tata)
-      // message.success('新建成功');
-      // setTimeout(() => {
-      // });
     } else {
       message.error('请填写完整信息');
     }
