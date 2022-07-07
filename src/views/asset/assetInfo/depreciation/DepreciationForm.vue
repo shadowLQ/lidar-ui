@@ -95,11 +95,13 @@ const rules = {
     message: '请选择原币币种',
   },
   depreciationAmt: {
+    type: 'number',
     required: true,
     trigger: ['blur', 'change'],
     message: '请输入折旧金额-原币',
   },
   depreciationAmtRmb: {
+    type: 'number',
     required: true,
     trigger: ['blur', 'change'],
     message: '请输入折旧金额-人民币',

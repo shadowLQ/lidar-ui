@@ -113,18 +113,14 @@
 
 <script lang="ts" setup>
 
-import {
-  computed,
-  CSSProperties, getCurrentInstance, h, reactive, ref, toRef, toRefs, unref, VNodeChild
-} from 'vue';
-import {NButton, NSpace, SelectOption, useDialog, useMessage} from "naive-ui";
-import {getCategory, getOffByOfcPrtId, getThirdDep} from "@/utils/dict";
-import {DeleteOutlined, PlusOutlined, DollarCircleOutlined, FormOutlined} from '@vicons/antd';
+import {getCurrentInstance, h, reactive, ref, unref} from 'vue';
+import {NButton, NSpace, useDialog, useMessage} from "naive-ui";
+import {DeleteOutlined, PlusOutlined, FormOutlined} from '@vicons/antd';
 import {allowanceColumns} from './allowance/columns';
 import AllowanceForm from '@/views/asset/assetInfo/allowance/AllowanceForm.vue';
 import DepreciationForm from '@/views/asset/assetInfo/depreciation/DepreciationForm.vue';
 import {depreciationColumns} from './depreciation/columns';
-import {getOlAssetInfoAddBySeqno, getTableList} from "@/api/asset/asset";
+import {getOlAssetInfoAddBySeqno} from "@/api/asset/asset";
 import {BasicTable, TableAction} from '@/components/Table';
 import {
   deleteDepreciation,
@@ -136,8 +132,7 @@ import {
   getAssetAllowanceDetailByAssetAddSeqno,
   getOlAssetAllowanceDetailBySeqno
 } from "@/api/asset/allowanceDetail";
-import {deleteDictType} from "@/api/dict/dictType";
-import {assignSame} from "@/utils/dataUtils";
+import {assignSpecify} from "@/utils/dataUtils";
 
 const {proxy} = getCurrentInstance();
 const {dict7020} = proxy.$useDict("7020");
@@ -176,7 +171,7 @@ function addDepreciationForm() {
   addTable();
   getOlAssetInfoAddBySeqno(seqno).then(res => {
     // Object.assign(unref(formParams), res);
-    assignSame(unref(formParams),res)
+    assignSpecify(unref(formParams),res,['assetNo','assetName'])
   })
 }
 // 修改折旧明细
@@ -234,7 +229,7 @@ function addAllowanceForm() {
   addTable();
   getOlAssetInfoAddBySeqno(seqno).then(res => {
     // Object.assign(unref(formParams), res);
-    assignSame(unref(formParams),res)
+    assignSpecify(unref(formParams),res,['assetNo','assetName'])
   })
 }
 // 修改减值明细

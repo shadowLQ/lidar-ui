@@ -84,11 +84,13 @@ const rules = {
     message: '请选择原币币种',
   },
   allowanceAmt: {
+    type: 'number',
     required: true,
     trigger: ['blur', 'change'],
     message: '请计提金额-原币',
   },
   allowanceAmtRmb: {
+    type: 'number',
     required: true,
     trigger: ['blur', 'change'],
     message: '计提金额-人民币',
