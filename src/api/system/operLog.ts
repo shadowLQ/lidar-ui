@@ -35,12 +35,12 @@ export function getByUserId(params) {
 }
 
 /**
- * 删除用户
- * @param userId
+ * 删除操作日志
+ * @param operId
  */
-export function deleteSysUser(userId) {
+export function deleteSysOperLog(operId) {
   return http.request({
-      url: '/system/cbaySysUser/delete/'+userId,
+      url: '/system/sysOperLog/delete/'+operId,
       method: 'DELETE',
       // params,
     },
