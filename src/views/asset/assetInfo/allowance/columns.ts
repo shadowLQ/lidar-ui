@@ -38,7 +38,7 @@ export const allowanceColumns = [
     width: 100,
     render(row) {
       return h(
-        () => (row.currency!=null?getDictLable(row.currency,dict1170):row.currency)
+        () => (row.currency!=null?getDictLable(row.currency,dict1170.value):row.currency)
       );
     },
   },

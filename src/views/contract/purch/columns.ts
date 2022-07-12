@@ -1,12 +1,20 @@
-import {h} from "vue";
+import {h, ref} from "vue";
 
 import {getDictLable, useDict} from "@/utils/dict";
+import {NDatePicker, NInput, NSpace} from "naive-ui";
+import {getTableList} from "@/api/contract/purch/paymentapproval";
 
 
 // @ts-ignore
 let {dict1170} = useDict("1170");
 // @ts-ignore
 let {dict7050} = useDict("7050");
+const params = ref({
+  contractId:''
+});
+const loadDataTable = async () => {
+  return await getTableList({...params.value});
+};
 
 export const columns = [
   {
@@ -19,9 +27,24 @@ export const columns = [
     ifShow: false,
   },
   {
-    title: '合同ID',
+    // title: '',
+    title (column) {
+      return h(NSpace,
+        [
+          h(() => '合同ID'),
+          h(NInput, {
+              onChange(v){
+                console.log("合同ID"+v)
+                params.value.contractId=v
+                loadDataTable()
+                console.log(column)
+              }
+            // textColor:'red'
+          }, `确认`)
+        ])
+    },
     key: 'contractId',
-    width: 100
+    width: 200
   },
   {
     title: '项目名称',
@@ -59,9 +82,23 @@ export const columns = [
     width: 100,
   },
   {
-    title: '申请放款实际时间',
+    title () {
+      return h(NSpace,
+        [
+          h(() => '申请放款实际时间'),
+          h(NDatePicker, {
+
+            // textColor:'red'
+          }, `确认`),
+          h(NDatePicker, {
+
+            // textColor:'red'
+          }, `确认`)
+        ])
+    },
+    // title: '申请放款实际时间',
     key: 'applyLoanDate',
-    width: 100,
+    width: 200,
   },
   {
     title: '其中税费其他',
@@ -74,7 +111,7 @@ export const columns = [
     width: 100,
     render(row) {
       return h(
-        () => (row.currencyCde != null ? getDictLable(row.currencyCde, dict1170) : row.currencyCde)
+        () => (row.currencyCde != null ? getDictLable(row.currencyCde, dict1170.value) : row.currencyCde)
       );
     },
   },

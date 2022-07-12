@@ -52,7 +52,7 @@ export const columns = [
     width: 100,
     render(row) {
       return h(
-        () => (getDictLable(row.userTypeCd,dict0103))
+        () => (getDictLable(row.userTypeCd,dict0103.value))
       );
     },
   },
