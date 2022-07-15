@@ -1,4 +1,7 @@
 // 相同赋值
+import {h} from "vue";
+import {NEllipsis} from "naive-ui";
+
 export function assignSame(target, source) {
   Object.keys(target).forEach(key1 => target[key1] = source[key1] || target[key1])
 }
@@ -15,5 +18,16 @@ export function arrDelete(arr, func) {
 // 替换掉指定的值
 export function assignSpecify(target, source,field) {
   field.forEach(key=>target[key] = source[key])
+}
+
+export function renderLabel(option) {
+  return [
+    h(
+      NEllipsis,
+      null,
+      {
+        default: () => option.label
+      }
+    )]
 }
 
