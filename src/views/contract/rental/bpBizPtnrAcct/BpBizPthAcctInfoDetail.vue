@@ -6,15 +6,17 @@
         class="mt-2"
         :segmented="true"
       >
-        <n-descriptions label-placement="left" class="py-2">
+        <n-descriptions label-placement="left" class="py-2" :column="3">
           <n-descriptions-item>
             <template #label>合作伙伴</template>
-            {{ formParams.bpId }}
+            {{getDictLable(formParams.bpId,bpBizPtnrBase)}}
           </n-descriptions-item>
-          <n-descriptions-item label="开户行名称">NaiveUiAdmin@qq.com</n-descriptions-item>
-          <n-descriptions-item label="开户行分支行名称">支付宝</n-descriptions-item>
-          <n-descriptions-item label="银行账户类别">NaiveUiAdmin@163.com</n-descriptions-item>
-          <n-descriptions-item label="银行账户账号">￥1980.00</n-descriptions-item>
+          <n-descriptions-item label="开户行名称">{{formParams.bankNm}}</n-descriptions-item>
+          <n-descriptions-item label="开户行分支行名称">{{formParams.bankBrchNm}}</n-descriptions-item>
+          <n-descriptions-item label="银行账户类别">
+            <n-tag type="info">{{getDictLable(formParams.bankAcctTypeCd, dict3019)}}</n-tag>
+          </n-descriptions-item>
+          <n-descriptions-item label="银行账户账号">{{formParams.bankAcctNbr}}</n-descriptions-item>
           <n-descriptions-item label="银行账户用途">
             <n-tag type="success">{{getDictLable(formParams.bankAcctPrpsCd, dict1272)}}</n-tag>
           </n-descriptions-item>
@@ -36,8 +38,7 @@
 import {ref, unref, reactive, defineComponent, getCurrentInstance} from 'vue';
 import {useMessage} from 'naive-ui';
 import {useRoute} from "vue-router";
-import { saveOrUpdate } from '@/api/contract/rental/bpBizPtnrAcct';
-import {getDictLable, useDict} from "@/utils/dict";
+import {getBpBizPtnrBase, getDictLable} from "@/utils/dict";
 
 
 
@@ -54,6 +55,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    let bpBizPtnrBase = getBpBizPtnrBase();
     let route = useRoute();
     let assetAddSeqno = route.params.seqno;
     const message = useMessage();
@@ -96,7 +98,8 @@ export default defineComponent({
       addTable,
       dict3019,
       dict1272,
-      getDictLable
+      getDictLable,
+      bpBizPtnrBase
     };
   },
 });

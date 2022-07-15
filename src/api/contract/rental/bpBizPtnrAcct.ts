@@ -1,6 +1,6 @@
 import { http } from '@/utils/http/axios';
 
-//获取合同table
+//获取合作伙伴账号table
 export function getTableList(params) {
   return http.request({
     url: '/system/cbayBpBizPtnrAcctInfo/list',
@@ -10,11 +10,11 @@ export function getTableList(params) {
 }
 
 /**
- * 新增用户
+ * 新增编辑合作伙伴账号
  */
-export function addUser(params) {
+export function saveOrUpdate(params) {
   return http.request({
-      url: '/system/cbaySysUser/add',
+      url: '/system/cbayBpBizPtnrAcctInfo/saveOrUpdate',
       method: 'POST',
       params,
     },
@@ -24,12 +24,26 @@ export function addUser(params) {
   );
 }
 /**
- * 根据用户id获取用户信息
+ * 根据主键获取合作伙伴账号信息
  */
-export function getByUserId(params) {
+export function getBpBizPtnrAcctInfo(bpBankAcctId) {
   return http.request({
-      url: '/system/cbaySysUser/getByUserId/'+params,
+      url: '/system/cbayBpBizPtnrAcctInfo/findBpBizPtnrAcctInfoByBpBankAcctId/'+bpBankAcctId,
       method: 'get'
+    }
+  );
+}
+/**
+ * 删除合作伙伴账号
+ * @param params
+ */
+export function deleteBizPtnrAcctInfo(params) {
+  return http.request({
+      url: '/system/cbayBpBizPtnrAcctInfo/delete/'+params,
+      method: 'DELETE'
+    },
+    {
+      isTransformResponse: false
     }
   );
 }

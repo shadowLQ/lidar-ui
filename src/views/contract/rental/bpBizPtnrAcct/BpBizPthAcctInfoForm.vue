@@ -1,16 +1,16 @@
 <template>
   <div>
     <n-modal v-model:show="showModal" :show-icon="false" preset="dialog" :trap-focus="false" :title="title"
-             :style="{ width: '1000px' }">
+             :style="{ width: '1200px' }">
       <n-card
         class="mt-2"
         :segmented="true"
       >
         <n-form :rules="rules" ref="formRef" :model="formParams" label-width="130"
                 label-placement="left">
-          <n-grid :cols="3" x-gap="20" y-gap="10">
+          <n-grid :cols="3" x-gap="10" y-gap="10">
             <n-form-item-gi label="合作伙伴" path="bpId">
-              <n-input clearable  placeholder="合作伙伴" v-model:value="formParams.bpId"/>
+              <n-select clearable filterable  placeholder="合作伙伴" :options="bpBizPtnrBase" v-model:value="formParams.bpId" :render-label="renderLabel" />
             </n-form-item-gi>
             <n-form-item-gi label="开户行名称" path="bankNm">
               <n-input clearable  placeholder="开户行名称" v-model:value="formParams.bankNm"/>
@@ -50,7 +50,8 @@ import {ref, unref, reactive, defineComponent, getCurrentInstance} from 'vue';
 import {useMessage} from 'naive-ui';
 import {useRoute} from "vue-router";
 import { saveOrUpdate } from '@/api/contract/rental/bpBizPtnrAcct';
-
+import {getBpBizPtnrBase} from "@/utils/dict";
+import {renderLabel} from '@/utils/dataUtils';
 
 const rules = {
   bpId: {
@@ -108,8 +109,9 @@ export default defineComponent({
     const {proxy} = getCurrentInstance();
     const {dict3019} = proxy.$useDict("3019");
     const {dict1272} = proxy.$useDict("1272");
+    let bpBizPtnrBase = getBpBizPtnrBase();
     const defaultValueRef = () => ({
-      bpId: '',
+      bpId: null,
       bankNm: '',
       bankBrchNm: null,
       bankAcctTypeCd: null,
@@ -165,16 +167,8 @@ export default defineComponent({
       confirmForm,
       dict3019,
       dict1272,
-      parse: (input: string) => {
-        const nums = input.replace(/,/g, '').trim()
-        if (/^\d+(\.(\d+)?)?$/.test(nums)) return Number(nums)
-        return nums === '' ? null : Number.NaN
-
-      },
-      format: (value: number | null) => {
-        if (value === null) return ''
-        return value.toLocaleString('en-US')
-      }
+      bpBizPtnrBase,
+      renderLabel
     };
   },
 });
