@@ -1,6 +1,6 @@
 import {RouteRecordRaw} from 'vue-router';
 import {Layout} from '@/router/constant';
-import {OptionsSharp} from '@vicons/ionicons5';
+import {HomeOutline} from '@vicons/ionicons5';
 import {renderIcon} from '@/utils/index';
 
 /**
@@ -22,7 +22,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     meta: {
       title: '资产管理',
-      icon: renderIcon(OptionsSharp),
+      icon: renderIcon(HomeOutline),
       sort: 2,
     },
     children: [
