@@ -1,6 +1,6 @@
 import {RouteRecordRaw} from 'vue-router';
 import {Layout} from '@/router/constant';
-import {OptionsSharp} from '@vicons/ionicons5';
+import {AirplaneOutline} from '@vicons/ionicons5';
 import {renderIcon} from '@/utils/index';
 
 const routeName = 'contract';
@@ -23,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     meta: {
       title: '采购合同管理',
-      icon: renderIcon(OptionsSharp),
+      icon: renderIcon(AirplaneOutline),
       sort: 1,
     },
     children: [

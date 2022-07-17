@@ -1,9 +1,7 @@
 import {RouteRecordRaw} from 'vue-router';
 import {Layout} from '@/router/constant';
-import {OptionsSharp} from '@vicons/ionicons5';
+import {BoatOutline} from '@vicons/ionicons5';
 import {renderIcon} from '@/utils/index';
-import {h} from "vue";
-import {NEllipsis} from "naive-ui";
 
 const routeName = 'contract';
 /**
@@ -25,7 +23,7 @@ const routes: Array<RouteRecordRaw> = [
     component: Layout,
     meta: {
       title: '租赁合同管理',
-      icon: renderIcon(OptionsSharp),
+      icon: renderIcon(BoatOutline),
       sort: 1,
     },
     children: [

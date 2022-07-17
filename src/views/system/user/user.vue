@@ -145,6 +145,7 @@ import {columns} from './columns';
 import {DeleteOutlined, FormOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';
 import {getCompany, getDep} from '@/utils/dict';
+import {renderLabel} from '@/utils/dataUtils';
 import {addDictType} from "@/api/dict/dictType";
 
 
@@ -333,7 +334,7 @@ const params = ref();
 const valueRef = ref('')
 
 const actionColumn = reactive({
-  width: 220,
+  width: 100,
   title: '操作',
   key: 'action',
   fixed: 'right',
@@ -531,18 +532,6 @@ function railStyle(info) {
   }
   return style
 
-}
-
-//
-function renderLabel(option) {
-  return [
-    h(
-      NEllipsis,
-      null,
-      {
-        default: () => option.label
-      }
-    )]
 }
 </script>
 
