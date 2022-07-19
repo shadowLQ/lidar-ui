@@ -140,7 +140,7 @@ import {
 import {FormItemRule, NEllipsis, NIcon, SelectOption, useMessage} from 'naive-ui';
 import {BasicTable, TableAction} from '@/components/Table';
 import {BasicForm, useForm} from '@/components/Form/index';
-import {saveOrUpdateUser, deleteSysUser, getByUserId, getTableList} from '@/api/system/operLog';
+import {saveOrUpdateUser, getByUserId, getTableList} from '@/api/system/operLog';
 import {columns} from './columns';
 import {DeleteOutlined, EyeOutlined, FormOutlined, PlusOutlined} from '@vicons/antd';
 import {useRouter} from 'vue-router';

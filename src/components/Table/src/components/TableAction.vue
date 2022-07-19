@@ -18,13 +18,21 @@
          {{action.popConfirm.title}}
         </n-popconfirm>
 
-        <n-button v-else icon-placement="left" v-bind="action" class="mx-2">{{ action.label }}
+<!--        <n-button v-else icon-placement="left" v-bind="action" class="mx-2">{{ action.label }}
           <template #icon v-if="action.icon">
             <n-icon  class="ml-1">
               <component :is="action.icon" />
             </n-icon>
           </template>
+        </n-button>-->
+
+        <n-button v-else v-bind="action" class="mx-2">
+          {{ action.label }}
+          <template #icon v-if="action.hasOwnProperty('icon')">
+            <n-icon :component="action.icon" />
+          </template>
         </n-button>
+
       </template>
       <n-dropdown
         v-if="dropDownActions && getDropdownList.length"
@@ -33,7 +41,7 @@
         @select="select"
       >
         <slot name="more"></slot>
-        <n-button v-bind="getMoreProps" class="mx-2" v-if="!$slots.more">
+        <n-button v-bind="getMoreProps" class="mx-2" v-if="!$slots.more" icon-placement="right">
           <div class="flex items-center">
             <span>更多</span>
             <n-icon size="14" class="ml-1">
@@ -97,7 +105,7 @@
       const getDropdownList = computed(() => {
         return (toRaw(props.dropDownActions) || [])
           .filter((action) => {
-            return hasPermission(action.auth) && isIfShow(action);
+            return hasPermission(action.auth as string[]) && isIfShow(action);
           })
           .map((action) => {
             const { popConfirm } = action;
@@ -130,7 +138,7 @@
       const getActions = computed(() => {
         return (toRaw(props.actions) || [])
           .filter((action) => {
-            return hasPermission(action.auth) && isIfShow(action);
+            return hasPermission(action.auth as string[]) && isIfShow(action);
           })
           .map((action) => {
             const { popConfirm } = action;

@@ -9,6 +9,7 @@ import {getCategoryByParentCode} from "@/api/category/category";
 import {getUsersApi} from "@/api/user/user";
 import {getOlAssetInfoAddBySpvId} from "@/api/asset/asset";
 import {findAllRecvAccounts, findBpBizPtnrAcctInfo} from "@/api/system/paymentCfg";
+import {findBpBizPtnrBaseByBpTypeCd} from "@/api/contract/rental/bpBizPtnrBase";
 
 /**
  * 获取字典数据以及下拉框其他数据
@@ -102,13 +103,16 @@ export async function getCategory(parentCode) {
 export function getDictLable(a, dictValue) {
   let lab = "";
   const arr = Array.isArray(a) ? a : [String(a)];
-  dictValue.value.forEach((d) => {
-    if (arr.includes(d.value)) {
-      console.log(d.label)
-      lab = d.label
-      return;
-    }
-  })
+  if (a!=null&&dictValue!=undefined){
+    dictValue.forEach((d) => {
+      if (arr.includes(d.value)) {
+        console.log(d.label)
+        lab = d.label
+        return;
+      }
+    })
+  }
+
   return lab;
 }
 
@@ -129,6 +133,19 @@ export function getRecvAccounts() {
 export function getRecvAcctNo() {
   let offices = ref();
   findBpBizPtnrAcctInfo().then(res => {
+    offices.value = res;
+  });
+  return offices;
+}
+
+/**
+ * 合作伙伴
+ * 304100000002 法人客户
+ * 304100000001 自然人客户
+ */
+export function getBpBizPtnrBase() {
+  let offices = ref();
+  findBpBizPtnrBaseByBpTypeCd('304100000002').then(res => {
     offices.value = res;
   });
   return offices;

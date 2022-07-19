@@ -18,9 +18,20 @@
       <slot name="tableTitle"></slot>
     </div>
 
-    <div class="flex items-center table-toolbar-right" v-if="rightTooltip">
+    <div class="flex items-center table-toolbar-right">
       <!--顶部右侧区域-->
       <slot name="toolbar"></slot>
+
+      <!--斑马纹-->
+      <n-tooltip trigger="hover">
+        <template #trigger>
+          <div class="mr-2 table-toolbar-right-icon">
+            <n-switch v-model:value="isStriped" @update:value="setStriped" />
+          </div>
+        </template>
+        <span>表格斑马纹</span>
+      </n-tooltip>
+      <n-divider vertical />
 
       <!--刷新-->
       <n-tooltip trigger="hover">
@@ -61,10 +72,10 @@
     <n-data-table
       ref="tableElRef"
       v-bind="getBindValues"
+      :striped="isStriped"
       :pagination="pagination"
       @update:page="updatePage"
       @update:page-size="updatePageSize"
-
     >
       <template #[item]="data" v-for="item in Object.keys($slots)" :key="item">
         <slot :name="item" v-bind="data"></slot>
@@ -145,7 +156,7 @@
       const tableElRef = ref<ComponentRef>(null);
       const wrapRef = ref<Nullable<HTMLDivElement>>(null);
       let paginationEl: HTMLElement | null;
-
+      const isStriped = ref(false);
       const tableData = ref<Recordable[]>([]);
       const innerPropsRef = ref<Partial<BasicTableProps>>();
 
@@ -203,10 +214,7 @@
 
       //组装表格信息
       const getBindValues = computed(() => {
-        // debugger
-        console.log("===============================",props.data)
         const tableData = unref(getDataSourceRef);
-        console.log("###############################",tableData)
         const maxHeight = tableData.length ? `${unref(deviceHeight)}px` : 'auto';
         return {
           ...unref(getProps),
@@ -226,6 +234,8 @@
       function setProps(props: Partial<BasicTableProps>) {
         innerPropsRef.value = { ...unref(innerPropsRef), ...props };
       }
+
+      const setStriped = (value: boolean) => (isStriped.value = value);
 
       const tableAction = {
         reload,
@@ -292,6 +302,8 @@
         updatePageSize,
         pagination,
         tableAction,
+        setStriped,
+        isStriped,
       };
     },
   });
@@ -320,7 +332,7 @@
     &-right {
       display: flex;
       justify-content: flex-end;
-      flex: 1;
+      flex: 0;
 
       &-icon {
         margin-left: 12px;

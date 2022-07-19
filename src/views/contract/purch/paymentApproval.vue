@@ -289,6 +289,7 @@ const actionColumn = reactive({
             confirm: handleDelete.bind(null, record)
           },
           label: '删除',
+          type: 'error',
           icon: DeleteOutlined,
           // 根据业务控制是否显示 isShow 和 auth 是并且关系
           ifShow: () => {
@@ -605,7 +606,7 @@ const columns = [
     width: 100,
     render(row) {
       return h(
-        () => (row.currencyCde != null ? getDictLable(row.currencyCde, dict1170) : row.currencyCde)
+        () => (row.currencyCde != null ? getDictLable(row.currencyCde, dict1170.value) : row.currencyCde)
       );
     },
   },
@@ -635,7 +636,7 @@ const columns = [
     width: 100,
     render(row) {
       return h(
-        () => (row.approveStatus != null ? getDictLable(row.approveStatus, dict7050) : row.approveStatus)
+        () => (row.approveStatus != null ? getDictLable(row.approveStatus, dict7050.value) : row.approveStatus)
       );
     },
   }
